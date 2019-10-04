@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "944648966874",
+    "firebase_url": "https://mealz-bee16.firebaseio.com",
+    "project_id": "mealz-bee16",
+    "storage_bucket": "mealz-bee16.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:944648966874:android:dc5292afa3fa46289d4be3",
+        "android_client_info": {
+          "package_name": "com.example.mealz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "944648966874-b5obq8noaahcej6cabd3m7oujrsl00ee.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mealz",
+            "certificate_hash": "122118b800010f1654e75dba5ff4794156edf9d0"
+          }
+        },
+        {
+          "client_id": "944648966874-t9ij2jhjb2vkqjntmkla4k5hct7qqc1t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnSFyxOj9HXO-viqhMIWyXS2IxISaeuzk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "944648966874-t9ij2jhjb2vkqjntmkla4k5hct7qqc1t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
