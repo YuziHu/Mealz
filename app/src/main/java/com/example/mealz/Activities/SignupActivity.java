@@ -1,4 +1,4 @@
-package com.example.mealz;
+package com.example.mealz.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,12 +11,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mealz.Activities.HomeActivity;
+import com.example.mealz.Models.User;
+import com.example.mealz.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
     private EditText userEmail, userPassword, userName;
@@ -24,6 +32,7 @@ public class SignupActivity extends AppCompatActivity {
     private Button signupBtn;
     TextView signUp;
     private FirebaseAuth mFirebaseAuth;
+    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +45,7 @@ public class SignupActivity extends AppCompatActivity {
         signupBtn = findViewById(R.id.signupBtn);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
 
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,12 +80,30 @@ public class SignupActivity extends AppCompatActivity {
                             showMessage("Account created!");
                             // after we created user account, we need to update his name
                             updateUserInfo(name, mFirebaseAuth.getCurrentUser());
+                            // save user info after signing up
                         }
                         else{
                             showMessage("Account creation failed!" + task.getException().getMessage());
                         }
                     }
                 });
+    }
+
+    private void saveUserInfo(String name, FirebaseUser currentUser) {
+        String uid = currentUser.getUid();
+        DatabaseReference current_user_db = database.getReference().child("Users").child(uid);
+        // create a new user object
+        User newUser = new User(uid,currentUser.getDisplayName(),currentUser.getEmail(),null);
+        // create a map that maps user info
+        Map userInfo = new HashMap();
+        System.out.println(newUser.getName());
+        userInfo.put("username",name);
+        userInfo.put("email",newUser.getEmail());
+        System.out.println(newUser.getGroceryList());
+        userInfo.put("groceryList",newUser.getGroceryList());
+        current_user_db.setValue(userInfo);
+        updateUI();
+
     }
 
     private void updateUserInfo(String name, FirebaseUser currentUser) {
@@ -89,18 +117,17 @@ public class SignupActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
                             showMessage("Thank you signing up!");
-                            updateUI();
                         }
-
                     }
                 });
+        // save user info
+        saveUserInfo(name, mFirebaseAuth.getCurrentUser());
     }
 
     private void updateUI() {
-        Intent homeActivity = new Intent(getApplicationContext(),HomeActivity.class);
+        Intent homeActivity = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(homeActivity);
         finish();
-
     }
 
     // simple method to show toast message

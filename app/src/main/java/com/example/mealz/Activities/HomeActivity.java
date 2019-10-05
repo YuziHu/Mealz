@@ -1,8 +1,10 @@
-package com.example.mealz;
+package com.example.mealz.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.mealz.R;
 
 public class HomeActivity extends AppCompatActivity {
 

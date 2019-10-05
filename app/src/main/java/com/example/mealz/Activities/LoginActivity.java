@@ -1,4 +1,4 @@
-package com.example.mealz;
+package com.example.mealz.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.mealz.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -94,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if(user!=null){
             // user is already connected, redirect him to his home page
-            System.out.println(user.getDisplayName());
+//            System.out.println(user.getUid());
             updateUI();
         }
     }
