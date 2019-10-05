@@ -1,9 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textSize="32sp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:id="@+id/loginText"/>
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/loginEmail"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginVertical="32dp"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/loginPassword"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginVertical="32dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/loginBtn"
+        android:text="Login"
+        android:layout_marginHorizontal="32dp"
+        android:background="@color/colorPrimary"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:id="@+id/toSignUpBtn"
+        android:text="Create New Account"
+        android:layout_marginHorizontal="32dp"
+        android:background="@color/colorAccent"/>
+
+</LinearLayout>

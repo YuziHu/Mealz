@@ -11,8 +11,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent signupActivity = new Intent(getApplicationContext(),SignupActivity.class);
-        startActivity(signupActivity);
+        Intent loginActivity = new Intent(getApplicationContext(),LoginActivity.class);
+        startActivity(loginActivity);
         finish();
     }
 }
