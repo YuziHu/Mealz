@@ -6,9 +6,10 @@ public class User {
     private final String uid;
     public String name;
     public String email;
-    public List<groceryItem> groceryList;
+    // List of Strings representing grocery ids
+    public List<String> groceryList;
 
-    public User(String uid, String name, String email, List<groceryItem> groceryList){
+    public User(String uid, String name, String email, List<String> groceryList){
         this.uid = uid;
         this.name = name;
         this.email = email;
@@ -22,7 +23,7 @@ public class User {
     public String getEmail(){
         return this.email;
     }
-    public List<groceryItem> getGroceryList(){
+    public List<String> getGroceryList(){
         return this.groceryList;
     }
     //
@@ -32,7 +33,7 @@ public class User {
     public void setEmail(String email){
         this.email = email;
     }
-    public void updateGroceryList(List<groceryItem> groceryList){
+    public void updateGroceryList(List<String> groceryList){
         this.groceryList = groceryList;
     }
 }
