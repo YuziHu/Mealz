@@ -73,6 +73,11 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
             currentUserGroceryList.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    groceryListView.setAdapter(null);
+                    groceryList.clear();
+                    groceryNames.clear();
+                    groceryAmount.clear();
+                    groceryUnits.clear();
                     for(DataSnapshot ds : dataSnapshot.getChildren()){
                         GroceryItem item = ds.getValue(GroceryItem.class);
                         groceryList.add(item);
@@ -95,7 +100,6 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
             public void onClick(View view) {
                 // pops up a window and lets user to add a grocery by name
                 openDialog();
-                // once got the data for the grocery item, save it in current user grocery list
             }
         });
     }
@@ -107,13 +111,18 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
 
     @Override
     public void addGrocery(String groceryName, int amount, String unit) {
-        // once user hits add, make a query to database to retrieve the grocery item by name
+        // once user hits add, make a query to database to retrieve the grocery item by name (API??)
+        // once got the data for the grocery item, save it in current user grocery list
+//        this.groceryList.clear();
+//        groceryListView.setAdapter(null);
+        adapter.clear();
         GroceryItem newGroceryEntry = new GroceryItem();
         newGroceryEntry.setName(groceryName);
         newGroceryEntry.setAmount(amount);
         newGroceryEntry.setUnit(unit);
         DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
         currentUserGroceryList.push().setValue(newGroceryEntry);
+        adapter.notifyDataSetChanged();
     }
 
     class CustomAdapter extends ArrayAdapter<String>{
