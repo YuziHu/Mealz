@@ -30,7 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener {
 
     private Button addGroceryBtn;
     private ListView groceryListView;
@@ -41,10 +41,11 @@ public class HomeActivity extends AppCompatActivity {
     List<Integer> groceryAmount = new ArrayList<>();
     List<String> groceryUnits = new ArrayList<>();
 
-    // get current user from FirebaseAuth
+    // firebase objects
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
+    private DatabaseReference current_user_db;
 
     // pop up window for adding a grocery item
     @Override
@@ -63,10 +64,9 @@ public class HomeActivity extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
 
 
-
         // populate grocery list view if current user has grocery items in list
         String currentUID = currentUser.getUid();
-        DatabaseReference current_user_db = database.getReference().child("Users").child(currentUID);
+        current_user_db = database.getReference().child("Users").child(currentUID);
         // if current user has grocery list
         DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
         if(currentUserGroceryList!=null){
@@ -95,8 +95,6 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // pops up a window and lets user to add a grocery by name
                 openDialog();
-                // once user hits add, make a query to database to retrieve the grocery item by name
-
                 // once got the data for the grocery item, save it in current user grocery list
             }
         });
@@ -105,6 +103,17 @@ public class HomeActivity extends AppCompatActivity {
     private void openDialog() {
         AddGroceryDialog addGroceryDialog = new AddGroceryDialog();
         addGroceryDialog.show(getSupportFragmentManager(), "Add grocery item");
+    }
+
+    @Override
+    public void addGrocery(String groceryName, int amount, String unit) {
+        // once user hits add, make a query to database to retrieve the grocery item by name
+        GroceryItem newGroceryEntry = new GroceryItem();
+        newGroceryEntry.setName(groceryName);
+        newGroceryEntry.setAmount(amount);
+        newGroceryEntry.setUnit(unit);
+        DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
+        currentUserGroceryList.push().setValue(newGroceryEntry);
     }
 
     class CustomAdapter extends ArrayAdapter<String>{
