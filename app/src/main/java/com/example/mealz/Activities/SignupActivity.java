@@ -121,7 +121,7 @@ public class SignupActivity extends AppCompatActivity {
                     }
                 });
         // save user info
-        saveUserInfo(name, mFirebaseAuth.getCurrentUser());
+        saveUserInfo(name, currentUser);
     }
 
     private void updateUI() {
