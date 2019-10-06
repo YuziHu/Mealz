@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add to your grocery list"
+        android:textSize="32dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="30dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:paddingVertical="20dp"
+        android:id="@+id/addGroceryName"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Amount"
+            android:paddingRight="120dp"
+            android:id="@+id/addGroceryAmount"/>
+
+        <Spinner
+            android:id="@+id/addGroceryUnit"
+            android:layout_width="59dp"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+</LinearLayout>

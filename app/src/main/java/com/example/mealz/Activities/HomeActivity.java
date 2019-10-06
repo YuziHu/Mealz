@@ -13,8 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.mealz.Dialogs.AddGroceryDialog;
 import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,8 +45,8 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
-//    private ArrayList<GroceryItem> groceryList;
 
+    // pop up window for adding a grocery item
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,9 @@ public class HomeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         currentUser = mAuth.getCurrentUser();
+
+
+
         // populate grocery list view if current user has grocery items in list
         String currentUID = currentUser.getUid();
         DatabaseReference current_user_db = database.getReference().child("Users").child(currentUID);
@@ -89,12 +94,17 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // pops up a window and lets user to add a grocery by name
-
+                openDialog();
                 // once user hits add, make a query to database to retrieve the grocery item by name
 
                 // once got the data for the grocery item, save it in current user grocery list
             }
         });
+    }
+
+    private void openDialog() {
+        AddGroceryDialog addGroceryDialog = new AddGroceryDialog();
+        addGroceryDialog.show(getSupportFragmentManager(), "Add grocery item");
     }
 
     class CustomAdapter extends ArrayAdapter<String>{

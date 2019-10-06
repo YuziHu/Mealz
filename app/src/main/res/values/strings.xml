@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Mealz</string>
+    <string-array name="groceryUnits">
+        <item>oz</item>
+        <item>lb</item>
+        <item>ml</item>
+    </string-array>
 </resources>
