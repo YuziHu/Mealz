@@ -125,8 +125,8 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        Intent homeActivity = new Intent(getApplicationContext(), HomeActivity.class);
-        startActivity(homeActivity);
+        Intent searchRecipeActivity = new Intent(getApplicationContext(), SearchRecipeActivity.class);
+        startActivity(searchRecipeActivity);
         finish();
     }
 

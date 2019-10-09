@@ -35,6 +35,7 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener {
 
     private Button addGroceryBtn;
+    private Button searchRecipeBtn;
     private ListView groceryListView;
     CustomAdapter adapter;
     // get grocery list as a list from firebase
@@ -59,6 +60,7 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
         setContentView(R.layout.activity_home);
 
         addGroceryBtn = findViewById(R.id.addGroceryItemBtn);
+        searchRecipeBtn = findViewById(R.id.toSearchRecipeBtn);
         groceryListView = findViewById(R.id.groceryListView);
 
         adapter = new CustomAdapter(this, groceryNames, groceryAmount, groceryUnits);
@@ -118,6 +120,14 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
                 openDialog();
             }
         });
+
+        searchRecipeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent toSearchActivity = new Intent(getApplicationContext(), SearchRecipeActivity.class);
+                startActivity(toSearchActivity);
+            }
+        });
     }
 
     private void setUpFirebaseListener(){
@@ -160,14 +170,12 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
     public void addGrocery(String groceryName, int amount, String unit) {
         // once user hits add, make a query to database to retrieve the grocery item by name (API??)
         // once got the data for the grocery item, save it in current user grocery list
-//        adapter.clear();
         GroceryItem newGroceryEntry = new GroceryItem();
         newGroceryEntry.setName(groceryName);
         newGroceryEntry.setAmount(amount);
         newGroceryEntry.setUnit(unit);
         DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
         currentUserGroceryList.push().setValue(newGroceryEntry);
-//        adapter.notifyDataSetChanged();
     }
 
     class CustomAdapter extends ArrayAdapter<String>{
@@ -195,7 +203,11 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
 
 
             gName.setText(groceryNames.get(position));
-            gAmount.setText(groceryAmount.get(position).toString());
+            // currently no amount field set if user add grocery item through searching a recipe
+            if(groceryAmount.get(position)==-1){
+                gAmount.setText("");
+            }
+            else gAmount.setText(groceryAmount.get(position).toString());
             gUnit.setText(groceryUnits.get(position));
 
             return grocery_item;

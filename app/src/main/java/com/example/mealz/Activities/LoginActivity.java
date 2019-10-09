@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if(user!=null){
             // user is already connected, redirect him to his home page
-//            System.out.println(user.getUid());
+            System.out.println("cur user uid: "+user.getUid());
             updateUI();
         }
     }
