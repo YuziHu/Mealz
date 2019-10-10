@@ -51,6 +51,5 @@
         android:id="@+id/signupBtn"
         android:text="Sign Up"
         android:layout_marginHorizontal="32dp"
-        android:background="@color/colorPrimary"/>
-
+        />
 </LinearLayout>
