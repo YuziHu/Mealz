@@ -11,6 +11,7 @@ public class RecipeModel implements Serializable {
     private List dietLabels;
     private List healthLabels;
     private List cautions;
+    private List ingredients;
     private List ingredientLines;
 
     public String getLabel() {
@@ -68,6 +69,10 @@ public class RecipeModel implements Serializable {
     public void setCautions(List cautions) {
         this.cautions = cautions;
     }
+
+    public List getIngredients() { return ingredients; }
+
+    public void setIngredients(List ingredients) {this.ingredients = ingredients; }
 
     public List getIngredientLines() {
         return ingredientLines;

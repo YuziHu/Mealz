@@ -92,7 +92,6 @@ public class SearchRecipeActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         try {
                             recipeList = responseToRecipeList(response);
-//
                             // All following function should be achieved under this function;
                             displayRecipe();
                         } catch (IOException e) {
@@ -145,6 +144,7 @@ public class SearchRecipeActivity extends AppCompatActivity {
     }
 
     public List<HitsModel> responseToRecipeList(String response) throws IOException {
+//        System.out.println(response);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         ResponseModel r = objectMapper.readValue(response, ResponseModel.class);
@@ -154,7 +154,7 @@ public class SearchRecipeActivity extends AppCompatActivity {
 
     public void recipeImageClicked(int j) {
         Intent myIntent = new Intent(this, RecipeDetailActivity.class);
-        System.out.println(recipeList.get(j).getRecipe().getIngredientLines()+"");
+        System.out.println(recipeList.get(j).getRecipe().getIngredients());
         RecipeModel recipe_detail = recipeList.get(j).getRecipe();
         myIntent.putExtra("recipeList",(Serializable)recipe_detail);
         startActivity(myIntent);

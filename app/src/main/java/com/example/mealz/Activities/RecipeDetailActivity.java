@@ -9,9 +9,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mealz.Models.GroceryItem;
+import com.example.mealz.Models.IngredientModel;
 import com.example.mealz.Models.RecipeModel;
 import com.example.mealz.R;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -53,12 +56,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     .into(img);
 
         TextView ingredient = findViewById(R.id.textView2);
-        final List<String> foods = recipe.getIngredientLines();
+        ObjectMapper mapper = new ObjectMapper();
+        final List<IngredientModel> ingredients = mapper.convertValue(recipe.getIngredients(), new TypeReference<List<IngredientModel>>(){});
+        System.out.println(ingredients);
         String result = "";
-        for (int i = 0; i < foods.size(); i++) {
-            result += foods.get(i);
-            System.out.println("foods(i): "+foods.get(i));
-            result += "\n\n";
+        for (int i = 0; i < ingredients.size(); i++) {
+            if(ingredients.get(i).getWeight()>0){
+                result += ingredients.get(i).getText();
+                result += "\n\n";
+            }
         }
 
         System.out.println("result: "+result);
@@ -77,13 +83,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 if(currentUser != null){
                     String currentUID = currentUser.getUid();
                     current_user_db = database.getReference().child("Users").child(currentUID);
-                    for(String ingredient : foods){
-                        GroceryItem newGroceryEntry = new GroceryItem();
-                        newGroceryEntry.setName(ingredient);
-                        newGroceryEntry.setAmount(-1);
-                        newGroceryEntry.setUnit("");
-                        DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
-                        currentUserGroceryList.push().setValue(newGroceryEntry);
+                    for(IngredientModel ingredient : ingredients){
+                        if(ingredient.getWeight()>0){
+                            GroceryItem newGroceryEntry = new GroceryItem();
+                            newGroceryEntry.setName(ingredient.getText());
+                            newGroceryEntry.setAmount((int)Math.floor(ingredient.getWeight()));
+                            newGroceryEntry.setUnit("g");
+                            DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
+                            currentUserGroceryList.push().setValue(newGroceryEntry);
+                        }
                     }
                 }
 //                rp += curr;
