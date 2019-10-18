@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.example.mealz.Dialogs.AddGroceryDialog;
 import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.R;
+import com.example.mealz.Adapters.GroceryListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,12 +39,15 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
     private Button addGroceryBtn;
     private Button searchRecipeBtn;
     private ListView groceryListView;
-    CustomAdapter adapter;
+    GroceryListAdapter adapter;
     // get grocery list as a list from firebase
     List<GroceryItem> groceryList = new ArrayList<>();
     List<String> groceryNames = new ArrayList<>();
     List<Integer> groceryAmount = new ArrayList<>();
     List<String> groceryUnits = new ArrayList<>();
+
+    // edit grocery actions spinner
+//    private Spinner editGroceryActions;
 
     // firebase objects
     private FirebaseAuth mAuth;
@@ -63,7 +68,7 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
         searchRecipeBtn = findViewById(R.id.toSearchRecipeBtn);
         groceryListView = findViewById(R.id.groceryListView);
 
-        adapter = new CustomAdapter(this, groceryNames, groceryAmount, groceryUnits);
+        adapter = new GroceryListAdapter(this, groceryNames, groceryAmount, groceryUnits);
         groceryListView.setAdapter(adapter);
 
         mAuth = FirebaseAuth.getInstance();
@@ -82,12 +87,12 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
 
 
         // populate grocery list view if current user has grocery items in list
-        if(currentUser != null){
+        if (currentUser != null) {
             String currentUID = currentUser.getUid();
             current_user_db = database.getReference().child("Users").child(currentUID);
             // if current user has grocery list
             DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
-            if(currentUserGroceryList!=null){
+            if (currentUserGroceryList != null) {
                 currentUserGroceryList.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -95,7 +100,7 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
                         groceryNames.clear();
                         groceryAmount.clear();
                         groceryUnits.clear();
-                        for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
                             GroceryItem item = ds.getValue(GroceryItem.class);
                             groceryList.add(item);
                             groceryNames.add(item.getName());
@@ -128,19 +133,20 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
                 startActivity(toSearchActivity);
             }
         });
+
+
     }
 
-    private void setUpFirebaseListener(){
+    private void setUpFirebaseListener() {
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user != null){
+                if (user != null) {
 
-                }
-                else{
+                } else {
                     Toast.makeText(HomeActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(intent);
                 }
             }
@@ -156,7 +162,7 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
     @Override
     protected void onStop() {
         super.onStop();
-        if(mAuthStateListener!=null){
+        if (mAuthStateListener != null) {
             FirebaseAuth.getInstance().removeAuthStateListener(mAuthStateListener);
         }
     }
@@ -177,40 +183,60 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
         DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
         currentUserGroceryList.push().setValue(newGroceryEntry);
     }
-
-    class CustomAdapter extends ArrayAdapter<String>{
-        Context context;
-        List<String> groceryNames;
-        List<Integer> groceryAmount;
-        List<String> groceryUnits;
-
-        CustomAdapter(Context c, List<String> names, List<Integer> amount, List<String> units){
-            super(c, R.layout.layout_grocery_item, R.id.groceryName, names);
-            this.context = c;
-            this.groceryNames = names;
-            this.groceryAmount = amount;
-            this.groceryUnits = units;
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater layoutInflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View grocery_item = layoutInflater.inflate((R.layout.layout_grocery_item),parent, false);
-            TextView gName = grocery_item.findViewById(R.id.groceryName);
-            TextView gAmount = grocery_item.findViewById(R.id.gAmount);
-            TextView gUnit = grocery_item.findViewById(R.id.gUnit);
-
-
-            gName.setText(groceryNames.get(position));
-            // currently no amount field set if user add grocery item through searching a recipe
-            if(groceryAmount.get(position)==-1){
-                gAmount.setText("");
-            }
-            else gAmount.setText(groceryAmount.get(position).toString());
-            gUnit.setText(groceryUnits.get(position));
-
-            return grocery_item;
-        }
-    }
 }
+
+//    class CustomAdapter extends ArrayAdapter<String> implements AdapterView.OnItemSelectedListener {
+//        Context context;
+//        List<String> groceryNames;
+//        List<Integer> groceryAmount;
+//        List<String> groceryUnits;
+//
+//        CustomAdapter(Context c, List<String> names, List<Integer> amount, List<String> units){
+//            super(c, R.layout.layout_grocery_item, R.id.groceryName, names);
+//            this.context = c;
+//            this.groceryNames = names;
+//            this.groceryAmount = amount;
+//            this.groceryUnits = units;
+//        }
+//
+//        @NonNull
+//        @Override
+//        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+//            LayoutInflater layoutInflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//            View grocery_item = layoutInflater.inflate((R.layout.layout_grocery_item),parent, false);
+//            TextView gName = grocery_item.findViewById(R.id.groceryName);
+//            TextView gAmount = grocery_item.findViewById(R.id.gAmount);
+//            TextView gUnit = grocery_item.findViewById(R.id.gUnit);
+//            // edit grocery action spinner
+//            Spinner editGroceryActions = grocery_item.findViewById(R.id.editGrocery);
+//            // Create an ArrayAdapter using the string array and a default spinner layout
+//            ArrayAdapter<String> editGroceryActionsAdapter = new ArrayAdapter<String>(this.context,
+//                    android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.editGroceryActions));
+//            // Specify the layout to use when the list of choices appears
+//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//            // apply the adapter to the spinner
+//            editGroceryActions.setAdapter(editGroceryActionsAdapter);
+//
+//
+//            gName.setText(groceryNames.get(position));
+//            // currently no amount field set if user add grocery item through searching a recipe
+//            if(groceryAmount.get(position)==-1){
+//                gAmount.setText("");
+//            }
+//            else gAmount.setText(groceryAmount.get(position).toString());
+//            gUnit.setText(groceryUnits.get(position));
+//
+//            return grocery_item;
+//        }
+//
+//        @Override
+//        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//        }
+//
+//        @Override
+//        public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//        }
+//    }
+//}
