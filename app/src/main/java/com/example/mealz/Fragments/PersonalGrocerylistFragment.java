@@ -61,12 +61,13 @@ public class PersonalGrocerylistFragment extends Fragment implements AddGroceryD
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal_grocerylist, container, false);
 
+        System.out.println(TAG);
 
         addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
         searchRecipeBtn = view.findViewById(R.id.toSearchRecipeBtn);
         groceryListView = view.findViewById(R.id.groceryListView);
 
-        adapter = new GroceryListAdapter(getActivity(), groceryNames, groceryAmount, groceryUnits);
+        adapter = new GroceryListAdapter(getActivity(), groceryNames, groceryAmount, groceryUnits, null);
         groceryListView.setAdapter(adapter);
 
         mAuth = FirebaseAuth.getInstance();
@@ -89,7 +90,7 @@ public class PersonalGrocerylistFragment extends Fragment implements AddGroceryD
             String currentUID = currentUser.getUid();
             current_user_db = database.getReference().child("Users").child(currentUID);
             // if current user has grocery list
-            DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
+            DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("personal");
             if (currentUserGroceryList != null) {
                 currentUserGroceryList.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -179,7 +180,7 @@ public class PersonalGrocerylistFragment extends Fragment implements AddGroceryD
         newGroceryEntry.setName(groceryName);
         newGroceryEntry.setAmount(amount);
         newGroceryEntry.setUnit(unit);
-        DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
+        DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("personal");
         currentUserGroceryList.push().setValue(newGroceryEntry);
     }
 }

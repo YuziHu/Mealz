@@ -45,6 +45,7 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
     List<String> groceryNames = new ArrayList<>();
     List<Integer> groceryAmount = new ArrayList<>();
     List<String> groceryUnits = new ArrayList<>();
+    List<String> groceryShares = new ArrayList<>();
 
     // firebase objects
     private FirebaseAuth mAuth;
@@ -65,7 +66,7 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
         searchRecipeBtn = findViewById(R.id.toSearchRecipeBtn);
         groceryListView = findViewById(R.id.groceryListView);
 
-        adapter = new GroceryListAdapter(this, groceryNames, groceryAmount, groceryUnits);
+        adapter = new GroceryListAdapter(this, groceryNames, groceryAmount, groceryUnits, groceryShares);
         groceryListView.setAdapter(adapter);
 
         mAuth = FirebaseAuth.getInstance();
@@ -97,12 +98,14 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
                         groceryNames.clear();
                         groceryAmount.clear();
                         groceryUnits.clear();
+                        groceryShares.clear();
                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
                             GroceryItem item = ds.getValue(GroceryItem.class);
                             groceryList.add(item);
                             groceryNames.add(item.getName());
                             groceryAmount.add(item.getAmount());
                             groceryUnits.add(item.getUnit());
+                            groceryShares.add(item.getSharedWith());
                         }
                         adapter.notifyDataSetChanged();
                     }

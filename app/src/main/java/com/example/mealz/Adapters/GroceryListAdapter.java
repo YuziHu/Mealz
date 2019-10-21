@@ -24,13 +24,15 @@ public class GroceryListAdapter extends ArrayAdapter<String> implements AdapterV
     List<String> groceryNames;
     List<Integer> groceryAmount;
     List<String> groceryUnits;
+    List<String> groceryShares;
 
-    public GroceryListAdapter(Context c, List<String> names, List<Integer> amount, List<String> units){
+    public GroceryListAdapter(Context c, List<String> names, List<Integer> amount, List<String> units, List<String> shares){
         super(c, R.layout.layout_grocery_item, R.id.groceryName, names);
         this.context = c;
         this.groceryNames = names;
         this.groceryAmount = amount;
         this.groceryUnits = units;
+        this.groceryShares = shares;
     }
 
     @NonNull
@@ -41,6 +43,7 @@ public class GroceryListAdapter extends ArrayAdapter<String> implements AdapterV
         TextView gName = grocery_item.findViewById(R.id.groceryName);
         TextView gAmount = grocery_item.findViewById(R.id.gAmount);
         TextView gUnit = grocery_item.findViewById(R.id.gUnit);
+        TextView gShare = grocery_item.findViewById(R.id.gShare);
         // edit grocery action spinner
         Spinner editGroceryActions = grocery_item.findViewById(R.id.editGrocery);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -60,6 +63,11 @@ public class GroceryListAdapter extends ArrayAdapter<String> implements AdapterV
         }
         else gAmount.setText(groceryAmount.get(position).toString());
         gUnit.setText(groceryUnits.get(position));
+        if(groceryShares!=null) {
+            System.out.println(groceryShares.get(position));
+            gShare.setText(groceryShares.get(position));
+        }
+        else gShare.setText("");
 
         return grocery_item;
     }
@@ -71,7 +79,7 @@ public class GroceryListAdapter extends ArrayAdapter<String> implements AdapterV
             AddGroceryDialog addGroceryDialog = new AddGroceryDialog();
             addGroceryDialog.show(((AppCompatActivity) this.context).getSupportFragmentManager(), "Add grocery item");
         }
-        Toast.makeText(this.context,actionSelected,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this.context,actionSelected,Toast.LENGTH_SHORT).show();
     }
 
     @Override

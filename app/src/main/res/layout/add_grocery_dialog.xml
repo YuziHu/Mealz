@@ -32,7 +32,7 @@
 
         <Spinner
             android:id="@+id/addGroceryUnit"
-            android:layout_width="59dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent" />
 
     </LinearLayout>

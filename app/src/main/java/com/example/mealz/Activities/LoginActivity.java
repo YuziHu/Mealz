@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginBtn;
     private Button toSignupBtn;
     private FirebaseAuth mAuth;
-    private Intent homeActivity, signupActivity, groceryListActivity;
+    private Intent homeActivity, signupActivity, userActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         homeActivity = new Intent(this, HomeActivity.class);
         signupActivity = new Intent(this, SignupActivity.class);
-        groceryListActivity = new Intent(this, GroceryListActivity.class);
+        userActivity = new Intent(this, UserActivity.class);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        startActivity(groceryListActivity);
+        startActivity(userActivity);
         finish();
     }
 
