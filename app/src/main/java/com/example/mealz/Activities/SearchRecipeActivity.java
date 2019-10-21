@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mealz.Activities.RecipeDetailActivity;
 import com.example.mealz.Models.HitsModel;
@@ -26,6 +30,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,7 +38,7 @@ import androidx.appcompat.app.AppCompatActivity;
 //import okhttp3.Response;
 
 
-public class SearchRecipeActivity extends AppCompatActivity {
+public class SearchRecipeActivity extends AppCompatActivity  {
 
 //    private List<Recipe> recipe  = new ArrayList<>(Arrays.asList(
 //            new Recipe("meat",
@@ -47,7 +52,7 @@ public class SearchRecipeActivity extends AppCompatActivity {
 //                    new ArrayList<String>(Arrays.asList("Blood", "Bone", "Cat")))
 //    ));
     private List<HitsModel> recipeList;
-
+    private Spinner dietSpinner;
     private EditText searchField;
     private ImageButton img;
 
@@ -59,6 +64,12 @@ public class SearchRecipeActivity extends AppCompatActivity {
 
         searchField = findViewById(R.id.recipeSearch);
         img = findViewById(R.id.SearchedImg2);
+        dietSpinner = findViewById(R.id.spinner);
+        ArrayAdapter<String> unitSelectionAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.diets));
+
+        unitSelectionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dietSpinner.setAdapter(unitSelectionAdapter);
 
 //        String img_url = recipe.get(0).getUrl();
 
@@ -69,9 +80,12 @@ public class SearchRecipeActivity extends AppCompatActivity {
     }
 
 
-    public void searchRecipeClicked(View buttonView){
-        String message = searchField.getText().toString();
+    public void searchRecipeClicked(View buttonView) {
+        String recipe = searchField.getText().toString();
+        String diet = dietSpinner.getSelectedItem().toString();
+        String message = "&q=" + recipe + "&diet=" + diet;
         searchForRecipe(message);
+        System.out.println(message);
     }
 
 
@@ -80,7 +94,8 @@ public class SearchRecipeActivity extends AppCompatActivity {
 //        EditText editText = (EditText) findViewById(R.id.editText);
 //        String message = editText.getText().toString();
 
-        String url = "https://api.edamam.com/search?app_id=736dba64&app_key=8b9c2a666b2c005a8c34b35a26063330&q=" + message;
+        String url = "https://api.edamam.com/search?app_id=736dba64&app_key=8b9c2a666b2c005a8c34b35a26063330" + message;
+        System.out.println(url);
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
@@ -112,22 +127,28 @@ public class SearchRecipeActivity extends AppCompatActivity {
     }
 
     public void displayRecipe(){
-        final ImageButton[] img = new ImageButton[3];
+        final ImageButton[] img = new ImageButton[5];
         img[0] = findViewById(R.id.SearchedImg1);
         img[1] = findViewById(R.id.SearchedImg2);
         img[2] = findViewById(R.id.SearchedImg3);
+        img[3] = findViewById(R.id.SearchedImg4);
+        img[4] = findViewById(R.id.SearchedImg5);
 
-        TextView[] label = new TextView[3];
+
+        TextView[] label = new TextView[5];
         label[0] = findViewById(R.id.label1);
         label[1] = findViewById(R.id.label2);
         label[2] = findViewById(R.id.label3);
+        label[3] = findViewById(R.id.label4);
+        label[4] = findViewById(R.id.label5);
+
 
         if (recipeList.size() > 0) {
-            for (int i=0 ; i<3; ++i) {
+            for (int i=0 ; i<5; ++i) {
                 String img_url = recipeList.get(i).getRecipe().getImage();
                 if (!img_url.equalsIgnoreCase(""))
                     Picasso.get().load(img_url).placeholder(R.drawable.ic_launcher_background)// Place holder image from drawable folder
-                            .error(R.drawable.b).resize(400, 400).centerCrop()
+                            .error(R.drawable.b).resize(300, 225).centerCrop()
                             .into(img[i]);
                 String label_text = recipeList.get(i).getRecipe().getLabel();
                 label[i].setText(label_text);
