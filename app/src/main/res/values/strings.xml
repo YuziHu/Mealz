@@ -13,4 +13,10 @@
     <string name="title_activity_grocery_list">GroceryListActivity</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
+    <string-array name="diets">
+        <item>balanced</item>
+        <item>high-protein</item>
+        <item>low-fat</item>
+        <item>low-carb</item>
+    </string-array>
 </resources>
