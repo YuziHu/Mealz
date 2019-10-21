@@ -1,55 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:layout_centerInParent="false"
+    android:layout_centerHorizontal="false"
+    android:layout_centerVertical="false"
+    android:layout_gravity="center"
     android:orientation="vertical"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity">
+
 
     <TextView
+        android:id="@+id/loginText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:textStyle="bold"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="136dp"
+        android:text="WELCOME TO \nMEALZ"
+        android:textColor="#00483A"
         android:textSize="32sp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
-        android:id="@+id/loginText"/>
-
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/loginEmail"
+        style="@style/Widget.AppCompat.EditText"
+        android:layout_width="345dp"
+        android:layout_height="50dp"
         android:layout_marginHorizontal="32dp"
         android:layout_marginVertical="32dp"
-        android:hint="Email"
+        android:layout_marginTop="124dp"
+        android:background="@drawable/my_edit_text_border"
+        android:hint="   Your Email"
         android:inputType="textEmailAddress"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginText" />
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/loginPassword"
+        android:layout_width="342dp"
+        android:layout_height="56dp"
         android:layout_marginHorizontal="32dp"
-        android:layout_marginVertical="32dp"
-        android:hint="Password"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/my_edit_text_border"
+        android:hint="   Password"
         android:inputType="textPassword"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginEmail" />
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/loginBtn"
-        android:text="Login"
-        android:layout_marginHorizontal="32dp"/>
+        style="@style/AppTheme.RoundedCornerMaterialButton"
+        android:layout_width="345dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="32dp"
+        android:text="Log in"
+        android:textColorLink="#00483A"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginPassword"
+        app:layout_constraintVertical_bias="0.147" />
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:id="@+id/toSignUpBtn"
-        android:text="Create New Account"
+        style="@style/AppTheme.RoundedCornerMaterialButton"
+        android:layout_width="337dp"
+        android:layout_height="49dp"
         android:layout_marginHorizontal="32dp"
-        />
-</LinearLayout>
+        android:layout_marginTop="8dp"
+        android:background="@color/cardview_light_background"
+        android:text="Sign Up"
+        android:textColor="#000000"
+
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.54"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
