@@ -19,7 +19,7 @@
         android:layout_alignParentBottom="true"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_navigation"
-        android:background="@color/colorAccent"
+        android:background="@color/colorTheme"
         />
 
 
