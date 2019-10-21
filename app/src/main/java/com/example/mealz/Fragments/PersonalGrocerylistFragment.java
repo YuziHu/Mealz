@@ -1,28 +1,21 @@
-package com.example.mealz.Activities;
+package com.example.mealz.Fragments;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mealz.Activities.HomeActivity;
+import com.example.mealz.Activities.LoginActivity;
+import com.example.mealz.Activities.SearchRecipeActivity;
+import com.example.mealz.Adapters.GroceryListAdapter;
 import com.example.mealz.Dialogs.AddGroceryDialog;
 import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.R;
-import com.example.mealz.Adapters.GroceryListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +27,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+//import android.support.v4.app.Fragment;
+
+public class PersonalGrocerylistFragment extends Fragment implements AddGroceryDialog.AddGroceryDialogListener {
+
+    private static final String TAG = "Personal Grocery List Fragment";
 
     private Button addGroceryBtn;
     private Button searchRecipeBtn;
@@ -56,16 +56,17 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
     private Button signout;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_personal_grocerylist, container, false);
 
-        addGroceryBtn = findViewById(R.id.addGroceryItemBtn);
-        searchRecipeBtn = findViewById(R.id.toSearchRecipeBtn);
-        groceryListView = findViewById(R.id.groceryListView);
 
-        adapter = new GroceryListAdapter(this, groceryNames, groceryAmount, groceryUnits);
+        addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
+        searchRecipeBtn = view.findViewById(R.id.toSearchRecipeBtn);
+        groceryListView = view.findViewById(R.id.groceryListView);
+
+        adapter = new GroceryListAdapter(getActivity(), groceryNames, groceryAmount, groceryUnits);
         groceryListView.setAdapter(adapter);
 
         mAuth = FirebaseAuth.getInstance();
@@ -73,7 +74,7 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
         currentUser = mAuth.getCurrentUser();
 
         // signout
-        signout = findViewById(R.id.signoutBtn);
+        signout = view.findViewById(R.id.signoutBtn);
         setUpFirebaseListener();
         signout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,12 +127,13 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
         searchRecipeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toSearchActivity = new Intent(getApplicationContext(), SearchRecipeActivity.class);
+                Intent toSearchActivity = new Intent(getActivity(), SearchRecipeActivity.class);
                 startActivity(toSearchActivity);
             }
         });
 
 
+        return view;
     }
 
     private void setUpFirebaseListener() {
@@ -142,8 +144,8 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
                 if (user != null) {
 
                 } else {
-                    Toast.makeText(HomeActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    Toast.makeText(getActivity(), "Signed out", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(intent);
                 }
             }
@@ -151,13 +153,13 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         FirebaseAuth.getInstance().addAuthStateListener(mAuthStateListener);
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         if (mAuthStateListener != null) {
             FirebaseAuth.getInstance().removeAuthStateListener(mAuthStateListener);
@@ -166,7 +168,7 @@ public class HomeActivity extends AppCompatActivity implements AddGroceryDialog.
 
     private void openDialog() {
         AddGroceryDialog addGroceryDialog = new AddGroceryDialog();
-        addGroceryDialog.show(getSupportFragmentManager(), "Add grocery item");
+        addGroceryDialog.show(getFragmentManager(), "Add grocery item");
     }
 
     @Override
