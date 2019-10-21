@@ -19,4 +19,11 @@
         <item>low-fat</item>
         <item>low-carb</item>
     </string-array>
+    <string-array name="health">
+        <item>vegan</item>
+        <item>vegetarian</item>
+        <item>dairy-free</item>
+        <item>gluten-free</item>
+        <item>peanut-free</item>
+    </string-array>
 </resources>

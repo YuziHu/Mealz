@@ -53,6 +53,7 @@ public class SearchRecipeActivity extends AppCompatActivity  {
 //    ));
     private List<HitsModel> recipeList;
     private Spinner dietSpinner;
+    private Spinner healthSpinner;
     private EditText searchField;
     private ImageButton img;
 
@@ -64,12 +65,18 @@ public class SearchRecipeActivity extends AppCompatActivity  {
 
         searchField = findViewById(R.id.recipeSearch);
         img = findViewById(R.id.SearchedImg2);
-        dietSpinner = findViewById(R.id.spinner);
-        ArrayAdapter<String> unitSelectionAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.diets));
 
-        unitSelectionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        dietSpinner.setAdapter(unitSelectionAdapter);
+        dietSpinner = findViewById(R.id.spinner);
+        ArrayAdapter<String> dietSelectionAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.diets));
+        dietSelectionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dietSpinner.setAdapter(dietSelectionAdapter);
+
+        healthSpinner = findViewById(R.id.spinner2);
+        ArrayAdapter<String> healthSelectionAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.health));
+        healthSelectionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        healthSpinner.setAdapter(healthSelectionAdapter);
 
 //        String img_url = recipe.get(0).getUrl();
 
@@ -83,9 +90,9 @@ public class SearchRecipeActivity extends AppCompatActivity  {
     public void searchRecipeClicked(View buttonView) {
         String recipe = searchField.getText().toString();
         String diet = dietSpinner.getSelectedItem().toString();
-        String message = "&q=" + recipe + "&diet=" + diet;
+        String health = healthSpinner.getSelectedItem().toString();
+        String message = "&q=" + recipe + "&diet=" + diet + "&health=" + health;
         searchForRecipe(message);
-        System.out.println(message);
     }
 
 
@@ -131,7 +138,7 @@ public class SearchRecipeActivity extends AppCompatActivity  {
         img[1] = findViewById(R.id.SearchedImg2);
         img[2] = findViewById(R.id.SearchedImg3);
         img[3] = findViewById(R.id.SearchedImg4);
-        img[4] = findViewById(R.id.SearchedImg5);
+//        img[4] = findViewById(R.id.SearchedImg5);
 
 
         TextView[] label = new TextView[5];
@@ -139,11 +146,11 @@ public class SearchRecipeActivity extends AppCompatActivity  {
         label[1] = findViewById(R.id.label2);
         label[2] = findViewById(R.id.label3);
         label[3] = findViewById(R.id.label4);
-        label[4] = findViewById(R.id.label5);
+//        label[4] = findViewById(R.id.label5);
 
 
         if (recipeList.size() > 0) {
-            for (int i=0 ; i<5; ++i) {
+            for (int i=0 ; i<4; ++i) { //5
                 String img_url = recipeList.get(i).getRecipe().getImage();
                 if (!img_url.equalsIgnoreCase(""))
                     Picasso.get().load(img_url).placeholder(R.drawable.ic_launcher_background)// Place holder image from drawable folder
