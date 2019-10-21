@@ -20,10 +20,13 @@
         <item>low-carb</item>
     </string-array>
     <string-array name="health">
+        <item>dairy-free</item>
+        <item>egg-free</item>
+        <item>fat-free</item>
+        <item>gluten-free</item>
+        <item>low-sugar</item>
+        <item>peanut-free</item>
         <item>vegan</item>
         <item>vegetarian</item>
-        <item>dairy-free</item>
-        <item>gluten-free</item>
-        <item>peanut-free</item>
     </string-array>
 </resources>
