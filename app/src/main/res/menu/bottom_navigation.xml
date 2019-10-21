@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_todo"
+        android:icon="@drawable/ic_panorama_fish_eye_black_24dp"
+        android:title="To-dos" />
+
+    <item
+        android:id="@+id/nav_mealplan"
+        android:icon="@drawable/ic_panorama_fish_eye_black_24dp"
+        android:title="Meal Plan" />
+
+    <item
+        android:id="@+id/nav_grocery"
+        android:icon="@drawable/ic_panorama_fish_eye_black_24dp"
+        android:title="Grocery" />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_panorama_fish_eye_black_24dp"
+        android:title="Me" />
+
+</menu>
