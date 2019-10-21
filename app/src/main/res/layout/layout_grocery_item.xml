@@ -51,9 +51,20 @@
                 android:id="@+id/gUnit"
                 />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shared with: "
+                android:textColor="#ccc"
+                android:textStyle="bold"
+                android:layout_margin="5dp"
+                android:textSize="15sp"
+                android:id="@+id/gShare"
+                />
+
             <Spinner
                 android:id="@+id/editGrocery"
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="220dp"/>
 

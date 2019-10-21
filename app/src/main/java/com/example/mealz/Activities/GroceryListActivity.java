@@ -62,21 +62,6 @@ public class GroceryListActivity extends AppCompatActivity implements AddGrocery
             String currentUID = currentUser.getUid();
             current_user_db = database.getReference().child("Users").child(currentUID);
         }
-
-//        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-//        ViewPager viewPager = findViewById(R.id.view_pager);
-//        viewPager.setAdapter(sectionsPagerAdapter);
-//        TabLayout tabs = findViewById(R.id.tabs);
-//        tabs.setupWithViewPager(viewPager);
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
     }
 
     private void setUpViewPager(ViewPager viewPager){
@@ -97,7 +82,7 @@ public class GroceryListActivity extends AppCompatActivity implements AddGrocery
         if (currentUser != null) {
             String currentUID = currentUser.getUid();
             current_user_db = database.getReference().child("Users").child(currentUID);
-            DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
+            DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("personal");
             currentUserGroceryList.push().setValue(newGroceryEntry);
         }
     }
