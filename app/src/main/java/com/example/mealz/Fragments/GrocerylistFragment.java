@@ -45,9 +45,6 @@ public class GrocerylistFragment extends Fragment implements AddGroceryDialog.Ad
         TabLayout tabLayout = view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-//        currentFragment = getFragmentManager().findFragmentById(R.id.grocerylist_container);
-//        getFragmentManager().beginTransaction().replace(R.id.grocerylist_container, currentFragment).commit();
-
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         currentUser = mAuth.getCurrentUser();

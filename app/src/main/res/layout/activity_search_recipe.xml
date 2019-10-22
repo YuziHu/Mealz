@@ -83,13 +83,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.028"><![CDATA[
-
-        1"
-            android:background="#F9F9F9"
-            app:srcCompat="@android:color/background_light" />
-
-        ]]>
+        app:layout_constraintVertical_bias="0.028">
 
         <ImageButton
             android:id="@+id/SearchedImg1"

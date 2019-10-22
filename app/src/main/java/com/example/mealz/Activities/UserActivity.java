@@ -38,7 +38,7 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
 
                     switch (item.getItemId()){
                         case R.id.nav_todo:
-                            selectedFragment = new UserProfileFragment();
+                            selectedFragment = new MealPlanFragment();
                             break;
                         case R.id.nav_mealplan:
                             selectedFragment = new MealPlanFragment();
