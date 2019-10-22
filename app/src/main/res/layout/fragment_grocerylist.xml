@@ -23,6 +23,7 @@
             android:textColor="#009688"
             android:textSize="32sp"
             android:textStyle="bold" />
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
