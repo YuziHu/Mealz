@@ -35,7 +35,6 @@ public class SharedGrocerylistFragment extends Fragment implements AddGroceryDia
     private static final String TAG = "Shared Grocery List Fragment";
 
     private Button addGroceryBtn;
-    private Button searchRecipeBtn;
     private ListView groceryListView;
     GroceryListAdapter adapter;
     // get grocery list as a list from firebase
@@ -51,9 +50,9 @@ public class SharedGrocerylistFragment extends Fragment implements AddGroceryDia
     private FirebaseDatabase database;
     private DatabaseReference current_user_db;
 
-    // sign out user
-    private Button signout;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
+//    // sign out user
+//    private Button signout;
+//    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     @Nullable
     @Override
@@ -63,7 +62,6 @@ public class SharedGrocerylistFragment extends Fragment implements AddGroceryDia
         System.out.println(TAG);
 
         addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
-        searchRecipeBtn = view.findViewById(R.id.toSearchRecipeBtn);
         groceryListView = view.findViewById(R.id.groceryListView);
 
         adapter = new GroceryListAdapter(getActivity(), groceryNames, groceryAmount, groceryUnits, groceryShares);
@@ -74,14 +72,14 @@ public class SharedGrocerylistFragment extends Fragment implements AddGroceryDia
         currentUser = mAuth.getCurrentUser();
 
         // signout
-        signout = view.findViewById(R.id.signoutBtn);
-        setUpFirebaseListener();
-        signout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-            }
-        });
+//        signout = view.findViewById(R.id.signoutBtn);
+//        setUpFirebaseListener();
+//        signout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                FirebaseAuth.getInstance().signOut();
+//            }
+//        });
 
         // populate grocery list view if current user has grocery items in list
         if (currentUser != null) {
@@ -126,32 +124,24 @@ public class SharedGrocerylistFragment extends Fragment implements AddGroceryDia
             }
         });
 
-        searchRecipeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent toSearchActivity = new Intent(getActivity(), SearchRecipeActivity.class);
-                startActivity(toSearchActivity);
-            }
-        });
-
         return view;
     }
 
-    private void setUpFirebaseListener() {
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-
-                } else {
-                    Toast.makeText(getActivity(), "Signed out", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    startActivity(intent);
-                }
-            }
-        };
-    }
+//    private void setUpFirebaseListener() {
+//        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                if (user != null) {
+//
+//                } else {
+//                    Toast.makeText(getActivity(), "Signed out", Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+//                    startActivity(intent);
+//                }
+//            }
+//        };
+//    }
 
     private void openDialog() {
         AddGroceryDialog addGroceryDialog = new AddGroceryDialog();

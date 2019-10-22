@@ -37,7 +37,6 @@ public class PersonalGrocerylistFragment extends Fragment implements AddGroceryD
     private static final String TAG = "Personal Grocery List Fragment";
 
     private Button addGroceryBtn;
-    private Button searchRecipeBtn;
     private ListView groceryListView;
     GroceryListAdapter adapter;
     // get grocery list as a list from firebase
@@ -52,9 +51,9 @@ public class PersonalGrocerylistFragment extends Fragment implements AddGroceryD
     private FirebaseDatabase database;
     private DatabaseReference current_user_db;
 
-    // sign out user
-    private Button signout;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
+//    // sign out user
+//    private Button signout;
+//    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     @Nullable
     @Override
@@ -64,7 +63,6 @@ public class PersonalGrocerylistFragment extends Fragment implements AddGroceryD
         System.out.println(TAG);
 
         addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
-        searchRecipeBtn = view.findViewById(R.id.toSearchRecipeBtn);
         groceryListView = view.findViewById(R.id.groceryListView);
 
         adapter = new GroceryListAdapter(getActivity(), groceryNames, groceryAmount, groceryUnits, null);
@@ -75,14 +73,14 @@ public class PersonalGrocerylistFragment extends Fragment implements AddGroceryD
         currentUser = mAuth.getCurrentUser();
 
         // signout
-        signout = view.findViewById(R.id.signoutBtn);
-        setUpFirebaseListener();
-        signout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-            }
-        });
+//        signout = view.findViewById(R.id.signoutBtn);
+//        setUpFirebaseListener();
+//        signout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                FirebaseAuth.getInstance().signOut();
+//            }
+//        });
 
 
         // populate grocery list view if current user has grocery items in list
@@ -125,47 +123,39 @@ public class PersonalGrocerylistFragment extends Fragment implements AddGroceryD
             }
         });
 
-        searchRecipeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent toSearchActivity = new Intent(getActivity(), SearchRecipeActivity.class);
-                startActivity(toSearchActivity);
-            }
-        });
-
 
         return view;
     }
 
-    private void setUpFirebaseListener() {
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
+//    private void setUpFirebaseListener() {
+//        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                if (user != null) {
+//
+//                } else {
+//                    Toast.makeText(getActivity(), "Signed out", Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+//                    startActivity(intent);
+//                }
+//            }
+//        };
+//    }
 
-                } else {
-                    Toast.makeText(getActivity(), "Signed out", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    startActivity(intent);
-                }
-            }
-        };
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseAuth.getInstance().addAuthStateListener(mAuthStateListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthStateListener != null) {
-            FirebaseAuth.getInstance().removeAuthStateListener(mAuthStateListener);
-        }
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        FirebaseAuth.getInstance().addAuthStateListener(mAuthStateListener);
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        if (mAuthStateListener != null) {
+//            FirebaseAuth.getInstance().removeAuthStateListener(mAuthStateListener);
+//        }
+//    }
 
     private void openDialog() {
         AddGroceryDialog addGroceryDialog = new AddGroceryDialog();
