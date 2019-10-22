@@ -1,10 +1,17 @@
 package com.example.mealz.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.mealz.Activities.LoginActivity;
+import com.example.mealz.Activities.SearchRecipeActivity;
+import com.example.mealz.Adapters.GroceryListAdapter;
 import com.example.mealz.Adapters.SectionsPageAdapter;
 import com.example.mealz.Dialogs.AddGroceryDialog;
 import com.example.mealz.Models.GroceryItem;
@@ -27,23 +34,34 @@ public class GrocerylistFragment extends Fragment implements AddGroceryDialog.Ad
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager viewPager;
 
+    // buttons
+    private Button searchRecipeBtn;
+    private ListView groceryListView;
+
     // firebase objects
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
     private DatabaseReference current_user_db;
+
+    // sign out user
+    private Button signout;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_grocerylist, container, false);
 
-        mSectionsPageAdapter = new SectionsPageAdapter(getChildFragmentManager());
+        mSectionsPageAdapter = new SectionsPageAdapter(getFragmentManager());
 
         viewPager = view.findViewById(R.id.grocerylist_container);
         setUpViewPager(viewPager);
 
         TabLayout tabLayout = view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        searchRecipeBtn = view.findViewById(R.id.toSearchRecipeBtn);
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -54,10 +72,59 @@ public class GrocerylistFragment extends Fragment implements AddGroceryDialog.Ad
             current_user_db = database.getReference().child("Users").child(currentUID);
         }
 
+        // signout
+        signout = view.findViewById(R.id.signoutBtn);
+        setUpFirebaseListener();
+        signout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+            }
+        });
+
+        searchRecipeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent toSearchActivity = new Intent(getActivity(), SearchRecipeActivity.class);
+                startActivity(toSearchActivity);
+            }
+        });
+
         return view;
     }
 
+    private void setUpFirebaseListener() {
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+
+                } else {
+                    Toast.makeText(getActivity(), "Signed out", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
+                }
+            }
+        };
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseAuth.getInstance().addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthStateListener != null) {
+            FirebaseAuth.getInstance().removeAuthStateListener(mAuthStateListener);
+        }
+    }
+
     private void setUpViewPager(ViewPager viewPager){
+//        SectionsPageAdapter adapter = new SectionsPageAdapter(getFragmentManager());
         mSectionsPageAdapter.addFragment(new PersonalGrocerylistFragment(), "Personal List");
         mSectionsPageAdapter.addFragment(new SharedGrocerylistFragment(), "Shared List");
         viewPager.setAdapter(mSectionsPageAdapter);

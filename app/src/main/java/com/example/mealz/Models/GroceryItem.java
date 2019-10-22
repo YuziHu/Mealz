@@ -61,5 +61,5 @@ public class GroceryItem {
 
     public String getSharedWith() { return shared_with; }
 
-    public void setShareWith(String shared_with) { this.shared_with = shared_with; }
+    public void setSharedWith(String shared_with) { this.shared_with = shared_with; }
 }
