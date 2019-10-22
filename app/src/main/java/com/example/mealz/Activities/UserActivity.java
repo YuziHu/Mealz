@@ -3,6 +3,7 @@ package com.example.mealz.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -10,8 +11,11 @@ import android.view.MenuItem;
 import com.example.mealz.Dialogs.AddGroceryDialog;
 import com.example.mealz.Fragments.GrocerylistFragment;
 import com.example.mealz.Fragments.MealPlanFragment;
+import com.example.mealz.Fragments.PersonalGrocerylistFragment;
+import com.example.mealz.Fragments.RecipeDetailFragment;
 import com.example.mealz.Fragments.UserProfileFragment;
 import com.example.mealz.Models.GroceryItem;
+import com.example.mealz.Models.RecipeModel;
 import com.example.mealz.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class UserActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener {
+public class UserActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener, MealPlanFragment.RecipeClickedListener {
 
     // firebase objects
     private FirebaseAuth mAuth;
@@ -28,7 +32,8 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
     private DatabaseReference current_user_db;
 
     // Fragments
-
+    private RecipeDetailFragment recipeDetailFragment;
+    private FragmentTransaction ft;
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener(){
@@ -38,7 +43,7 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
 
                     switch (item.getItemId()){
                         case R.id.nav_todo:
-                            selectedFragment = new MealPlanFragment();
+                            selectedFragment = new RecipeDetailFragment();
                             break;
                         case R.id.nav_mealplan:
                             selectedFragment = new MealPlanFragment();
@@ -56,9 +61,6 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
                 }
             };
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +69,13 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
 
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+
+        if(getIntent().getStringExtra("grocerylistFragment")!=null && getIntent().getStringExtra("grocerylistFragment").equals("OpenPersonalGroceryList")){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GrocerylistFragment()).addToBackStack(null).commit();
+        }
+
+        recipeDetailFragment = new RecipeDetailFragment();
+        ft = getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, recipeDetailFragment);
 
         // firebase
         mAuth = FirebaseAuth.getInstance();
@@ -77,6 +86,8 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
             String currentUID = currentUser.getUid();
             current_user_db = database.getReference().child("Users").child(currentUID);
         }
+
+        recipeDetailFragment = new RecipeDetailFragment();
     }
 
     @Override
@@ -89,5 +100,13 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
         newGroceryEntry.setUnit(unit);
         DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("personal");
         currentUserGroceryList.push().setValue(newGroceryEntry);
+    }
+
+    @Override
+    public void onRecipeSent(RecipeModel rm) {
+//        RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, recipeDetailFragment).commit();
+        ft.commit();
+        recipeDetailFragment.getRecipeDetail(rm);
     }
 }

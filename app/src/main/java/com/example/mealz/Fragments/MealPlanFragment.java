@@ -1,5 +1,6 @@
 package com.example.mealz.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +38,8 @@ import androidx.fragment.app.Fragment;
 
 public class MealPlanFragment extends Fragment {
 
+    private final String TAG = "Meal Plan Fragment.";
+
     private List<HitsModel> recipeList;
 
     private EditText searchField;
@@ -45,11 +48,19 @@ public class MealPlanFragment extends Fragment {
 
     private View view;
 
+    private RecipeClickedListener recipeClickedListener;
+
+    // create an interface to pass the recipe object into userActivity then to recipe detail fragment
+    public interface RecipeClickedListener {
+        void onRecipeSent(RecipeModel rm);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_mealplan, container, false);
 
+//        Log.i(TAG, "create meal plan fragment instance.");
 
         searchField = view.findViewById(R.id.recipeSearch);
         img = view.findViewById(R.id.SearchedImg2);
@@ -64,6 +75,24 @@ public class MealPlanFragment extends Fragment {
 
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        // context is the UserActivity which should implement RecipeClickedListener
+        if(context instanceof RecipeClickedListener){
+            recipeClickedListener = (RecipeClickedListener) context;
+        }
+        else{
+            throw new RuntimeException(context.toString()+" must implement RecipeClickedListener.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        recipeClickedListener = null;
     }
 
     public void searchRecipeClicked(){
@@ -128,6 +157,13 @@ public class MealPlanFragment extends Fragment {
                 String label_text = recipeList.get(i).getRecipe().getLabel();
                 label[i].setText(label_text);
                 final int j=i;
+//                img[i].setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        RecipeModel recipe_detail = recipeList.get(j).getRecipe();
+//                        recipeClickedListener.onRecipeSent(recipe_detail);
+//                    }
+//                });
                 img[i].setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         recipeImageClicked(j);
@@ -149,7 +185,7 @@ public class MealPlanFragment extends Fragment {
 
     public void recipeImageClicked(int j) {
         Intent myIntent = new Intent(getActivity(), RecipeDetailActivity.class);
-        System.out.println(recipeList.get(j).getRecipe().getIngredients());
+//        System.out.println(recipeList.get(j).getRecipe().getIngredients());
         RecipeModel recipe_detail = recipeList.get(j).getRecipe();
         myIntent.putExtra("recipeList",(Serializable)recipe_detail);
         startActivity(myIntent);
