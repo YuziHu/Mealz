@@ -27,6 +27,9 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
     private FirebaseDatabase database;
     private DatabaseReference current_user_db;
 
+    // Fragments
+
+
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener(){
                 @Override
@@ -48,7 +51,7 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
                             break;
                     }
 
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).addToBackStack(null).commit();
                     return true;
                 }
             };

@@ -37,13 +37,16 @@ public class GrocerylistFragment extends Fragment implements AddGroceryDialog.Ad
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_grocerylist, container, false);
 
-        mSectionsPageAdapter = new SectionsPageAdapter(getFragmentManager());
+        mSectionsPageAdapter = new SectionsPageAdapter(getChildFragmentManager());
 
-        viewPager = view.findViewById(R.id.container);
+        viewPager = view.findViewById(R.id.grocerylist_container);
         setUpViewPager(viewPager);
 
         TabLayout tabLayout = view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+//        currentFragment = getFragmentManager().findFragmentById(R.id.grocerylist_container);
+//        getFragmentManager().beginTransaction().replace(R.id.grocerylist_container, currentFragment).commit();
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -58,10 +61,9 @@ public class GrocerylistFragment extends Fragment implements AddGroceryDialog.Ad
     }
 
     private void setUpViewPager(ViewPager viewPager){
-        SectionsPageAdapter adapter = new SectionsPageAdapter(getFragmentManager());
-        adapter.addFragment(new PersonalGrocerylistFragment(), "Personal List");
-        adapter.addFragment(new SharedGrocerylistFragment(), "Shared List");
-        viewPager.setAdapter(adapter);
+        mSectionsPageAdapter.addFragment(new PersonalGrocerylistFragment(), "Personal List");
+        mSectionsPageAdapter.addFragment(new SharedGrocerylistFragment(), "Shared List");
+        viewPager.setAdapter(mSectionsPageAdapter);
     }
 
     @Override
