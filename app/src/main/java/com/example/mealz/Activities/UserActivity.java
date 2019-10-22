@@ -9,6 +9,8 @@ import android.view.MenuItem;
 
 import com.example.mealz.Dialogs.AddGroceryDialog;
 import com.example.mealz.Fragments.GrocerylistFragment;
+import com.example.mealz.Fragments.MealPlanFragment;
+import com.example.mealz.Fragments.UserProfileFragment;
 import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -33,16 +35,16 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
 
                     switch (item.getItemId()){
                         case R.id.nav_todo:
-                            selectedFragment = new GrocerylistFragment();
+                            selectedFragment = new UserProfileFragment();
                             break;
                         case R.id.nav_mealplan:
-                            selectedFragment = new GrocerylistFragment();
+                            selectedFragment = new MealPlanFragment();
                             break;
                         case R.id.nav_grocery:
                             selectedFragment = new GrocerylistFragment();
                             break;
                         case R.id.nav_profile:
-                            selectedFragment = new GrocerylistFragment();
+                            selectedFragment = new UserProfileFragment();
                             break;
                     }
 
@@ -50,6 +52,8 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
                     return true;
                 }
             };
+
+
 
 
     @Override
