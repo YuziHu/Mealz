@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.example.mealz.Activities.HomeActivity;
 import com.example.mealz.R;
 
 import androidx.appcompat.app.AppCompatDialogFragment;

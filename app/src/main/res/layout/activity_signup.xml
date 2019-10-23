@@ -7,6 +7,15 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="93dp"
+        android:layout_height="87dp"
+        android:layout_marginBottom="28dp"
+        app:layout_constraintBottom_toTopOf="@+id/loginText"
+        app:srcCompat="@drawable/mealz_logo"
+        tools:layout_editor_absoluteX="33dp" />
+
     <TextView
         android:id="@+id/loginText"
         android:layout_width="wrap_content"

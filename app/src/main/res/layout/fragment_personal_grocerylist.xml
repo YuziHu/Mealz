@@ -4,39 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.HomeActivity">
+    tools:context=".Fragments.PersonalGrocerylistFragment">
 
-    <Button
-        android:id="@+id/signoutBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp"
-        android:text="Sign out"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        style="@style/AppTheme.RoundedCornerMaterialButton"/>
 
-    <LinearLayout
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
-        app:layout_constraintBottom_toBottomOf="@+id/signoutBtn"
-        app:layout_constraintVertical_bias="1.0"
-        tools:layout_editor_absoluteX="-16dp">
-
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/groceryListView" />
-
-    </LinearLayout>
+        android:id="@+id/groceryListView"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingBottom="100sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/signoutBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="48sp"
         app:layout_constraintVertical_bias="1.0"
         tools:layout_editor_absoluteX="-16dp">
 
@@ -47,16 +30,6 @@
             android:layout_marginHorizontal="20dp"
             android:paddingHorizontal="10dp"
             android:text="Add an item"
-            style="@style/AppTheme.RoundedCornerMaterialButton"
-            />
-
-        <Button
-            android:id="@+id/toSearchRecipeBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="130dp"
-            android:paddingHorizontal="10dp"
-            android:text="Search to add"
             style="@style/AppTheme.RoundedCornerMaterialButton"
             />
 

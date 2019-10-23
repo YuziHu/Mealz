@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mealz.Activities.HomeActivity;
 import com.example.mealz.Models.User;
 import com.example.mealz.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -125,7 +124,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        Intent searchRecipeActivity = new Intent(getApplicationContext(), SearchRecipeActivity.class);
+        Intent searchRecipeActivity = new Intent(getApplicationContext(), UserActivity.class);
         startActivity(searchRecipeActivity);
         finish();
     }

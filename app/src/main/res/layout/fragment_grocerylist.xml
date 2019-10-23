@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.GroceryListActivity">
+    tools:context=".Fragments.GrocerylistFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -23,7 +23,6 @@
             android:textColor="#009688"
             android:textSize="32sp"
             android:textStyle="bold" />
-
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
@@ -33,9 +32,51 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/container"
+        android:id="@+id/grocerylist_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/signoutBtn"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="-16dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="50dp">
+
+        <Button
+            android:id="@+id/addGroceryItemBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:paddingHorizontal="10dp"
+            android:text="Add an item"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
+            />
+
+        <Button
+            android:id="@+id/toSearchRecipeBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="120sp"
+            android:paddingHorizontal="10dp"
+            android:text="Search to add"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
+            />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/signoutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp"
+        android:text="Sign out"
+        style="@style/AppTheme.RoundedCornerMaterialButton"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="160sp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

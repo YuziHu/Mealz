@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mealz.Fragments.PersonalGrocerylistFragment;
 import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.Models.IngredientModel;
 import com.example.mealz.Models.RecipeModel;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -89,7 +91,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                             newGroceryEntry.setName(ingredient.getText());
                             newGroceryEntry.setAmount((int)Math.floor(ingredient.getWeight()));
                             newGroceryEntry.setUnit("g");
-                            DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
+                            DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("personal");
                             currentUserGroceryList.push().setValue(newGroceryEntry);
                         }
                     }
@@ -110,8 +112,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
 
     public void openGroceryList() {
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(this, UserActivity.class);
 //        intent.putExtra(EXTRA_TEXT, rp);
+        intent.putExtra("grocerylistFragment", "OpenPersonalGroceryList");
         startActivity(intent);
     }
 }
