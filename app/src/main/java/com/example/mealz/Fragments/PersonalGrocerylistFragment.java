@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.mealz.Activities.HomeActivity;
 import com.example.mealz.Activities.LoginActivity;
 import com.example.mealz.Activities.SearchRecipeActivity;
 import com.example.mealz.Adapters.GroceryListAdapter;
@@ -32,7 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 //import android.support.v4.app.Fragment;
 
-public class PersonalGrocerylistFragment extends Fragment implements AddGroceryDialog.AddGroceryDialogListener {
+public class PersonalGrocerylistFragment extends Fragment {
 
     private static final String TAG = "Personal Grocery List Fragment";
 
@@ -59,8 +58,6 @@ public class PersonalGrocerylistFragment extends Fragment implements AddGroceryD
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal_grocerylist, container, false);
-
-        System.out.println(TAG);
 
         addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
         groceryListView = view.findViewById(R.id.groceryListView);
@@ -115,13 +112,13 @@ public class PersonalGrocerylistFragment extends Fragment implements AddGroceryD
             }
         }
 
-        addGroceryBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // pops up a window and lets user to add a grocery by name
-                openDialog();
-            }
-        });
+//        addGroceryBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // pops up a window and lets user to add a grocery by name
+//                openDialog();
+//            }
+//        });
 
 
         return view;
@@ -157,20 +154,20 @@ public class PersonalGrocerylistFragment extends Fragment implements AddGroceryD
 //        }
 //    }
 
-    private void openDialog() {
-        AddGroceryDialog addGroceryDialog = new AddGroceryDialog();
-        addGroceryDialog.show(getFragmentManager(), "Add grocery item");
-    }
+//    private void openDialog() {
+//        AddGroceryDialog addGroceryDialog = new AddGroceryDialog();
+//        addGroceryDialog.show(getFragmentManager(), "Add grocery item");
+//    }
 
-    @Override
-    public void addGrocery(String groceryName, int amount, String unit) {
-        // once user hits add, make a query to database to retrieve the grocery item by name (API??)
-        // once got the data for the grocery item, save it in current user grocery list
-        GroceryItem newGroceryEntry = new GroceryItem();
-        newGroceryEntry.setName(groceryName);
-        newGroceryEntry.setAmount(amount);
-        newGroceryEntry.setUnit(unit);
-        DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("personal");
-        currentUserGroceryList.push().setValue(newGroceryEntry);
-    }
+//    @Override
+//    public void addGrocery(String groceryName, int amount, String unit) {
+//        // once user hits add, make a query to database to retrieve the grocery item by name (API??)
+//        // once got the data for the grocery item, save it in current user grocery list
+//        GroceryItem newGroceryEntry = new GroceryItem();
+//        newGroceryEntry.setName(groceryName);
+//        newGroceryEntry.setAmount(amount);
+//        newGroceryEntry.setUnit(unit);
+//        DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("shared");
+//        currentUserGroceryList.push().setValue(newGroceryEntry);
+//    }
 }

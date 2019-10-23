@@ -48,10 +48,20 @@
         android:layout_marginBottom="50dp">
 
         <Button
+            android:id="@+id/addGroceryItemBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:paddingHorizontal="10dp"
+            android:text="Add an item"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
+            />
+
+        <Button
             android:id="@+id/toSearchRecipeBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="270sp"
+            android:layout_marginLeft="120sp"
             android:paddingHorizontal="10dp"
             android:text="Search to add"
             style="@style/AppTheme.RoundedCornerMaterialButton"

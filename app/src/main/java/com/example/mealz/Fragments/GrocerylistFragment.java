@@ -33,9 +33,12 @@ public class GrocerylistFragment extends Fragment implements AddGroceryDialog.Ad
 
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager viewPager;
+    private TabLayout tabLayout;
+    public int currentTab;
 
     // buttons
     private Button searchRecipeBtn;
+    private Button addGroceryBtn;
     private ListView groceryListView;
 
     // firebase objects
@@ -58,10 +61,32 @@ public class GrocerylistFragment extends Fragment implements AddGroceryDialog.Ad
         viewPager = view.findViewById(R.id.grocerylist_container);
         setUpViewPager(viewPager);
 
-        TabLayout tabLayout = view.findViewById(R.id.tabs);
+        tabLayout = view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        currentTab = 0;
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+//                System.out.println("current tab index: "+tab.getPosition());
+                currentTab = tab.getPosition();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+//        System.out.println(viewPager.getCurrentItem());
 
         searchRecipeBtn = view.findViewById(R.id.toSearchRecipeBtn);
+        addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -87,6 +112,13 @@ public class GrocerylistFragment extends Fragment implements AddGroceryDialog.Ad
             public void onClick(View view) {
                 Intent toSearchActivity = new Intent(getActivity(), SearchRecipeActivity.class);
                 startActivity(toSearchActivity);
+            }
+        });
+        addGroceryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // pops up a window and lets user to add a grocery by name
+                openDialog();
             }
         });
 
@@ -130,6 +162,11 @@ public class GrocerylistFragment extends Fragment implements AddGroceryDialog.Ad
         viewPager.setAdapter(mSectionsPageAdapter);
     }
 
+    private void openDialog() {
+        AddGroceryDialog addGroceryDialog = new AddGroceryDialog();
+        addGroceryDialog.show(getFragmentManager(), "Add grocery item");
+    }
+
     @Override
     public void addGrocery(String groceryName, int amount, String unit) {
         // once user hits add, make a query to database to retrieve the grocery item by name (API??)
@@ -142,6 +179,9 @@ public class GrocerylistFragment extends Fragment implements AddGroceryDialog.Ad
             String currentUID = currentUser.getUid();
             current_user_db = database.getReference().child("Users").child(currentUID);
             DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
+//            System.out.println("current tab: "+currentTab);
+//            if(currentTab==0) currentUserGroceryList = currentUserGroceryList.child("personal");
+//            if(currentTab==1) currentUserGroceryList = currentUserGroceryList.child("shared");
             currentUserGroceryList.push().setValue(newGroceryEntry);
         }
     }

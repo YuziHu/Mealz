@@ -34,12 +34,13 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
     // Fragments
     private RecipeDetailFragment recipeDetailFragment;
     private FragmentTransaction ft;
+    private Fragment selectedFragment = null;
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener(){
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item){
-                    Fragment selectedFragment = null;
+//                    Fragment selectedFragment = null;
 
                     switch (item.getItemId()){
                         case R.id.nav_todo:
@@ -98,8 +99,13 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
         newGroceryEntry.setName(groceryName);
         newGroceryEntry.setAmount(amount);
         newGroceryEntry.setUnit(unit);
-        DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("personal");
-        currentUserGroceryList.push().setValue(newGroceryEntry);
+        DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
+        if(selectedFragment instanceof GrocerylistFragment){
+            System.out.println("current tab is: "+((GrocerylistFragment) selectedFragment).currentTab);
+            if(((GrocerylistFragment) selectedFragment).currentTab==0) currentUserGroceryList = currentUserGroceryList.child("personal");
+            if(((GrocerylistFragment) selectedFragment).currentTab==1) currentUserGroceryList = currentUserGroceryList.child("shared");
+            currentUserGroceryList.push().setValue(newGroceryEntry);
+        }
     }
 
     @Override
