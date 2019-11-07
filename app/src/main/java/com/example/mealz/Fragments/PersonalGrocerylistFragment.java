@@ -2,6 +2,7 @@ package com.example.mealz.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.example.mealz.Activities.LoginActivity;
 import com.example.mealz.Activities.SearchRecipeActivity;
 import com.example.mealz.Adapters.GroceryListAdapter;
+import com.example.mealz.Adapters.RecyclerGrocerylistAdapter;
 import com.example.mealz.Dialogs.AddGroceryDialog;
 import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.R;
@@ -29,15 +31,18 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v4.app.Fragment;
 
 public class PersonalGrocerylistFragment extends Fragment {
 
-    private static final String TAG = "Personal Grocery List Fragment";
+    private static final String TAG = "PersonalGroceryListFrag";
 
     private Button addGroceryBtn;
     private ListView groceryListView;
     GroceryListAdapter adapter;
+    RecyclerGrocerylistAdapter rAdapter;
     // get grocery list as a list from firebase
     List<GroceryItem> groceryList = new ArrayList<>();
     List<String> groceryNames = new ArrayList<>();
@@ -57,13 +62,13 @@ public class PersonalGrocerylistFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_personal_grocerylist, container, false);
+        View view = inflater.inflate(R.layout.fragment_personal_grocerylist_recyclerview, container, false);
 
         addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
         groceryListView = view.findViewById(R.id.groceryListView);
 
-        adapter = new GroceryListAdapter(getActivity(), groceryNames, groceryAmount, groceryUnits, null);
-        groceryListView.setAdapter(adapter);
+//        adapter = new GroceryListAdapter(getActivity(), groceryNames, groceryAmount, groceryUnits, null);
+//        groceryListView.setAdapter(adapter);
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -101,7 +106,9 @@ public class PersonalGrocerylistFragment extends Fragment {
                             groceryAmount.add(item.getAmount());
                             groceryUnits.add(item.getUnit());
                         }
-                        adapter.notifyDataSetChanged();
+//                        adapter.notifyDataSetChanged();
+//                        rAdapter.notifyDataSetChanged();
+                        initRecyclerView();
                     }
 
                     @Override
@@ -122,6 +129,15 @@ public class PersonalGrocerylistFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void initRecyclerView(){
+        Log.d(TAG, "initRecyclerView: init recyclerview");
+        RecyclerView personalGrocerylistRecyclerView = getView().findViewById(R.id.personalGrocerylistView);
+        rAdapter = new RecyclerGrocerylistAdapter(getActivity(),groceryNames, groceryAmount, groceryUnits, null);
+        personalGrocerylistRecyclerView.setAdapter(rAdapter);
+        personalGrocerylistRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
     }
 
 //    private void setUpFirebaseListener() {
