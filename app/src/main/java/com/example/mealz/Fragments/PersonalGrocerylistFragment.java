@@ -5,8 +5,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.mealz.Adapters.RecyclerGrocerylistAdapter;
 import com.example.mealz.Models.GroceryItem;
@@ -36,6 +40,8 @@ public class PersonalGrocerylistFragment extends Fragment {
     private Button addGroceryBtn;
     private ListView groceryListView;
     RecyclerGrocerylistAdapter rAdapter;
+    private Spinner editGrocerySpinner;
+
     // get grocery list as a list from firebase
     List<GroceryItem> groceryList = new ArrayList<>();
     List<String> groceryNames = new ArrayList<>();
@@ -59,6 +65,7 @@ public class PersonalGrocerylistFragment extends Fragment {
 
         addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
         groceryListView = view.findViewById(R.id.groceryListView);
+//        editGrocerySpinner = view.findViewById(R.id.editGrocery);
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -117,6 +124,11 @@ public class PersonalGrocerylistFragment extends Fragment {
 //            }
 //        });
 
+//        ArrayAdapter<String> editGroceryActionAdapter = new ArrayAdapter<String>(getActivity(),
+//                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.editGroceryActions));
+//        editGroceryActionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        editGrocerySpinner.setAdapter(editGroceryActionAdapter);
+//        editGrocerySpinner.setOnItemClickListener((AdapterView.OnItemClickListener) getActivity());
 
         return view;
     }
@@ -129,6 +141,7 @@ public class PersonalGrocerylistFragment extends Fragment {
         personalGrocerylistRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }
+
 
 //    private void setUpFirebaseListener() {
 //        mAuthStateListener = new FirebaseAuth.AuthStateListener() {

@@ -38,7 +38,6 @@ public class GrocerylistFragment extends Fragment implements AddGroceryDialog.Ad
     // buttons
     private Button searchRecipeBtn;
     private Button addGroceryBtn;
-    private ListView groceryListView;
 
     // firebase objects
     private FirebaseAuth mAuth;
