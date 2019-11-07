@@ -41,7 +41,6 @@ public class PersonalGrocerylistFragment extends Fragment {
 
     private Button addGroceryBtn;
     private ListView groceryListView;
-    GroceryListAdapter adapter;
     RecyclerGrocerylistAdapter rAdapter;
     // get grocery list as a list from firebase
     List<GroceryItem> groceryList = new ArrayList<>();

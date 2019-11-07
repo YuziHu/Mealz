@@ -47,7 +47,8 @@ public class RecyclerGrocerylistAdapter extends RecyclerView.Adapter<RecyclerGro
         holder.gName.setText(groceryNames.get(position));
         holder.gAmount.setText(groceryAmount.get(position).toString());
         holder.gUnit.setText(groceryUnits.get(position));
-        if(groceryShares!=null) holder.gShare.setText(groceryShares.get(position));
+        if(groceryShares!=null) holder.gShare.setText("Shared With: "+groceryShares.get(position));
+        else holder.gShare.setVisibility(View.GONE);
     }
 
     @Override

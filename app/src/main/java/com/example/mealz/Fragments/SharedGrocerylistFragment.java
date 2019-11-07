@@ -2,6 +2,7 @@ package com.example.mealz.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.example.mealz.Activities.LoginActivity;
 import com.example.mealz.Activities.SearchRecipeActivity;
 import com.example.mealz.Adapters.GroceryListAdapter;
+import com.example.mealz.Adapters.RecyclerGrocerylistAdapter;
 import com.example.mealz.Dialogs.AddGroceryDialog;
 import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.R;
@@ -29,14 +31,17 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class SharedGrocerylistFragment extends Fragment {
 
-    private static final String TAG = "Shared Grocery List Fragment";
+    private static final String TAG = "SharedGroceryListFrag";
 
     private Button addGroceryBtn;
     private ListView groceryListView;
-    GroceryListAdapter adapter;
+//    GroceryListAdapter adapter;
+    RecyclerGrocerylistAdapter rAdapter;
     // get grocery list as a list from firebase
     List<GroceryItem> groceryList = new ArrayList<>();
     List<String> groceryNames = new ArrayList<>();
@@ -57,15 +62,15 @@ public class SharedGrocerylistFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_shared_grocerylist, container, false);
+        View view = inflater.inflate(R.layout.fragment_shared_grocerylist_recyclerview, container, false);
 
         System.out.println(TAG);
 
         addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
         groceryListView = view.findViewById(R.id.groceryListView);
 
-        adapter = new GroceryListAdapter(getActivity(), groceryNames, groceryAmount, groceryUnits, groceryShares);
-        groceryListView.setAdapter(adapter);
+//        adapter = new GroceryListAdapter(getActivity(), groceryNames, groceryAmount, groceryUnits, groceryShares);
+//        groceryListView.setAdapter(adapter);
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -105,7 +110,8 @@ public class SharedGrocerylistFragment extends Fragment {
                             System.out.println(item.getName());
                             groceryShares.add(item.getSharedWith());
                         }
-                        adapter.notifyDataSetChanged();
+//                        adapter.notifyDataSetChanged();
+                        initRecyclerView();
                     }
 
                     @Override
@@ -125,6 +131,15 @@ public class SharedGrocerylistFragment extends Fragment {
 //        });
 
         return view;
+    }
+
+    private void initRecyclerView(){
+        Log.d(TAG, "initRecyclerView: init recyclerview");
+        RecyclerView sharedGrocerylistRecyclerView = getView().findViewById(R.id.sharedGrocerylistView);
+        rAdapter = new RecyclerGrocerylistAdapter(getActivity(),groceryNames, groceryAmount, groceryUnits, groceryShares);
+        sharedGrocerylistRecyclerView.setAdapter(rAdapter);
+        sharedGrocerylistRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
     }
 
 //    private void setUpFirebaseListener() {
