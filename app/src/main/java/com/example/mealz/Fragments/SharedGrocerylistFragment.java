@@ -34,7 +34,6 @@ public class SharedGrocerylistFragment extends Fragment {
 
     private Button addGroceryBtn;
     private ListView groceryListView;
-//    GroceryListAdapter adapter;
     RecyclerGrocerylistAdapter rAdapter;
     // get grocery list as a list from firebase
     List<GroceryItem> groceryList = new ArrayList<>();
@@ -62,9 +61,6 @@ public class SharedGrocerylistFragment extends Fragment {
 
         addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
         groceryListView = view.findViewById(R.id.groceryListView);
-
-//        adapter = new GroceryListAdapter(getActivity(), groceryNames, groceryAmount, groceryUnits, groceryShares);
-//        groceryListView.setAdapter(adapter);
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();

@@ -60,9 +60,6 @@ public class PersonalGrocerylistFragment extends Fragment {
         addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
         groceryListView = view.findViewById(R.id.groceryListView);
 
-//        adapter = new GroceryListAdapter(getActivity(), groceryNames, groceryAmount, groceryUnits, null);
-//        groceryListView.setAdapter(adapter);
-
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         currentUser = mAuth.getCurrentUser();

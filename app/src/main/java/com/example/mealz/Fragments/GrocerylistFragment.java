@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.example.mealz.Activities.LoginActivity;
 import com.example.mealz.Activities.SearchRecipeActivity;
-import com.example.mealz.Adapters.GroceryListAdapter;
 import com.example.mealz.Adapters.SectionsPageAdapter;
 import com.example.mealz.Dialogs.AddGroceryDialog;
 import com.example.mealz.Models.GroceryItem;
