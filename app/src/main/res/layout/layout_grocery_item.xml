@@ -85,12 +85,6 @@
                 android:id="@+id/editGrocery"
                 />
 
-<!--            <Spinner-->
-<!--                android:id="@+id/editGrocery"-->
-<!--                android:layout_width="60dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_marginLeft="220dp"/>-->
-
         </LinearLayout>
 
     </LinearLayout>
