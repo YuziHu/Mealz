@@ -28,7 +28,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class SharedGrocerylistFragment extends Fragment {
+public class SharedGrocerylistFragment extends Fragment implements RecyclerGrocerylistAdapter.OnEditIconClickListener {
 
     private static final String TAG = "SharedGroceryListFrag";
 
@@ -126,10 +126,15 @@ public class SharedGrocerylistFragment extends Fragment {
     private void initRecyclerView(){
         Log.d(TAG, "initRecyclerView: init recyclerview");
         RecyclerView sharedGrocerylistRecyclerView = getView().findViewById(R.id.sharedGrocerylistView);
-        rAdapter = new RecyclerGrocerylistAdapter(getActivity(),groceryNames, groceryAmount, groceryUnits, groceryShares);
+        rAdapter = new RecyclerGrocerylistAdapter(getActivity(),groceryList, groceryNames, groceryAmount, groceryUnits, groceryShares, this);
         sharedGrocerylistRecyclerView.setAdapter(rAdapter);
         sharedGrocerylistRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+    }
+
+    @Override
+    public void onEditIconClick(int position) {
+        Log.d(TAG, "onEditIconClick: "+groceryList.get(position).getGid());
     }
 
 //    private void setUpFirebaseListener() {

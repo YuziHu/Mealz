@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.mealz.Dialogs.AddGroceryDialog;
+import com.example.mealz.Dialogs.EditGroceryDialog;
 import com.example.mealz.Fragments.GrocerylistFragment;
 import com.example.mealz.Fragments.MealPlanFragment;
 import com.example.mealz.Fragments.PersonalGrocerylistFragment;
@@ -23,7 +25,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class UserActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener, MealPlanFragment.RecipeClickedListener {
+public class UserActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener, MealPlanFragment.RecipeClickedListener, EditGroceryDialog.EditGroceryDialogListener {
+
+    private static final String TAG = "UserActivity";
 
     // firebase objects
     private FirebaseAuth mAuth;
@@ -114,5 +118,29 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
 //        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, recipeDetailFragment).commit();
         ft.commit();
         recipeDetailFragment.getRecipeDetail(rm);
+    }
+
+    @Override
+    public void setShared(String groceryName, int amount, String unit, String sharedWith) {
+
+    }
+
+    @Override
+    public void updateGrocery(String groceryName, int amount, String unit) {
+
+    }
+
+    @Override
+    public void deleteGrocery(String groceryID) {
+        Log.d(TAG, "deleteGrocery: "+groceryID);
+        //
+        DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
+        if(selectedFragment instanceof GrocerylistFragment){
+            System.out.println("current tab is: "+((GrocerylistFragment) selectedFragment).currentTab);
+            if(((GrocerylistFragment) selectedFragment).currentTab==0) currentUserGroceryList = currentUserGroceryList.child("personal");
+            if(((GrocerylistFragment) selectedFragment).currentTab==1) currentUserGroceryList = currentUserGroceryList.child("shared");
+            DatabaseReference item = currentUserGroceryList.child(groceryID);
+            item.setValue(null);
+        }
     }
 }

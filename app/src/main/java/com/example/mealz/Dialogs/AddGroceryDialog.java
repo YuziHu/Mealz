@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,7 @@ public class AddGroceryDialog extends AppCompatDialogFragment {
 //        return super.onCreateDialog(savedInstance);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.add_grocery_dialog, null);
+        View view = inflater.inflate(R.layout.dialog_add_grocery, null);
 
         builder.setView(view)
                 .setTitle("Add an item to your grocery list")
