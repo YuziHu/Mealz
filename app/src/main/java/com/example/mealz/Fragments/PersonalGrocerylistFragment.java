@@ -1,18 +1,24 @@
 package com.example.mealz.Fragments;
 
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mealz.Activities.LoginActivity;
-import com.example.mealz.Activities.SearchRecipeActivity;
-import com.example.mealz.Adapters.GroceryListAdapter;
+import com.example.mealz.Adapters.RecyclerGrocerylistAdapter;
 import com.example.mealz.Dialogs.AddGroceryDialog;
+import com.example.mealz.Dialogs.EditGroceryDialog;
 import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,15 +35,18 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v4.app.Fragment;
 
-public class PersonalGrocerylistFragment extends Fragment {
+public class PersonalGrocerylistFragment extends Fragment implements RecyclerGrocerylistAdapter.OnEditIconClickListener {
 
-    private static final String TAG = "Personal Grocery List Fragment";
+    private static final String TAG = "PersonalGroceryListFrag";
 
     private Button addGroceryBtn;
     private ListView groceryListView;
-    GroceryListAdapter adapter;
+    RecyclerGrocerylistAdapter rAdapter;
+
     // get grocery list as a list from firebase
     List<GroceryItem> groceryList = new ArrayList<>();
     List<String> groceryNames = new ArrayList<>();
@@ -61,9 +70,6 @@ public class PersonalGrocerylistFragment extends Fragment {
 
         addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
         groceryListView = view.findViewById(R.id.groceryListView);
-
-        adapter = new GroceryListAdapter(getActivity(), groceryNames, groceryAmount, groceryUnits, null);
-        groceryListView.setAdapter(adapter);
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -96,12 +102,14 @@ public class PersonalGrocerylistFragment extends Fragment {
                         groceryUnits.clear();
                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
                             GroceryItem item = ds.getValue(GroceryItem.class);
+//                            System.out.println(ds.getKey());
+                            item.setGid(ds.getKey());
                             groceryList.add(item);
                             groceryNames.add(item.getName());
                             groceryAmount.add(item.getAmount());
                             groceryUnits.add(item.getUnit());
                         }
-                        adapter.notifyDataSetChanged();
+                        initRecyclerView();
                     }
 
                     @Override
@@ -120,9 +128,99 @@ public class PersonalGrocerylistFragment extends Fragment {
 //            }
 //        });
 
-
         return view;
     }
+
+    private void initRecyclerView(){
+        Log.d(TAG, "initRecyclerView: init recyclerview");
+        RecyclerView personalGrocerylistRecyclerView = getView().findViewById(R.id.personalGrocerylistView);
+        rAdapter = new RecyclerGrocerylistAdapter(getActivity(),groceryList, groceryNames, groceryAmount, groceryUnits, null, this);
+        personalGrocerylistRecyclerView.setAdapter(rAdapter);
+        personalGrocerylistRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+    }
+
+    @Override
+    public void onEditIconClick(int position) {
+//        System.out.println(groceryList);
+//        System.out.println(position);
+        Log.d(TAG, "onEditIconClick: "+groceryList.get(position).getGid());
+        // create a dialog box
+        GroceryItem item = (GroceryItem) groceryList.get(position);
+        final String itemID = item.getGid();
+        final String itemName = groceryNames.get(position);
+        final int itemAmount = groceryAmount.get(position);
+        final String itemUnit = groceryUnits.get(position);
+        //
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_edit_grocery, null);
+        //
+        TextView editGroceryName, editGroceryUnit;
+        EditText editGroceryAmount;
+        Button setSharedGroceryBtn, updateGroceryBtn, deleteGroceryBtn;
+        //
+        editGroceryName = dialogView.findViewById(R.id.editGroceryName);
+        editGroceryAmount = dialogView.findViewById(R.id.editGroceryAmount);
+        editGroceryUnit = dialogView.findViewById(R.id.editGroceryUnit);
+        setSharedGroceryBtn = dialogView.findViewById(R.id.setSharedGroceryBtn);
+        updateGroceryBtn = dialogView.findViewById(R.id.updateGroceryBtn);
+        deleteGroceryBtn = dialogView.findViewById(R.id.deleteGroceryBtn);
+        //
+        editGroceryName.setText(groceryNames.get(position));
+        editGroceryAmount.setText(groceryAmount.get(position).toString());
+        editGroceryUnit.setText(groceryUnits.get(position));
+
+        builder.setView(dialogView)
+                .setTitle("Edit Grocery")
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+        final AlertDialog editGroceryDialog = builder.create();
+        setSharedGroceryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setShared(itemName, itemAmount, itemUnit, "");
+                editGroceryDialog.dismiss();
+            }
+        });
+        updateGroceryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateGrocery(itemName, itemAmount, itemUnit);
+                editGroceryDialog.dismiss();
+            }
+        });
+        deleteGroceryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteGrocery(itemID);
+                editGroceryDialog.dismiss();
+            }
+        });
+
+        editGroceryDialog.show();
+    }
+
+    public void setShared(String groceryName, int amount, String unit, String sharedWith) {
+
+    }
+
+    public void updateGrocery(String groceryName, int amount, String unit) {
+
+    }
+
+    public void deleteGrocery(String groceryID) {
+        Log.d(TAG, "deleteGrocery: "+groceryID);
+        //
+        DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("personal");
+            DatabaseReference item = currentUserGroceryList.child(groceryID);
+            item.setValue(null);
+    }
+
 
 //    private void setUpFirebaseListener() {
 //        mAuthStateListener = new FirebaseAuth.AuthStateListener() {

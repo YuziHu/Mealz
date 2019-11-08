@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.example.mealz.Activities.LoginActivity;
 import com.example.mealz.Activities.SearchRecipeActivity;
-import com.example.mealz.Adapters.GroceryListAdapter;
 import com.example.mealz.Adapters.SectionsPageAdapter;
 import com.example.mealz.Dialogs.AddGroceryDialog;
 import com.example.mealz.Models.GroceryItem;
@@ -27,7 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-public class GrocerylistFragment extends Fragment implements AddGroceryDialog.AddGroceryDialogListener {
+public class GrocerylistFragment extends Fragment {
 
     private static final String TAG = "GroceryListFragment";
 
@@ -39,7 +38,6 @@ public class GrocerylistFragment extends Fragment implements AddGroceryDialog.Ad
     // buttons
     private Button searchRecipeBtn;
     private Button addGroceryBtn;
-    private ListView groceryListView;
 
     // firebase objects
     private FirebaseAuth mAuth;
@@ -167,22 +165,22 @@ public class GrocerylistFragment extends Fragment implements AddGroceryDialog.Ad
         addGroceryDialog.show(getFragmentManager(), "Add grocery item");
     }
 
-    @Override
-    public void addGrocery(String groceryName, int amount, String unit) {
-        // once user hits add, make a query to database to retrieve the grocery item by name (API??)
-        // once got the data for the grocery item, save it in current user grocery list
-        GroceryItem newGroceryEntry = new GroceryItem();
-        newGroceryEntry.setName(groceryName);
-        newGroceryEntry.setAmount(amount);
-        newGroceryEntry.setUnit(unit);
-        if (currentUser != null) {
-            String currentUID = currentUser.getUid();
-            current_user_db = database.getReference().child("Users").child(currentUID);
-            DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
-//            System.out.println("current tab: "+currentTab);
-//            if(currentTab==0) currentUserGroceryList = currentUserGroceryList.child("personal");
-//            if(currentTab==1) currentUserGroceryList = currentUserGroceryList.child("shared");
-            currentUserGroceryList.push().setValue(newGroceryEntry);
-        }
-    }
+//    @Override
+//    public void addGrocery(String groceryName, int amount, String unit) {
+//        // once user hits add, make a query to database to retrieve the grocery item by name (API??)
+//        // once got the data for the grocery item, save it in current user grocery list
+//        GroceryItem newGroceryEntry = new GroceryItem();
+//        newGroceryEntry.setName(groceryName);
+//        newGroceryEntry.setAmount(amount);
+//        newGroceryEntry.setUnit(unit);
+//        if (currentUser != null) {
+//            String currentUID = currentUser.getUid();
+//            current_user_db = database.getReference().child("Users").child(currentUID);
+//            DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
+////            System.out.println("current tab: "+currentTab);
+////            if(currentTab==0) currentUserGroceryList = currentUserGroceryList.child("personal");
+////            if(currentTab==1) currentUserGroceryList = currentUserGroceryList.child("shared");
+//            currentUserGroceryList.push().setValue(newGroceryEntry);
+//        }
+//    }
 }

@@ -22,7 +22,6 @@
 //import com.example.mealz.Dialogs.AddGroceryDialog;
 //import com.example.mealz.Models.GroceryItem;
 //import com.example.mealz.R;
-//import com.example.mealz.Adapters.GroceryListAdapter;
 //import com.google.firebase.auth.FirebaseAuth;
 //import com.google.firebase.auth.FirebaseUser;
 //import com.google.firebase.database.DataSnapshot;
@@ -39,7 +38,6 @@
 //    private Button addGroceryBtn;
 //    private Button searchRecipeBtn;
 //    private ListView groceryListView;
-//    GroceryListAdapter adapter;
 //    // get grocery list as a list from firebase
 //    List<GroceryItem> groceryList = new ArrayList<>();
 //    List<String> groceryNames = new ArrayList<>();
@@ -66,8 +64,6 @@
 //        searchRecipeBtn = findViewById(R.id.toSearchRecipeBtn);
 //        groceryListView = findViewById(R.id.groceryListView);
 //
-//        adapter = new GroceryListAdapter(this, groceryNames, groceryAmount, groceryUnits, groceryShares);
-//        groceryListView.setAdapter(adapter);
 //
 //        mAuth = FirebaseAuth.getInstance();
 //        database = FirebaseDatabase.getInstance();
