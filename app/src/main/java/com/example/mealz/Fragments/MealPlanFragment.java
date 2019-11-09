@@ -1,194 +1,143 @@
 package com.example.mealz.Fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.mealz.Activities.RecipeDetailActivity;
-import com.example.mealz.Models.HitsModel;
-import com.example.mealz.Models.RecipeModel;
-import com.example.mealz.Models.ResponseModel;
+import com.example.mealz.Activities.LoginActivity;
+import com.example.mealz.Activities.SearchRecipeActivity;
+import com.example.mealz.Adapters.SectionsPageAdapter;
+import com.example.mealz.Dialogs.AddGroceryDialog;
+import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.R;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.List;
+import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 public class MealPlanFragment extends Fragment {
 
-    private final String TAG = "Meal Plan Fragment.";
+    private static final String TAG = "MealPlanFragment";
 
-    private List<HitsModel> recipeList;
+    private SectionsPageAdapter mSectionsPageAdapter;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
+    public int currentTab;
 
-    private EditText searchField;
-    private AppCompatImageButton searchBtn;
-    private ImageButton img;
+    // buttons
+    private Button searchRecipeBtn;
+    private Button addGroceryBtn;
 
-    private View view;
-
-    private RecipeClickedListener recipeClickedListener;
-
-    // create an interface to pass the recipe object into userActivity then to recipe detail fragment
-    public interface RecipeClickedListener {
-        void onRecipeSent(RecipeModel rm);
-    }
+    // firebase objects
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+    private FirebaseDatabase database;
+    private DatabaseReference current_user_db;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_mealplan, container, false);
+        View view =  inflater.inflate(R.layout.fragment_mealplan, container, false);
 
-//        Log.i(TAG, "create meal plan fragment instance.");
+        mSectionsPageAdapter = new SectionsPageAdapter(getChildFragmentManager());
 
-        searchField = view.findViewById(R.id.recipeSearch);
-        img = view.findViewById(R.id.SearchedImg2);
-        searchBtn = view.findViewById(R.id.searchButton);
+        viewPager = view.findViewById(R.id.mealplan_container);
+        setUpViewPager(viewPager);
 
-        searchBtn.setOnClickListener(new View.OnClickListener() {
+        tabLayout = view.findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        currentTab = 0;
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onClick(View view) {
-                searchRecipeClicked();
+            public void onTabSelected(TabLayout.Tab tab) {
+//                System.out.println("current tab index: "+tab.getPosition());
+                currentTab = tab.getPosition();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
 
+//        searchRecipeBtn = view.findViewById(R.id.toSearchRecipeBtn);
+//        addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
+
+        mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            String currentUID = currentUser.getUid();
+            current_user_db = database.getReference().child("Users").child(currentUID);
+        }
+
+
+//        searchRecipeBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent toSearchActivity = new Intent(getActivity(), SearchRecipeActivity.class);
+//                startActivity(toSearchActivity);
+//            }
+//        });
+//        addGroceryBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // pops up a window and lets user to add a grocery by name
+//                openDialog();
+//            }
+//        });
 
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        // context is the UserActivity which should implement RecipeClickedListener
-        if(context instanceof RecipeClickedListener){
-            recipeClickedListener = (RecipeClickedListener) context;
-        }
-        else{
-            throw new RuntimeException(context.toString()+" must implement RecipeClickedListener.");
-        }
+
+
+    private void setUpViewPager(ViewPager viewPager){
+//        SectionsPageAdapter adapter = new SectionsPageAdapter(getFragmentManager());
+        mSectionsPageAdapter.addFragment(new CurrentMealplanFragment(), "UNDERGOING");
+        mSectionsPageAdapter.addFragment(new FutureMealplanFragment(), "NEXT WEEK");
+        viewPager.setAdapter(mSectionsPageAdapter);
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        recipeClickedListener = null;
-    }
+//    private void openDialog() {
+//        AddGroceryDialog addGroceryDialog = new AddGroceryDialog();
+//        addGroceryDialog.show(getFragmentManager(), "Add grocery item");
+//    }
 
-    public void searchRecipeClicked(){
-        String message = searchField.getText().toString();
-        searchForRecipe(message);
-    }
-
-
-    public void searchForRecipe(String message){
-        // Do something in response to button
-//        EditText editText = (EditText) findViewById(R.id.editText);
-//        String message = editText.getText().toString();
-
-        String url = "https://api.edamam.com/search?app_id=736dba64&app_key=8b9c2a666b2c005a8c34b35a26063330&q=" + message;
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.GET,
-                url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            recipeList = responseToRecipeList(response);
-                            // All following function should be achieved under this function;
-                            displayRecipe();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Rest Response", error.toString());
-                    }
-                }
-        );
-        requestQueue.add(stringRequest);
-
-    }
-
-    public void displayRecipe(){
-        final ImageButton[] img = new ImageButton[3];
-        img[0] = view.findViewById(R.id.SearchedImg1);
-        img[1] = view.findViewById(R.id.SearchedImg2);
-        img[2] = view.findViewById(R.id.SearchedImg3);
-
-        TextView[] label = new TextView[3];
-        label[0] = view.findViewById(R.id.label1);
-        label[1] = view.findViewById(R.id.label2);
-        label[2] = view.findViewById(R.id.label3);
-
-        if (recipeList.size() > 0) {
-            for (int i=0 ; i<3; ++i) {
-                String img_url = recipeList.get(i).getRecipe().getImage();
-                if (!img_url.equalsIgnoreCase(""))
-                    Picasso.get().load(img_url).placeholder(R.drawable.ic_launcher_background)// Place holder image from drawable folder
-                            .error(R.drawable.b).resize(400, 400).centerCrop()
-                            .into(img[i]);
-                String label_text = recipeList.get(i).getRecipe().getLabel();
-                label[i].setText(label_text);
-                final int j=i;
-//                img[i].setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        RecipeModel recipe_detail = recipeList.get(j).getRecipe();
-//                        recipeClickedListener.onRecipeSent(recipe_detail);
-//                    }
-//                });
-                img[i].setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        recipeImageClicked(j);
-                    }
-                });
-            }
-
-        }
-    }
-
-    public List<HitsModel> responseToRecipeList(String response) throws IOException {
-//        System.out.println(response);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        ResponseModel r = objectMapper.readValue(response, ResponseModel.class);
-        this.recipeList = r.getHits();
-        return this.recipeList;
-    }
-
-    public void recipeImageClicked(int j) {
-        Intent myIntent = new Intent(getActivity(), RecipeDetailActivity.class);
-//        System.out.println(recipeList.get(j).getRecipe().getIngredients());
-        RecipeModel recipe_detail = recipeList.get(j).getRecipe();
-        myIntent.putExtra("recipeList",(Serializable)recipe_detail);
-        startActivity(myIntent);
-
-    }
+//    @Override
+//    public void addGrocery(String groceryName, int amount, String unit) {
+//        // once user hits add, make a query to database to retrieve the grocery item by name (API??)
+//        // once got the data for the grocery item, save it in current user grocery list
+//        GroceryItem newGroceryEntry = new GroceryItem();
+//        newGroceryEntry.setName(groceryName);
+//        newGroceryEntry.setAmount(amount);
+//        newGroceryEntry.setUnit(unit);
+//        if (currentUser != null) {
+//            String currentUID = currentUser.getUid();
+//            current_user_db = database.getReference().child("Users").child(currentUID);
+//            DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
+////            System.out.println("current tab: "+currentTab);
+////            if(currentTab==0) currentUserGroceryList = currentUserGroceryList.child("personal");
+////            if(currentTab==1) currentUserGroceryList = currentUserGroceryList.child("shared");
+//            currentUserGroceryList.push().setValue(newGroceryEntry);
+//        }
+//    }
 }

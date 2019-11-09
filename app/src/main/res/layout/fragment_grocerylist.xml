@@ -23,12 +23,14 @@
             android:textColor="#009688"
             android:textSize="32sp"
             android:textStyle="bold" />
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#F9F9F9"
             app:tabTextColor="#009688" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager

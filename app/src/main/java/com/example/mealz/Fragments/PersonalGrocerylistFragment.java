@@ -99,7 +99,6 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
                             groceryAmount.add(item.getAmount());
                             groceryUnits.add(item.getUnit());
                         }
-//                        initRecyclerView();
                         rAdapter.notifyDataSetChanged();
                     }
 
@@ -112,12 +111,6 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
         }
 
         return view;
-    }
-
-    private void initRecyclerView(){
-        Log.d(TAG, "initRecyclerView: init recyclerview");
-        personalGrocerylist.setLayoutManager(new LinearLayoutManager(getActivity()));
-
     }
 
     @Override

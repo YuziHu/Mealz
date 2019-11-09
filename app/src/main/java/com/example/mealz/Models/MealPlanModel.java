@@ -3,18 +3,32 @@ package com.example.mealz.Models;
 import java.util.List;
 
 public class MealPlanModel {
+    String mId;
     String name;
     String cookingTime;
-    String calories;
-    String servingSize;
+    Long calories;
+    Long servingSize;
+    String imageUrl;
     List<IngredientModel> ingredients;
 
-    public MealPlanModel(String name, String cookingTime, String calories, String servingSize, List<IngredientModel> ingredients) {
+    public MealPlanModel(){}
+
+    public MealPlanModel(String mId, String name, String cookingTime, Long calories, Long servingSize, String imageUrl, List<IngredientModel> ingredients) {
+        this.mId = mId;
         this.name = name;
         this.cookingTime = cookingTime;
         this.calories = calories;
         this.servingSize = servingSize;
+        this.imageUrl = imageUrl;
         this.ingredients = ingredients;
+    }
+
+    public String getmId() {
+        return mId;
+    }
+
+    public void setmId(String mId) {
+        this.mId = mId;
     }
 
     public String getName() {
@@ -33,19 +47,19 @@ public class MealPlanModel {
         this.cookingTime = cookingTime;
     }
 
-    public String getCalories() {
+    public Long getCalories() {
         return calories;
     }
 
-    public void setCalories(String calories) {
+    public void setCalories(Long calories) {
         this.calories = calories;
     }
 
-    public String getServingSize() {
+    public Long getServingSize() {
         return servingSize;
     }
 
-    public void setServingSize(String servingSize) {
+    public void setServingSize(Long servingSize) {
         this.servingSize = servingSize;
     }
 
@@ -55,5 +69,13 @@ public class MealPlanModel {
 
     public void setIngredients(List<IngredientModel> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

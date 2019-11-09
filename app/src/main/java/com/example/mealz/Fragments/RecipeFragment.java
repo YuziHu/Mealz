@@ -58,7 +58,7 @@ public class RecipeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_mealplan, container, false);
+        view = inflater.inflate(R.layout.fragment_search_recipe, container, false);
 
 //        Log.i(TAG, "create meal plan fragment instance.");
 
