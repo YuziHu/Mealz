@@ -15,6 +15,7 @@ import com.example.mealz.Fragments.GrocerylistFragment;
 import com.example.mealz.Fragments.MealPlanFragment;
 import com.example.mealz.Fragments.PersonalGrocerylistFragment;
 import com.example.mealz.Fragments.RecipeDetailFragment;
+import com.example.mealz.Fragments.RecipeFragment;
 import com.example.mealz.Fragments.UserProfileFragment;
 import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.Models.RecipeModel;
@@ -25,7 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class UserActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener, MealPlanFragment.RecipeClickedListener, EditGroceryDialog.EditGroceryDialogListener {
+public class UserActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener, RecipeFragment.RecipeClickedListener, EditGroceryDialog.EditGroceryDialogListener {
 
     private static final String TAG = "UserActivity";
 
@@ -38,7 +39,7 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
     // Fragments
     private RecipeDetailFragment recipeDetailFragment;
     private FragmentTransaction ft;
-    private Fragment selectedFragment = null;
+    private Fragment selectedFragment = new RecipeFragment();
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener(){
@@ -48,7 +49,7 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
 
                     switch (item.getItemId()){
                         case R.id.nav_todo:
-                            selectedFragment = new RecipeDetailFragment();
+                            selectedFragment = new RecipeFragment();
                             break;
                         case R.id.nav_mealplan:
                             selectedFragment = new MealPlanFragment();
@@ -70,6 +71,8 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).addToBackStack(null).commit();
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
 

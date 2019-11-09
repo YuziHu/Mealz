@@ -43,8 +43,6 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
 
     private static final String TAG = "PersonalGroceryListFrag";
 
-    private Button addGroceryBtn;
-    private ListView groceryListView;
     private RecyclerView personalGrocerylist;
     RecyclerGrocerylistAdapter rAdapter;
 
@@ -60,18 +58,20 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
     private FirebaseDatabase database;
     private DatabaseReference current_user_db;
 
-//    // sign out user
-//    private Button signout;
-//    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal_grocerylist, container, false);
 
-        addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
         personalGrocerylist = view.findViewById(R.id.personalGrocerylistView);
         personalGrocerylist.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rAdapter = new RecyclerGrocerylistAdapter(getActivity(),groceryList, groceryNames, groceryAmount, groceryUnits, null, this);
+        personalGrocerylist.setAdapter(rAdapter);
+
+
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -99,7 +99,8 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
                             groceryAmount.add(item.getAmount());
                             groceryUnits.add(item.getUnit());
                         }
-                        initRecyclerView();
+//                        initRecyclerView();
+                        rAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -115,8 +116,6 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
 
     private void initRecyclerView(){
         Log.d(TAG, "initRecyclerView: init recyclerview");
-        rAdapter = new RecyclerGrocerylistAdapter(getActivity(),groceryList, groceryNames, groceryAmount, groceryUnits, null, this);
-        personalGrocerylist.setAdapter(rAdapter);
         personalGrocerylist.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }

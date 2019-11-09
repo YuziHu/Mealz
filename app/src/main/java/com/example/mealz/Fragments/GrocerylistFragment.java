@@ -49,12 +49,13 @@ public class GrocerylistFragment extends Fragment {
     private Button signout;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_grocerylist, container, false);
 
-        mSectionsPageAdapter = new SectionsPageAdapter(getFragmentManager());
+        mSectionsPageAdapter = new SectionsPageAdapter(getChildFragmentManager());
 
         viewPager = view.findViewById(R.id.grocerylist_container);
         setUpViewPager(viewPager);

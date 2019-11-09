@@ -4,7 +4,7 @@
     <item
         android:id="@+id/nav_todo"
         android:icon="@drawable/ic_panorama_fish_eye_black_24dp"
-        android:title="To-dos" />
+        android:title="Recipe" />
 
     <item
         android:id="@+id/nav_mealplan"
