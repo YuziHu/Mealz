@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
-    private EditText userEmail, userPassword, userName;
+    private EditText userEmail, userPassword, confirmPassword, firstName, lastName;
 //    private ProgressBar loadingProgress;
     private Button signupBtn;
     TextView signUp;
@@ -38,9 +38,11 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        firstName = findViewById(R.id.edtFirstName);
+        lastName = findViewById(R.id.edtLastName);
         userEmail = findViewById(R.id.edtEmail);
         userPassword = findViewById(R.id.edtPassword);
-        userName = findViewById(R.id.edtUsername);
+        confirmPassword = findViewById(R.id.edtConfirmPassword);
         signupBtn = findViewById(R.id.signupBtn);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -52,14 +54,14 @@ public class SignupActivity extends AppCompatActivity {
 
                 final String email = userEmail.getText().toString();
                 final String password = userPassword.getText().toString();
-                final String name = userName.getText().toString();
+                final String name = firstName.getText().toString() + " " + lastName.getText().toString();
 
                 if(email.isEmpty() || name.isEmpty() || password.isEmpty()){
                     // display error message
-                    showMessage("Please Complete All Fields");
-
-                }
-                else{
+                    showMessage("Please complete all fields!");
+                } else if (userPassword.getText() != confirmPassword.getText()) {
+                    showMessage("Passwords do not match!");
+                } else {
                     // CreateUserAccount will try to create the user if the email is valid
                     CreateUserAccount(email,name,password);
                 }

@@ -15,18 +15,20 @@
         <TextView
             android:id="@+id/pendingTitle"
             android:layout_width="wrap_content"
+            android:fontFamily="@font/font_product_sans"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="?actionBarSize"
             android:padding="@dimen/appbar_padding"
-            android:text="PENDING MEALS"
-            android:textColor="#009688"
+            android:text="Pending Meals"
+            android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/font_product_sans"
             android:id="@+id/pendingMealplanRecyclerView"
             android:orientation="horizontal">
         </androidx.recyclerview.widget.RecyclerView>
@@ -36,16 +38,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:fontFamily="@font/font_product_sans"
             android:minHeight="?actionBarSize"
             android:padding="@dimen/appbar_padding"
-            android:text="AGREED MEALS"
-            android:textColor="#009688"
+            android:text="Agreed Meals"
+            android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/font_product_sans"
             android:id="@+id/agreedMealplanRecyclerView"
             android:orientation="horizontal">
         </androidx.recyclerview.widget.RecyclerView>
@@ -56,14 +60,16 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="?actionBarSize"
+            android:fontFamily="@font/font_product_sans"
             android:padding="@dimen/appbar_padding"
-            android:text="MY PERSONAL MEALS"
-            android:textColor="#009688"
+            android:text="My Personal Meals"
+            android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
+            android:fontFamily="@font/font_product_sans"
             android:layout_height="wrap_content"
             android:id="@+id/personalMealplanRecyclerView"
             android:orientation="horizontal">

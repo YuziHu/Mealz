@@ -9,7 +9,8 @@
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="80sp"
         android:text="Add A New Item"
-        android:textColor="#00483A"
+        android:fontFamily="@font/font_product_sans"
+        android:textColor="#000000"
         android:textSize="32dp"
         android:textStyle="bold" />
 
@@ -21,7 +22,10 @@
         android:layout_marginTop="50sp"
         android:layout_marginRight="20sp"
         android:background="@drawable/my_edit_text_border"
-        android:hint="   ITEM NAME"
+        android:hint="Item Name"
+        android:paddingLeft="10dp"
+        android:fontFamily="@font/font_product_sans"
+        android:textColor="#000000"
         android:paddingVertical="20dp" />
 
     <LinearLayout
@@ -35,8 +39,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="20sp"
+            android:fontFamily="@font/font_product_sans"
             android:background="@drawable/my_edit_text_border"
-            android:hint="   Quantity"
+            android:hint="Quantity"
+            android:paddingLeft="10dp"
             android:paddingRight="120dp" />
 
         <Spinner

@@ -9,7 +9,8 @@
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="80sp"
         android:text="Edit Grocery Item"
-        android:textColor="#00483A"
+        android:fontFamily="@font/font_product_sans"
+        android:textColor="#000000"
         android:textSize="32dp"
         android:textStyle="bold" />
 
@@ -20,7 +21,9 @@
         android:layout_marginLeft="20sp"
         android:layout_marginTop="50sp"
         android:layout_marginRight="20sp"
-        android:text="   ITEM NAME"
+        android:text="Item Name"
+        android:paddingLeft="10dp"
+        android:fontFamily="@font/font_product_sans"
         android:paddingVertical="20dp" />
 
     <LinearLayout
@@ -34,7 +37,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="20sp"
-            android:hint="   Quantity"
+            android:fontFamily="@font/font_product_sans"
+            android:paddingLeft="10dp"
+            android:hint="Quantity"
             android:paddingRight="120dp" />
 
         <TextView
@@ -42,6 +47,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="20sp"
+            android:fontFamily="@font/font_product_sans"
+            android:paddingLeft="10dp"
             android:text="Item Unit"/>
 
     </LinearLayout>
@@ -53,6 +60,7 @@
 
         <Button
             android:layout_width="match_parent"
+            android:fontFamily="@font/font_product_sans"
             android:layout_height="wrap_content"
             android:id="@+id/setSharedGroceryBtn"
             android:text="Set as shared"/>
@@ -60,11 +68,13 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/font_product_sans"
             android:id="@+id/updateGroceryBtn"
             android:text="UPDATE"/>
 
         <Button
             android:layout_width="match_parent"
+            android:fontFamily="@font/font_product_sans"
             android:layout_height="wrap_content"
             android:id="@+id/deleteGroceryBtn"
             android:text="DELETE"/>

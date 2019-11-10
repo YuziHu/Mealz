@@ -10,6 +10,7 @@
         android:id="@+id/signoutBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/font_product_sans"
         android:paddingHorizontal="10dp"
         android:text="Sign out"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,6 +21,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/font_product_sans"
         android:text="Grocery List"
         android:textSize="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -59,6 +61,7 @@
         <Button
             android:id="@+id/addGroceryItemBtn"
             android:layout_width="wrap_content"
+            android:fontFamily="@font/font_product_sans"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:paddingHorizontal="10dp"
@@ -68,6 +71,7 @@
         <Button
             android:id="@+id/toSearchRecipeBtn"
             android:layout_width="wrap_content"
+            android:fontFamily="@font/font_product_sans"
             android:layout_height="wrap_content"
             android:layout_marginLeft="130dp"
             android:paddingHorizontal="10dp"
