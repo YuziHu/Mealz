@@ -43,8 +43,7 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
 
     private static final String TAG = "PersonalGroceryListFrag";
 
-    private Button addGroceryBtn;
-    private ListView groceryListView;
+    private RecyclerView personalGrocerylist;
     RecyclerGrocerylistAdapter rAdapter;
 
     // get grocery list as a list from firebase
@@ -59,31 +58,23 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
     private FirebaseDatabase database;
     private DatabaseReference current_user_db;
 
-//    // sign out user
-//    private Button signout;
-//    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal_grocerylist, container, false);
 
-        addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
-        groceryListView = view.findViewById(R.id.groceryListView);
+        personalGrocerylist = view.findViewById(R.id.personalGrocerylistView);
+        personalGrocerylist.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rAdapter = new RecyclerGrocerylistAdapter(getActivity(),groceryList, groceryNames, groceryAmount, groceryUnits, null, this);
+        personalGrocerylist.setAdapter(rAdapter);
+
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         currentUser = mAuth.getCurrentUser();
-
-        // signout
-//        signout = view.findViewById(R.id.signoutBtn);
-//        setUpFirebaseListener();
-//        signout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FirebaseAuth.getInstance().signOut();
-//            }
-//        });
 
 
         // populate grocery list view if current user has grocery items in list
@@ -102,14 +93,13 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
                         groceryUnits.clear();
                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
                             GroceryItem item = ds.getValue(GroceryItem.class);
-//                            System.out.println(ds.getKey());
                             item.setGid(ds.getKey());
                             groceryList.add(item);
                             groceryNames.add(item.getName());
                             groceryAmount.add(item.getAmount());
                             groceryUnits.add(item.getUnit());
                         }
-                        initRecyclerView();
+                        rAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -120,30 +110,11 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
             }
         }
 
-//        addGroceryBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // pops up a window and lets user to add a grocery by name
-//                openDialog();
-//            }
-//        });
-
         return view;
-    }
-
-    private void initRecyclerView(){
-        Log.d(TAG, "initRecyclerView: init recyclerview");
-        RecyclerView personalGrocerylistRecyclerView = getView().findViewById(R.id.personalGrocerylistView);
-        rAdapter = new RecyclerGrocerylistAdapter(getActivity(),groceryList, groceryNames, groceryAmount, groceryUnits, null, this);
-        personalGrocerylistRecyclerView.setAdapter(rAdapter);
-        personalGrocerylistRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
     }
 
     @Override
     public void onEditIconClick(int position) {
-//        System.out.println(groceryList);
-//        System.out.println(position);
         Log.d(TAG, "onEditIconClick: "+groceryList.get(position).getGid());
         // create a dialog box
         GroceryItem item = (GroceryItem) groceryList.get(position);
@@ -221,51 +192,4 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
             item.setValue(null);
     }
 
-
-//    private void setUpFirebaseListener() {
-//        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-//            @Override
-//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//                FirebaseUser user = firebaseAuth.getCurrentUser();
-//                if (user != null) {
-//
-//                } else {
-//                    Toast.makeText(getActivity(), "Signed out", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-//                    startActivity(intent);
-//                }
-//            }
-//        };
-//    }
-
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        FirebaseAuth.getInstance().addAuthStateListener(mAuthStateListener);
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        if (mAuthStateListener != null) {
-//            FirebaseAuth.getInstance().removeAuthStateListener(mAuthStateListener);
-//        }
-//    }
-
-//    private void openDialog() {
-//        AddGroceryDialog addGroceryDialog = new AddGroceryDialog();
-//        addGroceryDialog.show(getFragmentManager(), "Add grocery item");
-//    }
-
-//    @Override
-//    public void addGrocery(String groceryName, int amount, String unit) {
-//        // once user hits add, make a query to database to retrieve the grocery item by name (API??)
-//        // once got the data for the grocery item, save it in current user grocery list
-//        GroceryItem newGroceryEntry = new GroceryItem();
-//        newGroceryEntry.setName(groceryName);
-//        newGroceryEntry.setAmount(amount);
-//        newGroceryEntry.setUnit(unit);
-//        DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("shared");
-//        currentUserGroceryList.push().setValue(newGroceryEntry);
-//    }
 }
