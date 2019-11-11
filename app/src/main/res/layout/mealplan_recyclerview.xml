@@ -28,10 +28,13 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="120sp"
             android:fontFamily="@font/font_product_sans"
             android:id="@+id/pendingMealplanRecyclerView"
             android:orientation="horizontal">
         </androidx.recyclerview.widget.RecyclerView>
+
+
 
         <TextView
             android:id="@+id/agreedTitle"

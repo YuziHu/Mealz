@@ -2,6 +2,7 @@ package com.example.mealz.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import com.example.mealz.Fragments.PersonalGrocerylistFragment;
 import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.Models.IngredientModel;
+import com.example.mealz.Models.MealPlanModel;
 import com.example.mealz.Models.RecipeModel;
 import com.example.mealz.R;
 
@@ -28,6 +30,8 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class RecipeDetailActivity extends AppCompatActivity {
+    private static final String TAG = "RecipeDetailActivity";
+
     public static String curr = "";
     public static String rp = "";
     public static final String EXTRA_TEXT = "com.example.mealz.example.EXTRA_TEXT";
@@ -50,8 +54,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         ImageView img = findViewById(R.id.imageView);
 
-        String img_url = recipe.getImage();
-
+        final String img_url = recipe.getImage();
+        final String label = recipe.getLabel();
         if (!img_url.equalsIgnoreCase(""))
             Picasso.get().load(img_url).placeholder(R.drawable.ic_launcher_background)// Place holder image from drawable folder
                     .error(R.drawable.b).resize(110, 110).centerCrop()
@@ -77,11 +81,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
         curr = result;
 
         // add ingredients of current food into database
-        Button add = findViewById(R.id.button2);
-        add.setOnClickListener(new View.OnClickListener() {
+        Button addToGrocerylist = findViewById(R.id.button2);
+        addToGrocerylist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Recipe Added Successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Ingredients Added Successfully", Toast.LENGTH_SHORT).show();
                 if(currentUser != null){
                     String currentUID = currentUser.getUid();
                     current_user_db = database.getReference().child("Users").child(currentUID);
@@ -98,6 +102,25 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 }
 //                rp += curr;
 //                System.out.println("rp: "+rp);
+            }
+        });
+
+        // add ingredients of current recipe into database
+        Button addToMealplan = findViewById(R.id.addToMealplanBtn);
+        addToMealplan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Recipe Added Successfully", Toast.LENGTH_SHORT).show();
+                if(currentUser != null){
+                    String currentUID = currentUser.getUid();
+                    current_user_db = database.getReference().child("Users").child(currentUID);
+                    MealPlanModel newMealplanEntry = new MealPlanModel();
+                    newMealplanEntry.setName(label);
+                    newMealplanEntry.setImageUrl(img_url);
+                    // add to current pending mealplan by default
+                    DatabaseReference curUserMealplans = current_user_db.child("meal_plans").child("current").child("pending");
+                    curUserMealplans.push().setValue(newMealplanEntry);
+                }
             }
         });
 

@@ -61,13 +61,13 @@ public class CurrentMealplanFragment extends Fragment {
         View view = inflater.inflate(R.layout.mealplan_recyclerview, container, false);
 
         pendingMealplanRecyclerView = view.findViewById(R.id.pendingMealplanRecyclerView);
-        pendingMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        pendingMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL, false));
         //
         agreedMealplanRecyclerView = view.findViewById(R.id.agreedMealplanRecyclerView);
-        agreedMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        agreedMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL, false));
         //
         personalMealplanRecyclerView = view.findViewById(R.id.personalMealplanRecyclerView);
-        personalMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        personalMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL, false));
         // adapter
         // pending
         pendingAdapter = new RecyclerMealplanAdapter(getActivity(), pendingImages, pendingNames);

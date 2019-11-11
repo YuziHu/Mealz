@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".recipe_detail_activity">
+    tools:context=".Activities.RecipeDetailActivity">
 
     <TextView
         android:id="@+id/textView2"
@@ -30,6 +30,7 @@
         android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteX="16dp" />
 
     <ImageView
@@ -44,15 +45,27 @@
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="193dp"
+        android:layout_height="39dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
+        android:layout_marginBottom="72dp"
         android:fontFamily="@font/font_product_sans"
-        android:layout_marginBottom="40dp"
         android:text="Add to Grocery List"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/addToMealplanBtn"
+        android:layout_width="193dp"
+        android:layout_height="42dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="40dp"
+        android:fontFamily="@font/font_product_sans"
+        android:text="Add to Mealplan"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button2" />
 
     <Button
         android:id="@+id/button3"
