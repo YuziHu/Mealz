@@ -76,12 +76,15 @@ public class FutureMealplanFragment extends Fragment implements RecyclerMealplan
 
         pendingMealplanRecyclerView = view.findViewById(R.id.pendingMealplanRecyclerView);
         pendingMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL, false));
+        pendingMealplanRecyclerView.setNestedScrollingEnabled(false);
         //
         agreedMealplanRecyclerView = view.findViewById(R.id.agreedMealplanRecyclerView);
         agreedMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL, false));
+        agreedMealplanRecyclerView.setNestedScrollingEnabled(false);
         //
         personalMealplanRecyclerView = view.findViewById(R.id.personalMealplanRecyclerView);
         personalMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL, false));
+        personalMealplanRecyclerView.setNestedScrollingEnabled(false);
         // adapter
         // pending
         pendingAdapter = new RecyclerMealplanAdapter(this, "PENDING", getActivity(), pendingImages, pendingNames);
@@ -130,7 +133,7 @@ public class FutureMealplanFragment extends Fragment implements RecyclerMealplan
                 });
             }
             // if current user has agreed meal plans
-            DatabaseReference curUserFutureAgreedMealplans = current_user_db.child("meal_plans").child("current").child("agreed");
+            DatabaseReference curUserFutureAgreedMealplans = current_user_db.child("meal_plans").child("future").child("agreed");
             if(curUserFutureAgreedMealplans!=null){
                 curUserFutureAgreedMealplans.addValueEventListener(new ValueEventListener() {
                     @Override

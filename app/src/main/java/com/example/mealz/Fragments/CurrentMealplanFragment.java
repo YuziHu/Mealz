@@ -29,6 +29,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -76,12 +77,15 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
 
         pendingMealplanRecyclerView = view.findViewById(R.id.pendingMealplanRecyclerView);
         pendingMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL, false));
+        pendingMealplanRecyclerView.setNestedScrollingEnabled(true);
         //
         agreedMealplanRecyclerView = view.findViewById(R.id.agreedMealplanRecyclerView);
         agreedMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL, false));
+        agreedMealplanRecyclerView.setNestedScrollingEnabled(false);
         //
         personalMealplanRecyclerView = view.findViewById(R.id.personalMealplanRecyclerView);
         personalMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL, false));
+        personalMealplanRecyclerView.setNestedScrollingEnabled(false);
         // adapter
         // pending
         pendingAdapter = new RecyclerMealplanAdapter(this, "PENDING", getActivity(), pendingImages, pendingNames);

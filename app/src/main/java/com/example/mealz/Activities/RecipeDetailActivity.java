@@ -117,7 +117,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     newMealplanEntry.setImageUrl(img_url);
                     newMealplanEntry.setIngredients(ingredients);
                     // add to current pending mealplan by default
-                    DatabaseReference curUserMealplans = current_user_db.child("meal_plans").child("current").child("personal");
+                    DatabaseReference curUserMealplans = current_user_db.child("meal_plans").child("current").child("pending");
                     curUserMealplans.push().setValue(newMealplanEntry);
                 }
             }
