@@ -10,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mealz.Activities.LoginActivity;
+import com.example.mealz.Models.GroceryItem;
+import com.example.mealz.Models.MealPlanModel;
 import com.example.mealz.Models.User;
 import com.example.mealz.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +26,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserProfileFragment extends Fragment {
 
     // firebase objects
@@ -32,11 +37,17 @@ public class UserProfileFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference current_user_db;
 
+    List<GroceryItem> groceryList = new ArrayList<>();
+    ArrayList<MealPlanModel> pendingMealPlans = new ArrayList<>();
+
     // sign out user
     private Button signout;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private TextView nameText;
+    private TextView groceryItems;
+    private TextView pendingRecipes;
+
 
     @Nullable
     @Override
@@ -45,6 +56,12 @@ public class UserProfileFragment extends Fragment {
 
         nameText = view.findViewById(R.id.nameText);
         nameText.setText("");
+
+        groceryItems = view.findViewById(R.id.groceryItemsAmount);
+        groceryItems.setText("");
+
+        pendingRecipes = view.findViewById(R.id.recipesAmount);
+        pendingRecipes.setText("");
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -62,15 +79,83 @@ public class UserProfileFragment extends Fragment {
                             String name = dataSnapshot.child("username").getValue(String.class);
                             nameText.setText(name);
                             System.out.println(name);
-
-
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
 
                         }
                     });
+
+            DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("personal");
+            if (currentUserGroceryList != null) {
+                currentUserGroceryList.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        groceryList.clear();
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            GroceryItem item = ds.getValue(GroceryItem.class);
+                            groceryList.add(item);
+                        }
+                        System.out.println(groceryList.size());
+                        String size = "" + groceryList.size();
+                        groceryItems.setText(size);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            DatabaseReference curUserFuturePendingMealplans = current_user_db.child("meal_plans").child("current").child("pending");
+            if(curUserFuturePendingMealplans!=null){
+                curUserFuturePendingMealplans.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        pendingMealPlans.clear();
+                        for(DataSnapshot ds : dataSnapshot.getChildren()){
+                            MealPlanModel mealplan = ds.getValue(MealPlanModel.class);
+                            mealplan.setmId(ds.getKey());
+                            pendingMealPlans.add(mealplan);
+                        }
+                        System.out.println(pendingMealPlans.size());
+                        String size = "" + pendingMealPlans.size();
+                        pendingRecipes.setText(size);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+//            current_user_db.child("grocery_list").child("personal");
+//            if (currentUserGroceryList != null) {
+//                currentUserGroceryList.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        groceryList.clear();
+//                        groceryNames.clear();
+//                        groceryAmount.clear();
+//                        groceryUnits.clear();
+//                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                            GroceryItem item = ds.getValue(GroceryItem.class);
+//                            item.setGid(ds.getKey());
+//                            groceryList.add(item);
+//                            groceryNames.add(item.getName());
+//                            groceryAmount.add(item.getAmount());
+//                            groceryUnits.add(item.getUnit());
+//                        }
+//                        rAdapter.notifyDataSetChanged();
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                });
+//            }
         }
 
 
