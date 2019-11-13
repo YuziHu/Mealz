@@ -22,14 +22,19 @@ public class RecyclerMealplanAdapter extends RecyclerView.Adapter<RecyclerMealpl
 
     private static final String TAG = "RecyclerMealplanAdapter";
 
-    private ArrayList<String> imageUrls;
-    private ArrayList<String> mealplanNames;
+    private List<String> imageUrls;
+    private List<String> mealplanNames;
     private Context context;
+    private String tag;
+    private MealPlanClickListener onMealplanClickListener;
 
-    public RecyclerMealplanAdapter(Context context, ArrayList<String> imageUrls, ArrayList<String> mealplanNames) {
+    public RecyclerMealplanAdapter(MealPlanClickListener onMealplanClickListener, String tag, Context context, List<String> imageUrls, List<String> mealplanNames) {
         this.imageUrls = imageUrls;
         this.mealplanNames = mealplanNames;
         this.context = context;
+        this.tag = tag;
+        this.onMealplanClickListener = onMealplanClickListener;
+
     }
 
     @NonNull
@@ -38,7 +43,7 @@ public class RecyclerMealplanAdapter extends RecyclerView.Adapter<RecyclerMealpl
         Log.d(TAG, "onCreateViewHolder: called");
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_single_mealplan, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, onMealplanClickListener);
     }
 
     @Override
@@ -50,12 +55,12 @@ public class RecyclerMealplanAdapter extends RecyclerView.Adapter<RecyclerMealpl
                     .into(holder.image);
             holder.name.setText(mealplanNames.get(position));
 
-            holder.image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d(TAG, "onClick: image clicked");
-                }
-            });
+//            holder.image.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Log.d(TAG, "onClick: image clicked");
+//                }
+//            });
         }
     }
 
@@ -64,14 +69,27 @@ public class RecyclerMealplanAdapter extends RecyclerView.Adapter<RecyclerMealpl
         return mealplanNames.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView image;
         TextView name;
+        MealPlanClickListener onMealplanClickListener;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, MealPlanClickListener onMealplanClickListener) {
             super(itemView);
             image = itemView.findViewById(R.id.mealplan_image);
             name = itemView.findViewById(R.id.mealplan_name);
+            this.onMealplanClickListener = onMealplanClickListener;
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            Log.d(TAG, "onClick: "+tag);
+            onMealplanClickListener.onMealplanClick(tag, getAdapterPosition());
+        }
+    }
+    public interface MealPlanClickListener{
+        void onMealplanClick(String tag, int position);
     }
 }

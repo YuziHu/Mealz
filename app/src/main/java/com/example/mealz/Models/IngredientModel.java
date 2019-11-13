@@ -1,6 +1,8 @@
 package com.example.mealz.Models;
 
-public class IngredientModel {
+import java.io.Serializable;
+
+public class IngredientModel implements Serializable {
     private String text;
     private float weight;
 

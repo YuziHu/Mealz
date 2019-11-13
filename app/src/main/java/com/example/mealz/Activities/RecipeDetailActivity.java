@@ -50,7 +50,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        RecipeModel recipe=(RecipeModel) getIntent().getSerializableExtra("recipeList");
+        RecipeModel recipe=(RecipeModel) getIntent().getSerializableExtra("recipe");
 
         ImageView img = findViewById(R.id.imageView);
 
@@ -72,8 +72,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 result += "\n\n";
             }
         }
-
-        System.out.println("result: "+result);
 
         //Intent intent = new Intent(this, GroceryActivity.class);
 
@@ -117,8 +115,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     MealPlanModel newMealplanEntry = new MealPlanModel();
                     newMealplanEntry.setName(label);
                     newMealplanEntry.setImageUrl(img_url);
+                    newMealplanEntry.setIngredients(ingredients);
                     // add to current pending mealplan by default
-                    DatabaseReference curUserMealplans = current_user_db.child("meal_plans").child("current").child("pending");
+                    DatabaseReference curUserMealplans = current_user_db.child("meal_plans").child("current").child("personal");
                     curUserMealplans.push().setValue(newMealplanEntry);
                 }
             }

@@ -187,7 +187,7 @@ public class RecipeFragment extends Fragment {
         Intent myIntent = new Intent(getActivity(), RecipeDetailActivity.class);
 //        System.out.println(recipeList.get(j).getRecipe().getIngredients());
         RecipeModel recipe_detail = recipeList.get(j).getRecipe();
-        myIntent.putExtra("recipeList",(Serializable)recipe_detail);
+        myIntent.putExtra("recipe",(Serializable)recipe_detail);
         startActivity(myIntent);
 
     }
