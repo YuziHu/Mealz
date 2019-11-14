@@ -33,7 +33,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class FutureMealplanFragment extends Fragment implements RecyclerMealplanAdapter.MealPlanClickListener {
+public class FutureMealplanFragment extends Fragment implements RecyclerMealplanAdapter.MealPlanClickListener, RecyclerMealplanAdapter.PendingMealplanButtonsListener {
     private static final String TAG = "FutureMealplanFragment";
 
     private RecyclerView pendingMealplanRecyclerView;
@@ -87,13 +87,13 @@ public class FutureMealplanFragment extends Fragment implements RecyclerMealplan
         personalMealplanRecyclerView.setNestedScrollingEnabled(false);
         // adapter
         // pending
-        pendingAdapter = new RecyclerMealplanAdapter(this, "PENDING", getActivity(), pendingImages, pendingNames);
+        pendingAdapter = new RecyclerMealplanAdapter(this, this, "PENDING", getActivity(), pendingImages, pendingNames);
         pendingMealplanRecyclerView.setAdapter(pendingAdapter);
         // agreed
-        agreedAdapter = new RecyclerMealplanAdapter(this, "AGREED", getActivity(), agreedImages, agreedNames);
+        agreedAdapter = new RecyclerMealplanAdapter(this, this, "AGREED", getActivity(), agreedImages, agreedNames);
         agreedMealplanRecyclerView.setAdapter(agreedAdapter);
         // personal
-        personalAdapter = new RecyclerMealplanAdapter(this, "PERSONAL", getActivity(), personalImages, personalNames);
+        personalAdapter = new RecyclerMealplanAdapter(this, this, "PERSONAL", getActivity(), personalImages, personalNames);
         personalMealplanRecyclerView.setAdapter(personalAdapter);
 
         // firebase
@@ -105,7 +105,7 @@ public class FutureMealplanFragment extends Fragment implements RecyclerMealplan
             String currentUID = currentUser.getUid();
             current_user_db = database.getReference().child("Users").child(currentUID);
             // if current user has pending meal plans
-            DatabaseReference curUserFuturePendingMealplans = current_user_db.child("meal_plans").child("current").child("pending");
+            DatabaseReference curUserFuturePendingMealplans = current_user_db.child("meal_plans").child("future").child("pending");
             if(curUserFuturePendingMealplans!=null){
                 curUserFuturePendingMealplans.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -160,7 +160,7 @@ public class FutureMealplanFragment extends Fragment implements RecyclerMealplan
                 });
             }
             // if current user has personal meal plans
-            DatabaseReference curUserFuturePersonalMealplans = current_user_db.child("meal_plans").child("current").child("personal");
+            DatabaseReference curUserFuturePersonalMealplans = current_user_db.child("meal_plans").child("future").child("personal");
             if(curUserFuturePersonalMealplans!=null){
                 curUserFuturePersonalMealplans.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -217,5 +217,15 @@ public class FutureMealplanFragment extends Fragment implements RecyclerMealplan
         Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
         intent.putExtra("recipe",(Serializable)recipe);
         startActivity(intent);
+    }
+
+    @Override
+    public void onLikeClick(String tag, int position) {
+
+    }
+
+    @Override
+    public void onDislikeClick(String tag, int position) {
+
     }
 }
