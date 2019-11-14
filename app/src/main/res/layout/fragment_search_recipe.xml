@@ -69,79 +69,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/researchedImages"
-        android:layout_width="230sp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.028">
-
-        <ImageButton
-            android:id="@+id/SearchedImg1"
-            android:layout_width="match_parent"
-            android:layout_height="81dp"
-            android:background="#F9F9F9"
-            app:srcCompat="@android:color/background_light"
-            />
-
-        <ImageButton
-            android:id="@+id/SearchedImg2"
-            android:layout_width="match_parent"
-            android:layout_height="82dp"
-            android:background="#F9F9F9"
-            app:srcCompat="@android:color/background_light"
-            android:layout_marginTop="20dp"/>
-
-        <ImageButton
-            android:id="@+id/SearchedImg3"
-            android:layout_width="match_parent"
-            android:layout_height="82dp"
-            android:background="#F9F9F9"
-            app:srcCompat="@android:color/background_light"
-            android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20sp"
+        android:layout_marginBottom="20sp"
+        android:paddingBottom="50sp"
+        android:id="@+id/search_recipe_recyclerview">
 
 
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/label3"
-        android:layout_width="143dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
-        android:fontFamily="@font/font_product_sans"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label2" />
+    </androidx.recyclerview.widget.RecyclerView>
 
 
-    <TextView
-        android:id="@+id/label1"
-        android:layout_width="143dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="84dp"
-        android:fontFamily="@font/font_product_sans"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.955"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchButton" />
-
-    <TextView
-        android:id="@+id/label2"
-        android:layout_width="143dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="44dp"
-        android:fontFamily="@font/font_product_sans"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.955"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label1" />
 
     <Spinner
         android:id="@+id/spinner"

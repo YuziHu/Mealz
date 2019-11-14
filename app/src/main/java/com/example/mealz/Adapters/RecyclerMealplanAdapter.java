@@ -55,12 +55,6 @@ public class RecyclerMealplanAdapter extends RecyclerView.Adapter<RecyclerMealpl
                     .into(holder.image);
             holder.name.setText(mealplanNames.get(position));
 
-//            holder.image.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Log.d(TAG, "onClick: image clicked");
-//                }
-//            });
         }
     }
 
