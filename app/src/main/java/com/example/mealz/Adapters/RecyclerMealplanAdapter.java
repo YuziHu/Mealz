@@ -23,20 +23,25 @@ public class RecyclerMealplanAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private static final String TAG = "RecyclerMealplanAdapter";
 
-//    private static final int PENDING_MEALPLAN_LISTVIEW = 1;
-
     private List<String> imageUrls;
     private List<String> mealplanNames;
     private Context context;
     private String tag;
     private MealPlanClickListener onMealplanClickListener;
+    private PendingMealplanButtonsListener likeDislikeButtonsListener;
 
-    public RecyclerMealplanAdapter(MealPlanClickListener onMealplanClickListener, String tag, Context context, List<String> imageUrls, List<String> mealplanNames) {
+    public RecyclerMealplanAdapter(MealPlanClickListener onMealplanClickListener,
+                                   PendingMealplanButtonsListener likeDislikeButtonsListener,
+                                   String tag,
+                                   Context context,
+                                   List<String> imageUrls,
+                                   List<String> mealplanNames) {
         this.imageUrls = imageUrls;
         this.mealplanNames = mealplanNames;
         this.context = context;
         this.tag = tag;
         this.onMealplanClickListener = onMealplanClickListener;
+        this.likeDislikeButtonsListener = likeDislikeButtonsListener;
 
     }
 
@@ -47,7 +52,7 @@ public class RecyclerMealplanAdapter extends RecyclerView.Adapter<RecyclerView.V
         View view = null;
         if(tag=="PENDING"){
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_single_mealplan_pending, parent, false);
-            return new ViewHolderPending(view, onMealplanClickListener);
+            return new ViewHolderPending(view, onMealplanClickListener, likeDislikeButtonsListener);
         }
         else{
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_single_mealplan, parent, false);
@@ -88,30 +93,44 @@ public class RecyclerMealplanAdapter extends RecyclerView.Adapter<RecyclerView.V
         else return 0;
     }
 
-    public class ViewHolderPending extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolderPending extends RecyclerView.ViewHolder {
         ImageView image;
         TextView name;
         // for pending mealplan list
         Button dislike;
         Button like;
         MealPlanClickListener onMealplanClickListener;
+        PendingMealplanButtonsListener likeDislikeButtonsListener;
 
-        public ViewHolderPending(@NonNull View itemView, MealPlanClickListener onMealplanClickListener) {
+        public ViewHolderPending(@NonNull View itemView, final MealPlanClickListener onMealplanClickListener, final PendingMealplanButtonsListener likeDislikeButtonsListener) {
             super(itemView);
             image = itemView.findViewById(R.id.mealplan_image);
             name = itemView.findViewById(R.id.mealplan_name);
             dislike = itemView.findViewById(R.id.dislike_button);
             like = itemView.findViewById(R.id.like_button);
             this.onMealplanClickListener = onMealplanClickListener;
+            this.likeDislikeButtonsListener = likeDislikeButtonsListener;
 
-            itemView.setOnClickListener(this);
+            image.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    onMealplanClickListener.onMealplanClick(tag, getAdapterPosition());
+                }
+            });
+            like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    likeDislikeButtonsListener.onLikeClick(tag, getAdapterPosition());
+                }
+            });
+            dislike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    likeDislikeButtonsListener.onDislikeClick(tag, getAdapterPosition());
+                }
+            });
         }
 
-        @Override
-        public void onClick(View view) {
-            Log.d(TAG, "onClick: "+tag);
-            onMealplanClickListener.onMealplanClick(tag, getAdapterPosition());
-        }
     }
 
     public class ViewHolderOther extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -136,5 +155,9 @@ public class RecyclerMealplanAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
     public interface MealPlanClickListener{
         void onMealplanClick(String tag, int position);
+    }
+    public interface PendingMealplanButtonsListener{
+        void onLikeClick(String tag, int position);
+        void onDislikeClick(String tag, int position);
     }
 }

@@ -34,7 +34,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CurrentMealplanFragment extends Fragment implements RecyclerMealplanAdapter.MealPlanClickListener {
+public class CurrentMealplanFragment extends Fragment implements RecyclerMealplanAdapter.MealPlanClickListener, RecyclerMealplanAdapter.PendingMealplanButtonsListener {
     private static final String TAG = "CurrentMealplanFragment";
 
     private RecyclerView pendingMealplanRecyclerView;
@@ -88,13 +88,13 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
         personalMealplanRecyclerView.setNestedScrollingEnabled(false);
         // adapter
         // pending
-        pendingAdapter = new RecyclerMealplanAdapter(this, "PENDING", getActivity(), pendingImages, pendingNames);
+        pendingAdapter = new RecyclerMealplanAdapter(this, this,"PENDING", getActivity(), pendingImages, pendingNames);
         pendingMealplanRecyclerView.setAdapter(pendingAdapter);
         // agreed
-        agreedAdapter = new RecyclerMealplanAdapter(this, "AGREED", getActivity(), agreedImages, agreedNames);
+        agreedAdapter = new RecyclerMealplanAdapter(this, this, "AGREED", getActivity(), agreedImages, agreedNames);
         agreedMealplanRecyclerView.setAdapter(agreedAdapter);
         // personal
-        personalAdapter = new RecyclerMealplanAdapter(this, "PERSONAL", getActivity(), personalImages, personalNames);
+        personalAdapter = new RecyclerMealplanAdapter(this, this, "PERSONAL", getActivity(), personalImages, personalNames);
         personalMealplanRecyclerView.setAdapter(personalAdapter);
 
         // firebase
@@ -218,5 +218,17 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
         Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
         intent.putExtra("recipe",(Serializable)recipe);
         startActivity(intent);
+    }
+
+    @Override
+    public void onLikeClick(String tag, int position) {
+        Log.d(TAG, "onLikeClick: called");
+        // sending to agreed meals
+    }
+
+    @Override
+    public void onDislikeClick(String tag, int position) {
+        Log.d(TAG, "onDislikeClick: called");
+        // sending to personal meals
     }
 }
