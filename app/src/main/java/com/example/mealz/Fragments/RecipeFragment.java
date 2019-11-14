@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.mealz.Activities.RecipeDetailActivity;
+import com.example.mealz.Adapters.SearchRecipeAdapter;
 import com.example.mealz.Models.HitsModel;
 import com.example.mealz.Models.RecipeModel;
 import com.example.mealz.Models.ResponseModel;
@@ -29,18 +30,23 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class RecipeFragment extends Fragment {
+public class RecipeFragment extends Fragment implements SearchRecipeAdapter.RecipeImageClickListener {
 
     private final String TAG = "RecipeFragment.";
 
     private List<HitsModel> recipeList;
+    private ArrayList<String> recipeImages = new ArrayList<>();
+    private ArrayList<String> recipeNames = new ArrayList<>();
 
     private EditText searchField;
     private AppCompatImageButton searchBtn;
@@ -147,31 +153,45 @@ public class RecipeFragment extends Fragment {
         label[1] = view.findViewById(R.id.label2);
         label[2] = view.findViewById(R.id.label3);
 
+        recipeImages.clear();
+        recipeNames.clear();
+
+        for(int i=0; i<recipeList.size(); i++){
+            recipeImages.add(recipeList.get(i).getRecipe().getImage());
+            recipeNames.add(recipeList.get(i).getRecipe().getLabel());
+        }
+
         if (recipeList.size() > 0) {
-            for (int i=0 ; i<3; ++i) {
-                String img_url = recipeList.get(i).getRecipe().getImage();
-                if (!img_url.equalsIgnoreCase(""))
-                    Picasso.get().load(img_url).placeholder(R.drawable.ic_launcher_background)// Place holder image from drawable folder
-                            .error(R.drawable.b).resize(400, 400).centerCrop()
-                            .into(img[i]);
-                String label_text = recipeList.get(i).getRecipe().getLabel();
-                label[i].setText(label_text);
-                final int j=i;
+
+            Log.d(TAG, "displayRecipe: ");
+            RecyclerView recipes = view.findViewById(R.id.search_recipe_recyclerview);
+            SearchRecipeAdapter adapter = new SearchRecipeAdapter(getActivity(), this, recipeImages, recipeNames);
+            recipes.setAdapter(adapter);
+            recipes.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+//            for (int i=0 ; i<3; ++i) {
+//                String img_url = recipeList.get(i).getRecipe().getImage();
+//                if (!img_url.equalsIgnoreCase(""))
+//                    Picasso.get().load(img_url).placeholder(R.drawable.ic_launcher_background)// Place holder image from drawable folder
+//                            .error(R.drawable.b).resize(400, 400).centerCrop()
+//                            .into(img[i]);
+//                String label_text = recipeList.get(i).getRecipe().getLabel();
+//                label[i].setText(label_text);
+//                final int j=i;
 //                img[i].setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        RecipeModel recipe_detail = recipeList.get(j).getRecipe();
-//                        recipeClickedListener.onRecipeSent(recipe_detail);
+//                    public void onClick(View v) {
+//                        recipeImageClicked(j);
 //                    }
 //                });
-                img[i].setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        recipeImageClicked(j);
-                    }
-                });
-            }
+//            }
 
         }
+    }
+
+    @Override
+    public void onRecipeImageClick(int position) {
+        Log.d(TAG, "onRecipeImageClick: "+position);
+        recipeImageClicked(position);
     }
 
     public List<HitsModel> responseToRecipeList(String response) throws IOException {
