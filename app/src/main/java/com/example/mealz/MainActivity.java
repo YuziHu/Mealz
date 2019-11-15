@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         //////////////////////////////////////////////////////////////////////////////////////////////
-        Intent loginActivity = new Intent(getApplicationContext(), UserActivity.class);
-        startActivity(loginActivity);
+        Intent userActivity = new Intent(getApplicationContext(), UserActivity.class);
+        startActivity(userActivity);
         finish();
     }
 }

@@ -1,6 +1,9 @@
 package com.example.mealz.Activities;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +31,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 public class RecipeDetailActivity extends AppCompatActivity {
     private static final String TAG = "RecipeDetailActivity";
@@ -40,6 +45,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
     private DatabaseReference current_user_db;
+    // creating firebase messages for notification
+    // 1. Notification Channel
+    // 2. Notification Builder
+    // 3. Notification Manager
+    private static final String CHANNEL_ID = "SEND_NOTIFICATION";
+    private static final String CHANNEL_NAME = "SEND_PENDING_RECIPE";
+    private static final String CHANNEL_DESC = "Pending recipe notification";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +110,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
                         }
                     }
                 }
-//                rp += curr;
-//                System.out.println("rp: "+rp);
             }
         });
 
@@ -119,6 +129,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     // add to current pending mealplan by default
                     DatabaseReference curUserMealplans = current_user_db.child("meal_plans").child("current").child("pending");
                     curUserMealplans.push().setValue(newMealplanEntry);
+                    // local test on notification on the same device
+//                    displayNotification();
                 }
             }
         });
@@ -130,6 +142,32 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 openGroceryList();
             }
         });
+
+        // notification
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(CHANNEL_DESC);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+
+
+    }
+
+    // might move to another class later
+    public void displayNotification(){
+        NotificationCompat.Builder nBuilder =
+                new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.mealz_logo)
+                .setContentTitle("New Pending Meal Plan")
+                .setContentText("Your roommate just added a pending meal plan.")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        // Notification Manager
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        // notification id is used update/delete notification, ignore it now
+        notificationManager.notify(1,nBuilder.build());
 
     }
 
