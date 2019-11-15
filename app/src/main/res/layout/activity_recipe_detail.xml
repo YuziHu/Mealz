@@ -21,13 +21,14 @@
 
     <TextView
         android:id="@+id/textView3"
-        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font_product_sans"
         android:layout_marginTop="28dp"
-        android:text="Ingredient"
-        android:textSize="36sp"
+        android:text="Ingredients"
+        android:padding="@dimen/appbar_padding"
+        android:textColor="#000000"
+        android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +38,7 @@
         android:id="@+id/imageView"
         android:layout_width="213dp"
         android:layout_height="138dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -45,37 +46,42 @@
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="193dp"
-        android:layout_height="39dp"
+        android:layout_width="195dp"
+        android:layout_height="40dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="36dp"
         android:fontFamily="@font/font_product_sans"
         android:text="Add to Grocery List"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addToMealplanBtn"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/addToMealplanBtn"
-        android:layout_width="193dp"
-        android:layout_height="42dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginBottom="40dp"
+        android:layout_width="195dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="92dp"
         android:fontFamily="@font/font_product_sans"
         android:text="Add to Mealplan"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button2" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="36dp"
         android:fontFamily="@font/font_product_sans"
         android:text="Grocery List"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.453"
-        app:layout_constraintStart_toEndOf="@+id/button2" />
+        app:layout_constraintHorizontal_bias="0.736"
+        app:layout_constraintStart_toEndOf="@+id/button2"
+        app:layout_constraintTop_toBottomOf="@+id/addToMealplanBtn"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
