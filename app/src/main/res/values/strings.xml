@@ -14,17 +14,14 @@
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string-array name="diets">
+        <item>none</item>
         <item>balanced</item>
         <item>high-protein</item>
         <item>low-fat</item>
         <item>low-carb</item>
     </string-array>
     <string-array name="health">
-        <item>dairy-free</item>
-        <item>egg-free</item>
-        <item>fat-free</item>
-        <item>gluten-free</item>
-        <item>low-sugar</item>
+        <item>none</item>
         <item>peanut-free</item>
         <item>vegan</item>
         <item>vegetarian</item>

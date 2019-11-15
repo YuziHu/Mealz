@@ -7,9 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -48,6 +50,8 @@ public class RecipeFragment extends Fragment implements SearchRecipeAdapter.Reci
     private ArrayList<String> recipeImages = new ArrayList<>();
     private ArrayList<String> recipeNames = new ArrayList<>();
 
+    private Spinner dietSpinner;
+    private Spinner healthSpinner;
     private EditText searchField;
     private AppCompatImageButton searchBtn;
     private ImageButton img;
@@ -67,6 +71,18 @@ public class RecipeFragment extends Fragment implements SearchRecipeAdapter.Reci
         view = inflater.inflate(R.layout.fragment_search_recipe, container, false);
 
 //        Log.i(TAG, "create meal plan fragment instance.");
+
+        dietSpinner = view.findViewById(R.id.spinner);
+        ArrayAdapter<String> dietSelectionAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.diets));
+        dietSelectionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dietSpinner.setAdapter(dietSelectionAdapter);
+
+        healthSpinner = view.findViewById(R.id.spinner2);
+        ArrayAdapter<String> healthSelectionAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.health));
+        healthSelectionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        healthSpinner.setAdapter(healthSelectionAdapter);
 
         searchField = view.findViewById(R.id.recipeSearch);
         img = view.findViewById(R.id.SearchedImg2);
@@ -102,7 +118,24 @@ public class RecipeFragment extends Fragment implements SearchRecipeAdapter.Reci
     }
 
     public void searchRecipeClicked(){
-        String message = searchField.getText().toString();
+        String message;
+        String diet = dietSpinner.getSelectedItem().toString();
+        System.out.println(diet);
+        String health = healthSpinner.getSelectedItem().toString();
+        System.out.println(health);
+        String recipe = searchField.getText().toString();
+        System.out.println(recipe);
+
+        if (diet.equals("none") && health.equals("none")) {
+            message = "&q=" + recipe;
+        } else if (diet.equals("none") && !health.equals("none")) {
+            message = "&q=" + recipe + "&health=" + health;
+        } else if (health.equals("none") && !diet.equals("none")) {
+            message = "&q=" + recipe + "&diet=" + diet;
+        } else {
+            message = "&q=" + recipe + "&diet=" + diet + "&health=" + health;
+        }
+        System.out.println(message);
         searchForRecipe(message);
     }
 
@@ -112,7 +145,7 @@ public class RecipeFragment extends Fragment implements SearchRecipeAdapter.Reci
 //        EditText editText = (EditText) findViewById(R.id.editText);
 //        String message = editText.getText().toString();
 
-        String url = "https://api.edamam.com/search?app_id=736dba64&app_key=8b9c2a666b2c005a8c34b35a26063330&q=" + message;
+        String url = "https://api.edamam.com/search?app_id=736dba64&app_key=8b9c2a666b2c005a8c34b35a26063330" + message;
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
