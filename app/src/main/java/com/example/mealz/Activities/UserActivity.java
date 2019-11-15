@@ -25,8 +25,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
@@ -97,26 +100,33 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
         if (currentUser != null) {
             String currentUID = currentUser.getUid();
             current_user_db = database.getReference().child("Users").child(currentUID);
-            Log.d(TAG, "onCreate: "+current_user_db.child("token"));
-            if(current_user_db.child("token")==null) {
-                // add a token if the current user does not have one
-                FirebaseInstanceId.getInstance().getInstanceId()
-                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                                if(task.isSuccessful()){
-                                    String token = task.getResult().getToken();
-                                    Log.d(TAG, "onCreate: Firebase message instance token:"+token);
-                                    current_user_db.child("token").push().setValue(token);
+            current_user_db.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(!dataSnapshot.child("token").exists()){
+                        FirebaseInstanceId.getInstance().getInstanceId()
+                                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                        if(task.isSuccessful()){
+                                            String token = task.getResult().getToken();
+//                                            Log.d(TAG, "onCreate: Firebase message instance token:"+FCMtoken);
+                                            current_user_db.child("token").setValue(token);
+                                        }else{
+//                                            FCMtoken = " Error: "+task.getException().getMessage();
+//                                            Log.d(TAG, "onCreate: Firebase message instance token:"+FCMtoken);
 
-                                }else{
-//                                FCMtoken = " Error: "+task.getException().getMessage();
-//                                Log.d(TAG, "onCreate: Firebase message instance token:"+FCMtoken);
+                                        }
+                                    }
+                                });
+                    }
+                }
 
-                                }
-                            }
-                        });
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
 
         recipeDetailFragment = new RecipeDetailFragment();
