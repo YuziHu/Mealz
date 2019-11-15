@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.mealz.Activities.RecipeDetailActivity;
 import com.example.mealz.Adapters.RecyclerMealplanAdapter;
@@ -222,12 +223,106 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
 
     @Override
     public void onLikeClick(String tag, int position) {
+        final RecipeModel recipe = new RecipeModel();
+        recipe.setImage(pendingImages.get(position));
+        recipe.setLabel(pendingNames.get(position));
+        recipe.setIngredients((pendingIngredients.get(position)));
+        if (currentUser != null) {
+            String currentUID = currentUser.getUid();
+            current_user_db = database.getReference().child("Users").child(currentUID);
+            MealPlanModel newMealPlanEntry = new MealPlanModel();
+            newMealPlanEntry.setName(recipe.getLabel());
+            newMealPlanEntry.setImageUrl(recipe.getImage());
+            newMealPlanEntry.setIngredients(recipe.getIngredients());
+            DatabaseReference currUserMealPlansAgreed = current_user_db.child("meal_plans").child("current").child("agreed");
+            currUserMealPlansAgreed.push().setValue(newMealPlanEntry);
+
+            DatabaseReference curUserFuturePendingMealplans = current_user_db.child("meal_plans").child("current").child("pending");
+            if (curUserFuturePendingMealplans != null) {
+                curUserFuturePendingMealplans.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        pendingMealPlans.clear();
+                        pendingImages.clear();
+                        pendingNames.clear();
+                        pendingIngredients.clear();
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            MealPlanModel mealplan = ds.getValue(MealPlanModel.class);
+
+                            if (mealplan.getName() == recipe.getLabel()) {
+                                ds.getRef().removeValue();
+                            } else {
+                                mealplan.setmId(ds.getKey());
+                                List<IngredientModel> ingredients = mapper.convertValue(mealplan.getIngredients(), new TypeReference<List<IngredientModel>>() {
+                                });
+                                pendingMealPlans.add(mealplan);
+                                pendingImages.add(mealplan.getImageUrl());
+                                pendingNames.add(mealplan.getName());
+                                pendingIngredients.add(ingredients);
+                            }
+                        }
+                        pendingAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
         Log.d(TAG, "onLikeClick: called");
         // sending to agreed meals
     }
 
     @Override
     public void onDislikeClick(String tag, int position) {
+        final RecipeModel recipe = new RecipeModel();
+        recipe.setImage(pendingImages.get(position));
+        recipe.setLabel(pendingNames.get(position));
+        recipe.setIngredients((pendingIngredients.get(position)));
+        if (currentUser != null) {
+            String currentUID = currentUser.getUid();
+            current_user_db = database.getReference().child("Users").child(currentUID);
+            MealPlanModel newMealPlanEntry = new MealPlanModel();
+            newMealPlanEntry.setName(recipe.getLabel());
+            newMealPlanEntry.setImageUrl(recipe.getImage());
+            newMealPlanEntry.setIngredients(recipe.getIngredients());
+            DatabaseReference currUserMealPlansPersonal = current_user_db.child("meal_plans").child("current").child("personal");
+            currUserMealPlansPersonal.push().setValue(newMealPlanEntry);
+            DatabaseReference curUserFuturePendingMealplans = current_user_db.child("meal_plans").child("current").child("pending");
+            if (curUserFuturePendingMealplans != null) {
+                curUserFuturePendingMealplans.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        pendingMealPlans.clear();
+                        pendingImages.clear();
+                        pendingNames.clear();
+                        pendingIngredients.clear();
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            MealPlanModel mealplan = ds.getValue(MealPlanModel.class);
+                            if (mealplan.getName() == recipe.getLabel()) {
+                                ds.getRef().removeValue();
+                            } else {
+                                mealplan.setmId(ds.getKey());
+                                List<IngredientModel> ingredients = mapper.convertValue(mealplan.getIngredients(), new TypeReference<List<IngredientModel>>() {
+                                });
+                                pendingMealPlans.add(mealplan);
+                                pendingImages.add(mealplan.getImageUrl());
+                                pendingNames.add(mealplan.getName());
+                                pendingIngredients.add(ingredients);
+                            }
+                        }
+                        pendingAdapter.notifyDataSetChanged();
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
+
         Log.d(TAG, "onDislikeClick: called");
         // sending to personal meals
     }
