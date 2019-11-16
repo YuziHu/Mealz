@@ -80,9 +80,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
     final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
     final private String serverKey = "key=" + "AAAA2_F3Uto:APA91bEwAg8SEWXS3svPUGomRZyHVvz2tzbLlstcoEF4DTuEL9fEtKHvocWaoyjouDo_c-I73ebjm4yoQpcXTD9mI8pWLSfG3ILPaHlk0EmyvSEP-o2eSSFrLMTmfaQKSh8fYYCqMLhw";
     final private String contentType = "application/json";
-    String NOTIFICATION_TITLE;
-    String NOTIFICATION_MESSAGE;
-    String TOPIC;
     RequestQueue requestQueue;
 
     @Override
@@ -181,8 +178,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     newMealplanEntry.setImageUrl(img_url);
                     newMealplanEntry.setIngredients(ingredients);
                     // add to current pending mealplan by default
-                    DatabaseReference curUserMealplans = current_user_db.child("meal_plans").child("current").child("pending");
-                    curUserMealplans.push().setValue(newMealplanEntry);
+                    if(UserActivity.groupID!=null){
+                        DatabaseReference curUserGroupMealplans = database.getReference().child("Groups").child(UserActivity.groupID).child("meal_plans").child("current").child("pending");
+                        curUserGroupMealplans.push().setValue(newMealplanEntry);
+                    }
                     // local test for showing notification
 //                    displayNotification();
                     // send notification
@@ -205,23 +204,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
                             }
                         }
                     }
-                    // send notification
-//                    TOPIC = "topics/1LCy6eCWCaaHrn3ciapXuv0Grfh2";
-//                    NOTIFICATION_TITLE = "title";
-//                    NOTIFICATION_MESSAGE = "body";
-//
-//                    JSONObject notification = new JSONObject();
-//                    JSONObject notificationBody = new JSONObject();
-//                    try{
-//                        notificationBody.put("title", NOTIFICATION_TITLE);
-//                        notificationBody.put("message", NOTIFICATION_MESSAGE);
-//
-//                        notification.put("to", TOPIC);
-//                        notification.put("data", notificationBody);
-//                    } catch (JSONException e) {
-//                        Log.e(TAG, "onClick: " + e.getMessage());
-//                    }
-//                    sendNotification(notification);
                 }
             }
         });
@@ -248,9 +230,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
                         if(task.isSuccessful()){
                             String token = task.getResult().getToken();
-                            Log.i(TAG, "onComplete: "+token);
-                            System.out.println("token: "+ token);
-//                            Toast.makeText(getApplicationContext(), token, Toast.LENGTH_SHORT);
                         }
                         else{
                             Log.e(TAG, "onComplete: Error" + task.getException().getMessage());
@@ -286,22 +265,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
         };
         requestQueue.add(req);
     }
-
-//    // might move to another class later
-//    public void displayNotification(){
-//        NotificationCompat.Builder nBuilder =
-//                new NotificationCompat.Builder(this, CHANNEL_ID)
-//                .setSmallIcon(R.drawable.mealz_logo)
-//                .setContentTitle("New Pending Meal Plan")
-//                .setContentText("Your roommate just added a pending meal plan.")
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-//
-//        // Notification Manager
-//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-//        // notification id is used update/delete notification, ignore it now
-//        notificationManager.notify(1,nBuilder.build());
-//
-//    }
 
     public void openGroceryList() {
         Intent intent = new Intent(this, UserActivity.class);
