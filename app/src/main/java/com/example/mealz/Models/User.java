@@ -8,12 +8,15 @@ public class User {
     public String email;
     // List of Strings representing grocery ids
     public List<String> groceryList;
+    // registration token for firebase message
+    public String token;
 
-    public User(String uid, String name, String email, List<String> groceryList){
+    public User(String uid, String name, String email, List<String> groceryList, String token){
         this.uid = uid;
         this.name = name;
         this.email = email;
         this.groceryList = groceryList;
+        this.token = token;
     }
 
     // get and set methods
@@ -26,6 +29,7 @@ public class User {
     public List<String> getGroceryList(){
         return this.groceryList;
     }
+    public String getToken(){ return this.token; }
     //
     public void setName(String newName){
         this.name = newName;
@@ -36,4 +40,5 @@ public class User {
     public void updateGroceryList(List<String> groceryList){
         this.groceryList = groceryList;
     }
+    public void setToken(String token){ this.token = token; }
 }

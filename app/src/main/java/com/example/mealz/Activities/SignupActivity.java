@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,11 +22,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
+    private static final String TAG = "SignupActivity";
+
     private EditText userEmail, userPassword, confirmPassword, firstName, lastName;
 //    private ProgressBar loadingProgress;
     private Button signupBtn;
@@ -59,7 +64,7 @@ public class SignupActivity extends AppCompatActivity {
                 if(email.isEmpty() || name.isEmpty() || password.isEmpty()){
                     // display error message
                     showMessage("Please complete all fields!");
-                } else if (userPassword.getText() != confirmPassword.getText()) {
+                } else if (!(userPassword.getText().toString()).equals(confirmPassword.getText().toString())) {
                     showMessage("Passwords do not match!");
                 } else {
                     // CreateUserAccount will try to create the user if the email is valid
@@ -90,24 +95,24 @@ public class SignupActivity extends AppCompatActivity {
                 });
     }
 
-    private void saveUserInfo(String name, FirebaseUser currentUser) {
+    private void saveUserInfo(String name, FirebaseUser currentUser, String token) {
         String uid = currentUser.getUid();
         DatabaseReference current_user_db = database.getReference().child("Users").child(uid);
         // create a new user object
-        User newUser = new User(uid,currentUser.getDisplayName(),currentUser.getEmail(),null);
+        User newUser = new User(uid,currentUser.getDisplayName(),currentUser.getEmail(),null, token);
         // create a map that maps user info
         Map userInfo = new HashMap();
         System.out.println(newUser.getName());
         userInfo.put("username",name);
         userInfo.put("email",newUser.getEmail());
-        System.out.println(newUser.getGroceryList());
+//        System.out.println(newUser.getGroceryList());
         userInfo.put("groceryList",newUser.getGroceryList());
         current_user_db.setValue(userInfo);
         updateUI();
 
     }
 
-    private void updateUserInfo(String name, FirebaseUser currentUser) {
+    private void updateUserInfo(final String name, final FirebaseUser currentUser) {
 //        StorageReference mStorage = FirebaseStorage.getInstance().getReference().child()
         UserProfileChangeRequest profileUpate = new UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
@@ -121,8 +126,23 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
                 });
-        // save user info
-        saveUserInfo(name, currentUser);
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if(task.isSuccessful()){
+                            String token = task.getResult().getToken();
+                            Log.d(TAG, "onCreate: Firebase message instance token:"+token);
+                            // save user info
+                            saveUserInfo(name, currentUser, token);
+
+                        }else{
+//                            FCMtoken = " Error: "+task.getException().getMessage();
+//                            Log.d(TAG, "onCreate: Firebase message instance token:"+FCMtoken);
+
+                        }
+                    }
+                });
     }
 
     private void updateUI() {

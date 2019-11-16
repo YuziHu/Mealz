@@ -18,17 +18,29 @@ import com.example.mealz.Fragments.RecipeDetailFragment;
 import com.example.mealz.Fragments.RecipeFragment;
 import com.example.mealz.Fragments.UserProfileFragment;
 import com.example.mealz.Models.GroceryItem;
+import com.example.mealz.Models.Group;
 import com.example.mealz.Models.RecipeModel;
 import com.example.mealz.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class UserActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener, RecipeFragment.RecipeClickedListener, EditGroceryDialog.EditGroceryDialogListener {
 
     private static final String TAG = "UserActivity";
+
+    // user information
+    public static String groupID;
 
     // firebase objects
     private FirebaseAuth mAuth;
@@ -92,8 +104,43 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
 
         if (currentUser != null) {
             String currentUID = currentUser.getUid();
+            FirebaseMessaging.getInstance().subscribeToTopic(currentUID);
+            Log.i(TAG, "onCreate: subscribe to topic: "+currentUID);
             current_user_db = database.getReference().child("Users").child(currentUID);
+            DatabaseReference userGroup = current_user_db.child("group");
+//            groupID = String.valueOf(current_user_db.child("group").child("groupID").getKey());
+//            Log.i(TAG, "onDataChange: "+groupID);
+            userGroup.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        groupID = ds.getValue().toString();
+                    }
+                    FirebaseInstanceId.getInstance().getInstanceId()
+                            .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                        if(task.isSuccessful()){
+                                            String token = task.getResult().getToken();
+//                                            Log.d(TAG, "onCreate: Firebase message instance token:"+FCMtoken);
+                                            current_user_db.child("token").setValue(token);
+                                        }else{
+//                                            FCMtoken = " Error: "+task.getException().getMessage();
+//                                            Log.d(TAG, "onCreate: Firebase message instance token:"+FCMtoken);
+
+                                        }
+                                    }
+                                });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
+
+//        FirebaseMessaging.getInstance().subscribeToTopic("updates");
 
         recipeDetailFragment = new RecipeDetailFragment();
     }

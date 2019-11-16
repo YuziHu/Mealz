@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.mealz.Activities.RecipeDetailActivity;
+import com.example.mealz.Activities.UserActivity;
 import com.example.mealz.Adapters.RecyclerMealplanAdapter;
 import com.example.mealz.Models.IngredientModel;
 import com.example.mealz.Models.MealPlanModel;
 import com.example.mealz.Models.RecipeModel;
+import com.example.mealz.Models.User;
 import com.example.mealz.R;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,6 +52,7 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
     private DatabaseReference current_user_db;
+    private DatabaseReference curUserGroup;
 
     // get meal plans as a list from firebase
     // pending
@@ -106,10 +109,13 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
         if(currentUser!=null){
             String currentUID = currentUser.getUid();
             current_user_db = database.getReference().child("Users").child(currentUID);
+            if(UserActivity.groupID!=null){
+                curUserGroup = database.getReference().child("Groups").child(UserActivity.groupID);
+            }
             // if current user has pending meal plans
-            DatabaseReference curUserFuturePendingMealplans = current_user_db.child("meal_plans").child("current").child("pending");
-            if(curUserFuturePendingMealplans!=null){
-                curUserFuturePendingMealplans.addValueEventListener(new ValueEventListener() {
+            DatabaseReference curUserCurrentPendingMealplans = curUserGroup.child("meal_plans").child("current").child("pending");
+            if(curUserCurrentPendingMealplans!=null){
+                curUserCurrentPendingMealplans.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         pendingMealPlans.clear();
@@ -135,9 +141,13 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
                 });
             }
             // if current user has agreed meal plans
-            DatabaseReference curUserFutureAgreedMealplans = current_user_db.child("meal_plans").child("current").child("agreed");
-            if(curUserFutureAgreedMealplans!=null){
-                curUserFutureAgreedMealplans.addValueEventListener(new ValueEventListener() {
+            if(UserActivity.groupID!=null){
+                curUserGroup = database.getReference().child("Groups").child(UserActivity.groupID);
+            }
+            // if current user has pending meal plans
+            DatabaseReference curUserCurrentAgreedMealplans = curUserGroup.child("meal_plans").child("current").child("agreed");
+            if(curUserCurrentAgreedMealplans!=null){
+                curUserCurrentAgreedMealplans.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         agreedMealPlans.clear();
@@ -162,9 +172,9 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
                 });
             }
             // if current user has personal meal plans
-            DatabaseReference curUserFuturePersonalMealplans = current_user_db.child("meal_plans").child("current").child("personal");
-            if(curUserFuturePersonalMealplans!=null){
-                curUserFuturePersonalMealplans.addValueEventListener(new ValueEventListener() {
+            DatabaseReference curUserCurrentPersonalMealplans = current_user_db.child("meal_plans").child("current").child("personal");
+            if(curUserCurrentPersonalMealplans!=null){
+                curUserCurrentPersonalMealplans.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         personalMealPlans.clear();
