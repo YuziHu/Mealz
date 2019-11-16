@@ -64,7 +64,7 @@ public class SignupActivity extends AppCompatActivity {
                 if(email.isEmpty() || name.isEmpty() || password.isEmpty()){
                     // display error message
                     showMessage("Please complete all fields!");
-                } else if (userPassword.getText() != confirmPassword.getText()) {
+                } else if (!(userPassword.getText().toString()).equals(confirmPassword.getText().toString())) {
                     showMessage("Passwords do not match!");
                 } else {
                     // CreateUserAccount will try to create the user if the email is valid
