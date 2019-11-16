@@ -34,52 +34,80 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/groceryItemsAmount"
+        android:id="@+id/groceryItems"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginTop="32dp"
         android:textSize="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.248"
+        app:layout_constraintHorizontal_bias="0.02"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameText" />
 
     <TextView
-        android:id="@+id/recipesAmount"
+        android:id="@+id/agreedMeals"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="32dp"
+        android:textSize="32dp"
+        app:layout_constraintEnd_toStartOf="@+id/personalMeals"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toEndOf="@+id/groceryItems"
+        app:layout_constraintTop_toBottomOf="@+id/nameText" />
+
+    <TextView
+        android:id="@+id/personalMeals"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="108dp"
+        android:layout_marginRight="108dp"
         android:textSize="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.601"
-        app:layout_constraintStart_toEndOf="@+id/groceryItemsAmount"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameText" />
 
     <TextView
         android:id="@+id/groceryItemsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="106dp"
+        android:layout_height="76dp"
         android:layout_marginStart="36dp"
         android:layout_marginLeft="36dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/font_product_sans"
         android:text="Grocery Items"
         android:textSize="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/groceryItemsAmount" />
+        app:layout_constraintTop_toBottomOf="@+id/groceryItems" />
 
     <TextView
         android:id="@+id/recipesText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="76dp"
-        android:layout_marginRight="76dp"
+        android:layout_width="91dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/font_product_sans"
-        android:text="Recipes"
+        android:text="Agreed Meals"
+        android:textSize="24dp"
+        app:layout_constraintEnd_toStartOf="@+id/recipesText2"
+        app:layout_constraintHorizontal_bias="0.395"
+        app:layout_constraintStart_toEndOf="@+id/groceryItemsText"
+        app:layout_constraintTop_toBottomOf="@+id/agreedMeals" />
+
+    <TextView
+        android:id="@+id/recipesText2"
+        android:layout_width="91dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginRight="44dp"
+        android:fontFamily="@font/font_product_sans"
+        android:text="Personal Meals"
         android:textSize="24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipesAmount" />
+        app:layout_constraintTop_toBottomOf="@+id/personalMeals" />
 
     <ImageView
         android:id="@+id/imageView5"

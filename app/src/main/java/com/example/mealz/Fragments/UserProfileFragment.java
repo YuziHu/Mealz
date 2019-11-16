@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.example.mealz.Activities.LoginActivity;
 import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.Models.MealPlanModel;
-import com.example.mealz.Models.User;
 import com.example.mealz.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,7 +37,8 @@ public class UserProfileFragment extends Fragment {
     private DatabaseReference current_user_db;
 
     List<GroceryItem> groceryList = new ArrayList<>();
-    ArrayList<MealPlanModel> pendingMealPlans = new ArrayList<>();
+    ArrayList<MealPlanModel> agreedMealPlans = new ArrayList<>();
+    ArrayList<MealPlanModel> personalMealPlans = new ArrayList<>();
 
     // sign out user
     private Button signout;
@@ -46,7 +46,8 @@ public class UserProfileFragment extends Fragment {
 
     private TextView nameText;
     private TextView groceryItems;
-    private TextView pendingRecipes;
+    private TextView agreedMeals;
+    private TextView personalMeals;
 
 
     @Nullable
@@ -57,11 +58,14 @@ public class UserProfileFragment extends Fragment {
         nameText = view.findViewById(R.id.nameText);
         nameText.setText("");
 
-        groceryItems = view.findViewById(R.id.groceryItemsAmount);
+        groceryItems = view.findViewById(R.id.groceryItems);
         groceryItems.setText("");
 
-        pendingRecipes = view.findViewById(R.id.recipesAmount);
-        pendingRecipes.setText("");
+        agreedMeals = view.findViewById(R.id.agreedMeals);
+        agreedMeals.setText("");
+
+        personalMeals = view.findViewById(R.id.personalMeals);
+        personalMeals.setText("");
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -108,20 +112,42 @@ public class UserProfileFragment extends Fragment {
                 });
             }
 
-            DatabaseReference curUserFuturePendingMealplans = current_user_db.child("meal_plans").child("current").child("pending");
-            if(curUserFuturePendingMealplans!=null){
-                curUserFuturePendingMealplans.addValueEventListener(new ValueEventListener() {
+            DatabaseReference curUserFutureAgreedMealplans = current_user_db.child("meal_plans").child("current").child("agreed");
+            if(curUserFutureAgreedMealplans!=null){
+                curUserFutureAgreedMealplans.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        pendingMealPlans.clear();
+                        agreedMealPlans.clear();
                         for(DataSnapshot ds : dataSnapshot.getChildren()){
                             MealPlanModel mealplan = ds.getValue(MealPlanModel.class);
                             mealplan.setmId(ds.getKey());
-                            pendingMealPlans.add(mealplan);
+                            agreedMealPlans.add(mealplan);
                         }
-                        System.out.println(pendingMealPlans.size());
-                        String size = "" + pendingMealPlans.size();
-                        pendingRecipes.setText(size);
+                        System.out.println(agreedMealPlans.size());
+                        String size = "" + agreedMealPlans.size();
+                        agreedMeals.setText(size);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            DatabaseReference curUserFuturePersonalMealplans = current_user_db.child("meal_plans").child("current").child("personal");
+            if(curUserFuturePersonalMealplans!=null){
+                curUserFuturePersonalMealplans.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        personalMealPlans.clear();
+                        for(DataSnapshot ds : dataSnapshot.getChildren()){
+                            MealPlanModel mealplan = ds.getValue(MealPlanModel.class);
+                            mealplan.setmId(ds.getKey());
+                            personalMealPlans.add(mealplan);
+                        }
+                        System.out.println(personalMealPlans.size());
+                        String size = "" + personalMealPlans.size();
+                        personalMeals.setText(size);
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
