@@ -48,7 +48,6 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/pendingTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/font_product_sans"
@@ -63,15 +62,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="120sp"
             android:fontFamily="@font/font_product_sans"
-            android:id="@+id/pendingMealplanRecyclerView"
-            android:orientation="horizontal">
-        </androidx.recyclerview.widget.RecyclerView>
+            android:minHeight="120sp"
+            android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
 
 
         <TextView
-            android:id="@+id/agreedTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/font_product_sans"
@@ -87,12 +83,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/font_product_sans"
-            android:id="@+id/agreedMealplanRecyclerView"
-            android:orientation="horizontal">
-        </androidx.recyclerview.widget.RecyclerView>
+            android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
 
         <TextView
-            android:id="@+id/personalTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/font_product_sans"
@@ -106,11 +99,9 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="wrap_content"
-            android:fontFamily="@font/font_product_sans"
             android:layout_height="wrap_content"
-            android:id="@+id/personalMealplanRecyclerView"
-            android:orientation="horizontal">
-        </androidx.recyclerview.widget.RecyclerView>
+            android:fontFamily="@font/font_product_sans"
+            android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
 
 
     </LinearLayout>
