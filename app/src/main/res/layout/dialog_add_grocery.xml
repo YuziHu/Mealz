@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="80sp"
+        android:text="Add A New Item"
+        android:fontFamily="@font/font_product_sans"
+        android:textColor="#000000"
+        android:textSize="32dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/addGroceryName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"
+        android:layout_marginTop="50sp"
+        android:layout_marginRight="20sp"
+        android:background="@drawable/my_edit_text_border"
+        android:hint="Item Name"
+        android:paddingLeft="10dp"
+        android:fontFamily="@font/font_product_sans"
+        android:textColor="#000000"
+        android:paddingVertical="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_marginTop="30sp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/addGroceryAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20sp"
+            android:fontFamily="@font/font_product_sans"
+            android:background="@drawable/my_edit_text_border"
+            android:hint="Quantity"
+            android:paddingLeft="10dp"
+            android:paddingRight="120dp" />
+
+        <Spinner
+            android:id="@+id/addGroceryUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+</LinearLayout>
