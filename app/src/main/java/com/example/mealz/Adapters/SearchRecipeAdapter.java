@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class SearchRecipeAdapter extends RecyclerView.Adapter<SearchRecipeAdapter.ViewHolder> {
@@ -62,7 +63,7 @@ public class SearchRecipeAdapter extends RecyclerView.Adapter<SearchRecipeAdapte
 
         ImageButton recipeImage;
         TextView recipeName;
-        RelativeLayout recipelistParentLayout;
+        ConstraintLayout recipelistParentLayout;
         RecipeImageClickListener recipeImageClickListener;
 
         public ViewHolder(@NonNull View itemView, RecipeImageClickListener recipeImageClickListener) {
