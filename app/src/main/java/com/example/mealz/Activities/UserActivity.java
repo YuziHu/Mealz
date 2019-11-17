@@ -13,12 +13,11 @@ import com.example.mealz.Dialogs.AddGroceryDialog;
 import com.example.mealz.Dialogs.EditGroceryDialog;
 import com.example.mealz.Fragments.GrocerylistFragment;
 import com.example.mealz.Fragments.MealPlanFragment;
-import com.example.mealz.Fragments.PersonalGrocerylistFragment;
 import com.example.mealz.Fragments.RecipeDetailFragment;
 import com.example.mealz.Fragments.RecipeFragment;
+import com.example.mealz.Fragments.RecipeSearchFragment;
 import com.example.mealz.Fragments.UserProfileFragment;
 import com.example.mealz.Models.GroceryItem;
-import com.example.mealz.Models.Group;
 import com.example.mealz.Models.RecipeModel;
 import com.example.mealz.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,7 +34,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-public class UserActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener, RecipeFragment.RecipeClickedListener, EditGroceryDialog.EditGroceryDialogListener {
+public class UserActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener, RecipeSearchFragment.RecipeClickedListener, EditGroceryDialog.EditGroceryDialogListener {
 
     private static final String TAG = "UserActivity";
 
