@@ -75,7 +75,10 @@ public class FutureMealplanFragment extends Fragment implements RecyclerMealplan
         View view = inflater.inflate(R.layout.mealplan_recyclerview, container, false);
 
         pendingMealplanRecyclerView = view.findViewById(R.id.pendingMealplanRecyclerView);
-        pendingMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL, false));
+        LinearLayoutManager pendingLayout = new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL, false);
+        pendingLayout.setReverseLayout(true);
+        pendingLayout.setStackFromEnd(true);
+        pendingMealplanRecyclerView.setLayoutManager(pendingLayout);
         pendingMealplanRecyclerView.setNestedScrollingEnabled(false);
         //
         agreedMealplanRecyclerView = view.findViewById(R.id.agreedMealplanRecyclerView);
