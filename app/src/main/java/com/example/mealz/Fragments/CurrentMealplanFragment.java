@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.mealz.Activities.RecipeDetailActivity;
@@ -80,7 +81,10 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
         View view = inflater.inflate(R.layout.mealplan_recyclerview, container, false);
 
         pendingMealplanRecyclerView = view.findViewById(R.id.pendingMealplanRecyclerView);
-        pendingMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL, false));
+        LinearLayoutManager pendingLayout = new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, true);
+        pendingLayout.setReverseLayout(true);
+        pendingLayout.setStackFromEnd(true);
+        pendingMealplanRecyclerView.setLayoutManager(pendingLayout);
         pendingMealplanRecyclerView.setNestedScrollingEnabled(true);
         //
         agreedMealplanRecyclerView = view.findViewById(R.id.agreedMealplanRecyclerView);
@@ -244,10 +248,10 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
             newMealPlanEntry.setName(recipe.getLabel());
             newMealPlanEntry.setImageUrl(recipe.getImage());
             newMealPlanEntry.setIngredients(recipe.getIngredients());
-            DatabaseReference currUserMealPlansAgreed = current_user_db.child("meal_plans").child("current").child("agreed");
+            DatabaseReference currUserMealPlansAgreed = curUserGroup.child("meal_plans").child("current").child("agreed");
             currUserMealPlansAgreed.push().setValue(newMealPlanEntry);
 
-            DatabaseReference curUserFuturePendingMealplans = current_user_db.child("meal_plans").child("current").child("pending");
+            DatabaseReference curUserFuturePendingMealplans = curUserGroup.child("meal_plans").child("current").child("pending");
             if (curUserFuturePendingMealplans != null) {
                 curUserFuturePendingMealplans.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -298,9 +302,9 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
             newMealPlanEntry.setName(recipe.getLabel());
             newMealPlanEntry.setImageUrl(recipe.getImage());
             newMealPlanEntry.setIngredients(recipe.getIngredients());
-            DatabaseReference currUserMealPlansPersonal = current_user_db.child("meal_plans").child("current").child("personal");
+            DatabaseReference currUserMealPlansPersonal = curUserGroup.child("meal_plans").child("current").child("personal");
             currUserMealPlansPersonal.push().setValue(newMealPlanEntry);
-            DatabaseReference curUserFuturePendingMealplans = current_user_db.child("meal_plans").child("current").child("pending");
+            DatabaseReference curUserFuturePendingMealplans = curUserGroup.child("meal_plans").child("current").child("pending");
             if (curUserFuturePendingMealplans != null) {
                 curUserFuturePendingMealplans.addValueEventListener(new ValueEventListener() {
                     @Override
