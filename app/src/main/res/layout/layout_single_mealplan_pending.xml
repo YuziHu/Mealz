@@ -25,7 +25,7 @@
                 android:scaleType="centerCrop"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/mealplan_image"
-                android:src="@mipmap/ic_launcher"
+                android:src="@mipmap/mealzlogo"
                 android:clickable="false"/>
 
             <TextView

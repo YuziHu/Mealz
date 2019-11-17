@@ -13,7 +13,7 @@
         android:layout_height="80sp"
         android:clickable="false"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/mealzlogo" />
 
     <TextView
         android:id="@+id/recipe_name"

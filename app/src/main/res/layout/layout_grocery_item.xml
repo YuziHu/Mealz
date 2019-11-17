@@ -81,7 +81,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@mipmap/ic_launcher"
+                android:src="@mipmap/mealzlogo"
                 android:id="@+id/editGrocery"
                 />
 
