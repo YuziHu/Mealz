@@ -9,8 +9,16 @@
 
     <ImageButton
         android:id="@+id/recipe_image"
-        android:layout_width="230sp"
-        android:layout_height="80sp"
+        android:layout_width="79dp"
+        android:layout_height="57dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="27dp"
+        android:layout_marginLeft="27dp"
+        android:layout_marginTop="16dp"
+        android:background="#F9F9F9"
         android:clickable="false"
         android:scaleType="centerCrop"
         android:src="@mipmap/mealzlogo" />
@@ -19,9 +27,13 @@
         android:id="@+id/recipe_name"
         android:layout_width="143dp"
         android:layout_height="55dp"
-        android:layout_margin="10sp"
-        android:layout_toRightOf="@+id/recipe_image"
+        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="15sp"
+        android:layout_toRightOf="@+id/recipe_image"
         android:fontFamily="@font/font_product_sans" />
 
 </RelativeLayout>
