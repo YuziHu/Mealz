@@ -13,12 +13,11 @@ import com.example.mealz.Dialogs.AddGroceryDialog;
 import com.example.mealz.Dialogs.EditGroceryDialog;
 import com.example.mealz.Fragments.GrocerylistFragment;
 import com.example.mealz.Fragments.MealPlanFragment;
-import com.example.mealz.Fragments.PersonalGrocerylistFragment;
 import com.example.mealz.Fragments.RecipeDetailFragment;
 import com.example.mealz.Fragments.RecipeFragment;
+import com.example.mealz.Fragments.RecipeSearchFragment;
 import com.example.mealz.Fragments.UserProfileFragment;
 import com.example.mealz.Models.GroceryItem;
-import com.example.mealz.Models.Group;
 import com.example.mealz.Models.RecipeModel;
 import com.example.mealz.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,12 +34,16 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-public class UserActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener, RecipeFragment.RecipeClickedListener, EditGroceryDialog.EditGroceryDialogListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener, RecipeSearchFragment.RecipeClickedListener, EditGroceryDialog.EditGroceryDialogListener {
 
     private static final String TAG = "UserActivity";
 
     // user information
     public static String groupID;
+    public static List<String> members = new ArrayList<>();
 
     // firebase objects
     private FirebaseAuth mAuth;
@@ -115,6 +118,7 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for(DataSnapshot ds : dataSnapshot.getChildren()){
                         groupID = ds.getValue().toString();
+//                        Log.i(TAG, "onDataChange: "+groupID);
                     }
                     FirebaseInstanceId.getInstance().getInstanceId()
                             .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -138,6 +142,27 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
 
                 }
             });
+
+            Log.i(TAG, "onDataChange: "+groupID);
+            if(groupID!=null) {
+//                Log.i(TAG, "onCreate: user group id "+groupID);
+                // get list of members
+                DatabaseReference curUserGroup = database.getReference().child("Groups").child(UserActivity.groupID).child("members");
+                curUserGroup.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                        Log.i(TAG, "onDataChange: "+ds.getKey());
+                            members.add(ds.getKey());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
         }
 
 //        FirebaseMessaging.getInstance().subscribeToTopic("updates");

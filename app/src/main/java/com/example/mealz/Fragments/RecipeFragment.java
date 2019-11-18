@@ -1,247 +1,236 @@
 package com.example.mealz.Fragments;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
-import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.mealz.Activities.RecipeDetailActivity;
-import com.example.mealz.Adapters.SearchRecipeAdapter;
-import com.example.mealz.Models.HitsModel;
-import com.example.mealz.Models.RecipeModel;
-import com.example.mealz.Models.ResponseModel;
+import com.example.mealz.Activities.UserActivity;
+import com.example.mealz.Adapters.RecyclerMealplanAdapter;
+import com.example.mealz.Models.IngredientModel;
+import com.example.mealz.Models.MealPlanModel;
 import com.example.mealz.R;
-import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.picasso.Picasso;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RecipeFragment extends Fragment implements SearchRecipeAdapter.RecipeImageClickListener {
+public class RecipeFragment extends Fragment implements RecyclerMealplanAdapter.MealPlanClickListener {
 
-    private final String TAG = "RecipeFragment.";
+    private static final String TAG = "RecipeFragment";
 
-    private List<HitsModel> recipeList;
-    private ArrayList<String> recipeImages = new ArrayList<>();
-    private ArrayList<String> recipeNames = new ArrayList<>();
-
-    private Spinner dietSpinner;
-    private Spinner healthSpinner;
+    private ImageButton searchBtn;
     private EditText searchField;
-    private AppCompatImageButton searchBtn;
-    private ImageButton img;
-
-    private View view;
-
-    private RecipeClickedListener recipeClickedListener;
-
-    // create an interface to pass the recipe object into userActivity then to recipe detail fragment
-    public interface RecipeClickedListener {
-        void onRecipeSent(RecipeModel rm);
-    }
+    //
+    private RecyclerView commonLikeRecyclerView;
+    private RecyclerView roommateLikeRecyclerView;
+    private RecyclerView recommendRecyclerView;
+    RecyclerMealplanAdapter commonLikeAdapter;
+    RecyclerMealplanAdapter roommateLikeAdapter;
+    RecyclerMealplanAdapter recommendAdapter;
+    // firebase objects
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+    private FirebaseDatabase database;
+    private DatabaseReference current_user_db;
+    private DatabaseReference curUserGroup;
+    //
+    List<MealPlanModel> commonLikeList = new ArrayList<>();
+    List<String> commonLikeImages = new ArrayList<>();
+    List<String> commonLikeNames = new ArrayList<>();
+    List<List<IngredientModel>> commonLikeIngredients = new ArrayList<>();
+    //
+    List<MealPlanModel> roommateLikeList = new ArrayList<>();
+    List<String> roommateLikeImages = new ArrayList<>();
+    List<String> roommateLikeNames = new ArrayList<>();
+    List<List<IngredientModel>> roommateLikeIngredients = new ArrayList<>();
+    //
+    List<MealPlanModel> recommendList = new ArrayList<>();
+    List<String> recommendImages = new ArrayList<>();
+    List<String> recommendNames = new ArrayList<>();
+    List<List<IngredientModel>> recommendIngredients = new ArrayList<>();
+    //
+    ObjectMapper mapper = new ObjectMapper();
+    //
+    List<String> members = new ArrayList<>();
+    String roommateID = "";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_search_recipe, container, false);
+        View view = inflater.inflate(R.layout.layout_recipe_main, container, false);
 
-//        Log.i(TAG, "create meal plan fragment instance.");
+        mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        currentUser = mAuth.getCurrentUser();
 
-        dietSpinner = view.findViewById(R.id.spinner);
-        ArrayAdapter<String> dietSelectionAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.diets));
-        dietSelectionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        dietSpinner.setAdapter(dietSelectionAdapter);
+        if (UserActivity.groupID != null) {
+            Log.i(TAG, "onCreate: user group id " + UserActivity.groupID);
+            // get list of members
+            DatabaseReference curUserGroup = database.getReference().child("Groups").child(UserActivity.groupID).child("members");
+            curUserGroup.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                        Log.i(TAG, "onDataChange: "+ds.getKey());
+                        members.add(ds.getKey());
+                    }
+                }
 
-        healthSpinner = view.findViewById(R.id.spinner2);
-        ArrayAdapter<String> healthSelectionAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.health));
-        healthSelectionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        healthSpinner.setAdapter(healthSelectionAdapter);
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        searchField = view.findViewById(R.id.recipeSearch);
-        img = view.findViewById(R.id.SearchedImg2);
-        searchBtn = view.findViewById(R.id.searchButton);
+                }
+            });
+        }
+
+        searchBtn = view.findViewById(R.id.searchButton3);
+        searchField = view.findViewById(R.id.recipeSearch2);
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                searchRecipeClicked();
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new RecipeSearchFragment()).commit();
             }
         });
 
+        searchField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new RecipeSearchFragment()).commit();
+            }
+        });
+
+        // recycler views
+        commonLikeRecyclerView = view.findViewById(R.id.commonLikeRecyclerview);
+        commonLikeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
+        commonLikeRecyclerView.setNestedScrollingEnabled(true);
+        //
+        roommateLikeRecyclerView = view.findViewById(R.id.roommateLikeRecyclerview);
+        roommateLikeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
+        roommateLikeRecyclerView.setNestedScrollingEnabled(true);
+        //
+        recommendRecyclerView = view.findViewById(R.id.recommendRecyclerview);
+        recommendRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
+        recommendRecyclerView.setNestedScrollingEnabled(true);
+        // adapters
+        commonLikeAdapter = new RecyclerMealplanAdapter(this, null, "", getActivity(), commonLikeImages, commonLikeNames);
+        commonLikeRecyclerView.setAdapter(commonLikeAdapter);
+        //
+        roommateLikeAdapter = new RecyclerMealplanAdapter(this, null, "", getActivity(), roommateLikeImages, roommateLikeNames);
+        roommateLikeRecyclerView.setAdapter(roommateLikeAdapter);
+        //
+        recommendAdapter = new RecyclerMealplanAdapter(this, null, "", getActivity(), recommendImages, recommendNames);
+        recommendRecyclerView.setAdapter(recommendAdapter);
+
+        // firebase
+        mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        if (UserActivity.groupID != null) {
+            curUserGroup = database.getReference().child("Groups").child(UserActivity.groupID);
+            DatabaseReference curUserCommonLikeMealplans = curUserGroup.child("meal_plans").child("common_like");
+            if (curUserCommonLikeMealplans != null) {
+                curUserCommonLikeMealplans.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        commonLikeList.clear();
+                        commonLikeImages.clear();
+                        commonLikeNames.clear();
+                        commonLikeIngredients.clear();
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            MealPlanModel mealplan = ds.getValue(MealPlanModel.class);
+                            mealplan.setmId(ds.getKey());
+                            List<IngredientModel> ingredients = mapper.convertValue(mealplan.getIngredients(), new TypeReference<List<IngredientModel>>() {
+                            });
+                            commonLikeList.add(mealplan);
+                            commonLikeImages.add(mealplan.getImageUrl());
+                            commonLikeNames.add(mealplan.getName());
+                            commonLikeIngredients.add(ingredients);
+                        }
+                        commonLikeAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+            Log.i(TAG, "onCreateView: " + UserActivity.groupID);
+            // get list of members
+            DatabaseReference curUserGroup = database.getReference().child("Groups").child(UserActivity.groupID).child("members");
+            curUserGroup.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        Log.i(TAG, "onDataChange: " + ds.getKey());
+                        members.add(ds.getKey());
+                        if (!(ds.getKey()).equals(currentUser.getUid())) {
+                            roommateID = ds.getKey();
+                            Log.i(TAG, "onDataChange: " + ds.getKey());
+                            DatabaseReference roommatePersonal = database.getReference().child("Users").child(roommateID).child("meal_plans").child("current").child("personal");
+                            roommatePersonal.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    roommateLikeList.clear();
+                                    roommateLikeImages.clear();
+                                    roommateLikeNames.clear();
+                                    roommateLikeIngredients.clear();
+                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                        MealPlanModel mealplan = ds.getValue(MealPlanModel.class);
+                                        mealplan.setmId(ds.getKey());
+                                        List<IngredientModel> ingredients = mapper.convertValue(mealplan.getIngredients(), new TypeReference<List<IngredientModel>>() {
+                                        });
+                                        roommateLikeList.add(mealplan);
+                                        roommateLikeImages.add(mealplan.getImageUrl());
+                                        roommateLikeNames.add(mealplan.getName());
+                                        roommateLikeIngredients.add(ingredients);
+                                    }
+                                    roommateLikeAdapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+            });
+            Log.i(TAG, "onCreateView: " + roommateID);
+        }
 
         return view;
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        // context is the UserActivity which should implement RecipeClickedListener
-        if(context instanceof RecipeClickedListener){
-            recipeClickedListener = (RecipeClickedListener) context;
-        }
-        else{
-            throw new RuntimeException(context.toString()+" must implement RecipeClickedListener.");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        recipeClickedListener = null;
-    }
-
-    public void searchRecipeClicked(){
-        String message;
-        String diet = dietSpinner.getSelectedItem().toString();
-        System.out.println(diet);
-        String health = healthSpinner.getSelectedItem().toString();
-        System.out.println(health);
-        String recipe = searchField.getText().toString();
-        System.out.println(recipe);
-
-        if (diet.equals("none") && health.equals("none")) {
-            message = "&q=" + recipe;
-        } else if (diet.equals("none") && !health.equals("none")) {
-            message = "&q=" + recipe + "&health=" + health;
-        } else if (health.equals("none") && !diet.equals("none")) {
-            message = "&q=" + recipe + "&diet=" + diet;
-        } else {
-            message = "&q=" + recipe + "&diet=" + diet + "&health=" + health;
-        }
-        System.out.println(message);
-        searchForRecipe(message);
-    }
-
-
-    public void searchForRecipe(String message){
-        // Do something in response to button
-//        EditText editText = (EditText) findViewById(R.id.editText);
-//        String message = editText.getText().toString();
-
-        String url = "https://api.edamam.com/search?app_id=736dba64&app_key=8b9c2a666b2c005a8c34b35a26063330" + message;
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.GET,
-                url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            recipeList = responseToRecipeList(response);
-                            // All following function should be achieved under this function;
-                            displayRecipe();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Rest Response", error.toString());
-                    }
-                }
-        );
-        requestQueue.add(stringRequest);
-
-    }
-
-    public void displayRecipe(){
-        final ImageButton[] img = new ImageButton[3];
-        img[0] = view.findViewById(R.id.SearchedImg1);
-        img[1] = view.findViewById(R.id.SearchedImg2);
-        img[2] = view.findViewById(R.id.SearchedImg3);
-
-        TextView[] label = new TextView[3];
-        label[0] = view.findViewById(R.id.label1);
-        label[1] = view.findViewById(R.id.label2);
-        label[2] = view.findViewById(R.id.label3);
-
-        recipeImages.clear();
-        recipeNames.clear();
-
-        for(int i=0; i<recipeList.size(); i++){
-            recipeImages.add(recipeList.get(i).getRecipe().getImage());
-            recipeNames.add(recipeList.get(i).getRecipe().getLabel());
-        }
-
-        if (recipeList.size() > 0) {
-
-            Log.d(TAG, "displayRecipe: ");
-            RecyclerView recipes = view.findViewById(R.id.search_recipe_recyclerview);
-            SearchRecipeAdapter adapter = new SearchRecipeAdapter(getActivity(), this, recipeImages, recipeNames);
-            recipes.setAdapter(adapter);
-            recipes.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-//            for (int i=0 ; i<3; ++i) {
-//                String img_url = recipeList.get(i).getRecipe().getImage();
-//                if (!img_url.equalsIgnoreCase(""))
-//                    Picasso.get().load(img_url).placeholder(R.drawable.ic_launcher_background)// Place holder image from drawable folder
-//                            .error(R.drawable.b).resize(400, 400).centerCrop()
-//                            .into(img[i]);
-//                String label_text = recipeList.get(i).getRecipe().getLabel();
-//                label[i].setText(label_text);
-//                final int j=i;
-//                img[i].setOnClickListener(new View.OnClickListener() {
-//                    public void onClick(View v) {
-//                        recipeImageClicked(j);
-//                    }
-//                });
-//            }
-
-        }
-    }
-
-    @Override
-    public void onRecipeImageClick(int position) {
-        Log.d(TAG, "onRecipeImageClick: "+position);
-        recipeImageClicked(position);
-    }
-
-    public List<HitsModel> responseToRecipeList(String response) throws IOException {
-//        System.out.println(response);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        ResponseModel r = objectMapper.readValue(response, ResponseModel.class);
-        this.recipeList = r.getHits();
-        return this.recipeList;
-    }
-
-    public void recipeImageClicked(int j) {
-        Intent myIntent = new Intent(getActivity(), RecipeDetailActivity.class);
-//        System.out.println(recipeList.get(j).getRecipe().getIngredients());
-        RecipeModel recipe_detail = recipeList.get(j).getRecipe();
-        myIntent.putExtra("recipe",(Serializable)recipe_detail);
-        startActivity(myIntent);
-
+    public void onMealplanClick(String tag, int position) {
+        Log.d(TAG, "onMealplanClick: ");
     }
 }

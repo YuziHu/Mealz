@@ -101,7 +101,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        Log.i(TAG, "onDataChange: "+ds.getKey());
+//                        Log.i(TAG, "onDataChange: "+ds.getKey());
                         members.add(ds.getKey());
                     }
                 }
