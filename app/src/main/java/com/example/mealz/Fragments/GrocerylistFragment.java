@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.mealz.Adapters.SectionsPageAdapter;
 import com.example.mealz.Dialogs.AddGroceryDialog;
@@ -30,8 +31,8 @@ public class GrocerylistFragment extends Fragment {
     public int currentTab;
 
     // buttons
-    private Button searchRecipeBtn;
-    private Button addGroceryBtn;
+    //private Button searchRecipeBtn;
+    private TextView addGroceryBtn;
 
     // firebase objects
     private FirebaseAuth mAuth;
@@ -78,7 +79,7 @@ public class GrocerylistFragment extends Fragment {
 
 //        System.out.println(viewPager.getCurrentItem());
 
-        searchRecipeBtn = view.findViewById(R.id.toSearchRecipeBtn);
+        //searchRecipeBtn = view.findViewById(R.id.toSearchRecipeBtn);
         addGroceryBtn = view.findViewById(R.id.addGroceryItemBtn);
 
         mAuth = FirebaseAuth.getInstance();
@@ -100,12 +101,12 @@ public class GrocerylistFragment extends Fragment {
 //            }
 //        });
 
-        searchRecipeBtn.setOnClickListener(new View.OnClickListener() {
+        /*searchRecipeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openSearchRecipe();
             }
-        });
+        });*/
 
         addGroceryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
