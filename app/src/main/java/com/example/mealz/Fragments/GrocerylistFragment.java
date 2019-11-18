@@ -1,19 +1,13 @@
 package com.example.mealz.Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.example.mealz.Activities.LoginActivity;
-import com.example.mealz.Activities.SearchRecipeActivity;
 import com.example.mealz.Adapters.SectionsPageAdapter;
 import com.example.mealz.Dialogs.AddGroceryDialog;
-import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -170,7 +164,7 @@ public class GrocerylistFragment extends Fragment {
 //        Intent intent = new Intent(this, HomeActivity.class);
 ////        intent.putExtra(EXTRA_TEXT, rp);
 //        startActivity(intent);
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new RecipeFragment()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new RecipeSearchFragment()).commit();
     }
 
 //    @Override

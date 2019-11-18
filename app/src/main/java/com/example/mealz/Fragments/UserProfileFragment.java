@@ -36,7 +36,7 @@ public class UserProfileFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference current_user_db;
 
-    List<GroceryItem> groceryList = new ArrayList<>();
+    //List<GroceryItem> groceryList = new ArrayList<>();
     ArrayList<MealPlanModel> agreedMealPlans = new ArrayList<>();
     ArrayList<MealPlanModel> personalMealPlans = new ArrayList<>();
 
@@ -48,6 +48,9 @@ public class UserProfileFragment extends Fragment {
     private TextView groceryItems;
     private TextView agreedMeals;
     private TextView personalMeals;
+    //private TextView numMeals;
+    //private TextView numItems;
+    private TextView roommateName;
 
 
     @Nullable
@@ -58,14 +61,15 @@ public class UserProfileFragment extends Fragment {
         nameText = view.findViewById(R.id.nameText);
         nameText.setText("");
 
-        groceryItems = view.findViewById(R.id.groceryItems);
-        groceryItems.setText("");
-
         agreedMeals = view.findViewById(R.id.agreedMeals);
         agreedMeals.setText("");
 
         personalMeals = view.findViewById(R.id.personalMeals);
         personalMeals.setText("");
+
+        roommateName = view.findViewById(R.id.roommateName);
+        //roommateName.setText("");
+
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -90,7 +94,7 @@ public class UserProfileFragment extends Fragment {
                         }
                     });
 
-            DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("personal");
+            /*DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("personal");
             if (currentUserGroceryList != null) {
                 currentUserGroceryList.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -110,7 +114,7 @@ public class UserProfileFragment extends Fragment {
 
                     }
                 });
-            }
+            }*/
 
             DatabaseReference curUserFutureAgreedMealplans = current_user_db.child("meal_plans").child("current").child("agreed");
             if(curUserFutureAgreedMealplans!=null){
