@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mealz.Activities.LoginActivity;
+import com.example.mealz.Activities.UserActivity;
 import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.Models.MealPlanModel;
 import com.example.mealz.R;
@@ -76,7 +77,7 @@ public class UserProfileFragment extends Fragment {
         currentUser = mAuth.getCurrentUser();
 
         if (currentUser != null) {
-            String currentUID = currentUser.getUid();
+            final String currentUID = currentUser.getUid();
             current_user_db = database.getReference().child("Users").child(currentUID);
 
             current_user_db.addListenerForSingleValueEvent(
@@ -93,28 +94,6 @@ public class UserProfileFragment extends Fragment {
 
                         }
                     });
-
-            /*DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("personal");
-            if (currentUserGroceryList != null) {
-                currentUserGroceryList.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        groceryList.clear();
-                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                            GroceryItem item = ds.getValue(GroceryItem.class);
-                            groceryList.add(item);
-                        }
-                        System.out.println(groceryList.size());
-                        String size = "" + groceryList.size();
-                        groceryItems.setText(size);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-            }*/
 
             DatabaseReference curUserFutureAgreedMealplans = current_user_db.child("meal_plans").child("current").child("agreed");
             if(curUserFutureAgreedMealplans!=null){
@@ -160,32 +139,25 @@ public class UserProfileFragment extends Fragment {
                 });
             }
 
-//            current_user_db.child("grocery_list").child("personal");
-//            if (currentUserGroceryList != null) {
-//                currentUserGroceryList.addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        groceryList.clear();
-//                        groceryNames.clear();
-//                        groceryAmount.clear();
-//                        groceryUnits.clear();
-//                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-//                            GroceryItem item = ds.getValue(GroceryItem.class);
-//                            item.setGid(ds.getKey());
-//                            groceryList.add(item);
-//                            groceryNames.add(item.getName());
-//                            groceryAmount.add(item.getAmount());
-//                            groceryUnits.add(item.getUnit());
-//                        }
-//                        rAdapter.notifyDataSetChanged();
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                    }
-//                });
-//            }
+            if(UserActivity.groupID!=null){
+                // get list of members
+                DatabaseReference curUserGroup = database.getReference().child("Groups").child(UserActivity.groupID).child("members");
+                curUserGroup.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            if(!(ds.getKey()).equals(currentUID)){
+                                roommateName.setText(ds.child("username").getValue().toString());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
         }
 
 
