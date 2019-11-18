@@ -102,7 +102,7 @@ public class RecyclerGrocerylistAdapter extends RecyclerView.Adapter<RecyclerGro
         TextView gAmount;
         TextView gUnit;
         TextView gShare;
-        ImageView editGroceryAction;
+        //ImageView editGroceryAction;
         //
         OnEditIconClickListener onEditIconClickListener;
 
@@ -113,7 +113,7 @@ public class RecyclerGrocerylistAdapter extends RecyclerView.Adapter<RecyclerGro
             gAmount = itemView.findViewById(R.id.gAmount);
             gUnit = itemView.findViewById(R.id.gUnit);
             gShare = itemView.findViewById(R.id.gShare);
-            editGroceryAction = itemView.findViewById(R.id.editGrocery);
+            //editGroceryAction = itemView.findViewById(R.id.editGrocery);
             this.onEditIconClickListener = onEditIconClickListener;
 
             itemView.setOnClickListener(this);

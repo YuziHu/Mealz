@@ -71,14 +71,14 @@
             android:layout_height="wrap_content"
             android:text="Agreed"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/roboto_medium" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Meals"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/roboto_medium" />
 
     </LinearLayout>
 
@@ -106,14 +106,14 @@
             android:layout_height="wrap_content"
             android:text="Personal"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/roboto_medium" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Meals"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/roboto_medium" />
 
     </LinearLayout>
 
@@ -156,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:text="My Roommate"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/roboto_medium" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -165,7 +165,7 @@
                 android:text="Remove"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/roboto_medium" />
         </LinearLayout>
 
         <LinearLayout
@@ -191,7 +191,7 @@
                 android:gravity="center"
                 android:text="Joshua"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/font_product_sans" />
         </LinearLayout>
 
         <View
@@ -211,7 +211,7 @@
                 android:layout_height="wrap_content"
                 android:text="My Coupons"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/roboto_medium" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -220,7 +220,7 @@
                 android:text="See All"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/roboto_medium" />
         </LinearLayout>
 
         <TextView
@@ -229,7 +229,7 @@
             android:text="2 Grocery Coupons Available"
             android:textColor="#C2C1C1"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/roboto_medium" />
 
         <View
             android:layout_width="match_parent"
