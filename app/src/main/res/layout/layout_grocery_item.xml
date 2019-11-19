@@ -78,14 +78,14 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
           
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@mipmap/mealzlogo"
-                android:id="@+id/editGrocery"
-                />
+
 
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="#CCCCCC" />
 
     </LinearLayout>
 
