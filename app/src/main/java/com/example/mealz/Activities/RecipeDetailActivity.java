@@ -179,11 +179,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     newMealplanEntry.setIngredients(ingredients);
                     // add to current pending mealplan by default
                     if(UserActivity.groupID!=null){
-                        DatabaseReference curUserGroupMealplans = database.getReference().child("Groups").child(UserActivity.groupID).child("meal_plans").child("current").child("pending");
+                        DatabaseReference curUserGroupMealplans = database.getReference()
+                                                                        .child("Groups")
+                                                                        .child(UserActivity.groupID)
+                                                                        .child("meal_plans")
+                                                                        .child("current")
+                                                                        .child("pending");
                         curUserGroupMealplans.push().setValue(newMealplanEntry);
                     }
-                    // local test for showing notification
-//                    displayNotification();
                     // send notification
                     if(members != null) {
                         for(String member : members){
@@ -224,18 +227,18 @@ public class RecipeDetailActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
 
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if(task.isSuccessful()){
-                            String token = task.getResult().getToken();
-                        }
-                        else{
-                            Log.e(TAG, "onComplete: Error" + task.getException().getMessage());
-                        }
-                    }
-                });
+//        FirebaseInstanceId.getInstance().getInstanceId()
+//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+//                        if(task.isSuccessful()){
+//                            String token = task.getResult().getToken();
+//                        }
+//                        else{
+//                            Log.e(TAG, "onComplete: Error" + task.getException().getMessage());
+//                        }
+//                    }
+//                });
 
 
     }
