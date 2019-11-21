@@ -302,7 +302,7 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
             newMealPlanEntry.setName(recipe.getLabel());
             newMealPlanEntry.setImageUrl(recipe.getImage());
             newMealPlanEntry.setIngredients(recipe.getIngredients());
-            DatabaseReference currUserMealPlansPersonal = curUserGroup.child("meal_plans").child("current").child("personal");
+            DatabaseReference currUserMealPlansPersonal = current_user_db.child("meal_plans").child("current").child("personal");
             currUserMealPlansPersonal.push().setValue(newMealPlanEntry);
             DatabaseReference curUserFuturePendingMealplans = curUserGroup.child("meal_plans").child("current").child("pending");
             if (curUserFuturePendingMealplans != null) {
