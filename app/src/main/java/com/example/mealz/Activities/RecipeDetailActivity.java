@@ -212,6 +212,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         });
 
         Button openList = findViewById(R.id.button3);
+        openList.setVisibility(View.INVISIBLE);
         openList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
