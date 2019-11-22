@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -37,6 +39,7 @@ public class RecyclerGrocerylistAdapter extends RecyclerView.Adapter<RecyclerGro
     List<String> groceryShares;
     // OnEditIconClickListener
     private OnEditIconClickListener onEditIconClickListener;
+    private OnCheckboxClickListener onCheckboxClickListener;
     // Spinner
 //    Spinner editGrocerySpinner;
     // Firebase objects
@@ -51,7 +54,8 @@ public class RecyclerGrocerylistAdapter extends RecyclerView.Adapter<RecyclerGro
                                       List<Integer> groceryAmount,
                                       List<String> groceryUnits,
                                       List<String> groceryShares,
-                                      OnEditIconClickListener onEditIconClickListener) {
+                                      OnEditIconClickListener onEditIconClickListener,
+                                      OnCheckboxClickListener onCheckboxClickListener) {
         this.context = context;
         this.groceryItemList = groceryItemList;
         this.groceryNames = groceryNames;
@@ -59,6 +63,7 @@ public class RecyclerGrocerylistAdapter extends RecyclerView.Adapter<RecyclerGro
         this.groceryUnits = groceryUnits;
         this.groceryShares = groceryShares;
         this.onEditIconClickListener = onEditIconClickListener;
+        this.onCheckboxClickListener = onCheckboxClickListener;
         // Firebase initialization
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -77,7 +82,7 @@ public class RecyclerGrocerylistAdapter extends RecyclerView.Adapter<RecyclerGro
 //        editGrocerySpinner.setAdapter(editGroceryActionAdapter);
 //        editGrocerySpinner.setOnItemSelectedListener(this);
 
-        ViewHolder holder = new ViewHolder(view, onEditIconClickListener);
+        ViewHolder holder = new ViewHolder(view, onEditIconClickListener, onCheckboxClickListener);
         return holder;
     }
 
@@ -88,7 +93,15 @@ public class RecyclerGrocerylistAdapter extends RecyclerView.Adapter<RecyclerGro
         holder.gName.setText(groceryNames.get(position));
         holder.gAmount.setText(groceryAmount.get(position).toString());
         holder.gUnit.setText(groceryUnits.get(position));
-        if(groceryShares!=null && groceryShares.get(position)!=null) holder.gShare.setText("Shared With: "+groceryShares.get(position));
+        Log.i(TAG, "onBindViewHolder: "+groceryItemList.get(position).getChecked());
+        if(groceryItemList.get(position).getChecked()==null || groceryItemList.get(position).getChecked()=="false"){
+            holder.checkGroceryItem.setChecked(false);
+        }
+        else{
+            holder.checkGroceryItem.setChecked(true);
+        }
+//        holder.checkGroceryItem.setChecked(groceryItemList.get(position).getChecked().equals("true"));
+        if(groceryShares!=null && groceryShares.get(position).length()>0) holder.gShare.setText("Shared With: "+groceryShares.get(position));
         else holder.gShare.setVisibility(View.GONE);
     }
 
@@ -103,33 +116,44 @@ public class RecyclerGrocerylistAdapter extends RecyclerView.Adapter<RecyclerGro
         TextView gAmount;
         TextView gUnit;
         TextView gShare;
-        //ImageView editGroceryAction;
+        CheckBox checkGroceryItem;
         ImageButton ingredientEdit;
         //
         OnEditIconClickListener onEditIconClickListener;
+        OnCheckboxClickListener onCheckboxClickListener;
 
-        public ViewHolder(@NonNull View itemView, final OnEditIconClickListener onEditIconClickListener) {
+        public ViewHolder(@NonNull View itemView, final OnEditIconClickListener onEditIconClickListener, final OnCheckboxClickListener onCheckboxClickListener) {
             super(itemView);
 
             gName = itemView.findViewById(R.id.groceryName);
             gAmount = itemView.findViewById(R.id.gAmount);
             gUnit = itemView.findViewById(R.id.gUnit);
             gShare = itemView.findViewById(R.id.gShare);
+            checkGroceryItem = itemView.findViewById(R.id.groceryItemCheckbox);
             ingredientEdit = itemView.findViewById(R.id.ingridientEdit);
             //editGroceryAction = itemView.findViewById(R.id.editGrocery);
             this.onEditIconClickListener = onEditIconClickListener;
+            this.onCheckboxClickListener = onCheckboxClickListener;
             ingredientEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     onEditIconClickListener.onEditIconClick(getAdapterPosition());
                 }
             });
-//            itemView.setOnClickListener(this);
+            checkGroceryItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onCheckboxClickListener.onCheckboxClick(getAdapterPosition());
+                }
+            });
         }
 
     }
 
     public interface OnEditIconClickListener {
         void onEditIconClick(int position);
+    }
+    public interface OnCheckboxClickListener {
+        void onCheckboxClick(int position);
     }
 }

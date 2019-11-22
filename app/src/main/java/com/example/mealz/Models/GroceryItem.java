@@ -7,16 +7,18 @@ public class GroceryItem {
     String unit;
     float priceByUnit;
     String sharedWith;
+    String checked;
 
     public GroceryItem(){}
 
-    public GroceryItem(String gid, String name, int amount, String unit, float priceByUnit, String sharedWith) {
+    public GroceryItem(String gid, String name, int amount, String unit, float priceByUnit, String sharedWith, String checked) {
         this.gid = gid;
         this.name = name;
         this.amount = amount;
         this.unit = unit;
         this.priceByUnit = priceByUnit;
         this.sharedWith = sharedWith;
+        this.checked = checked;
     }
 
     public String getGid() {
@@ -62,4 +64,12 @@ public class GroceryItem {
     public String getSharedWith() { return sharedWith; }
 
     public void setSharedWith(String sharedWith) { this.sharedWith = sharedWith; }
+
+    public String getChecked() {
+        return checked;
+    }
+
+    public void setChecked(String checked) {
+        this.checked = checked;
+    }
 }

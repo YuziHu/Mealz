@@ -21,8 +21,11 @@
 
             <CheckBox
                 android:id="@+id/groceryItemCheckbox"
-                android:layout_width="0dp"
-                android:layout_height="0dp" />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="5dp"/>
 
             <TextView
                 android:id="@+id/groceryName"
@@ -34,7 +37,7 @@
                 android:textColor="#000"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/groceryItemCheckbox"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
@@ -46,7 +49,7 @@
                 android:layout_weight="1"
                 android:background="#F9F9F9"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/groceryName"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/ic_more_vert_black_24dp" />

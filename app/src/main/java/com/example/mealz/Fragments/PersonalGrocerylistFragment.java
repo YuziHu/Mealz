@@ -40,7 +40,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v4.app.Fragment;
 
-public class PersonalGrocerylistFragment extends Fragment implements RecyclerGrocerylistAdapter.OnEditIconClickListener {
+public class PersonalGrocerylistFragment extends Fragment implements RecyclerGrocerylistAdapter.OnEditIconClickListener, RecyclerGrocerylistAdapter.OnCheckboxClickListener {
 
     private static final String TAG = "PersonalGroceryListFrag";
 
@@ -69,7 +69,7 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
 
         personalGrocerylist = view.findViewById(R.id.personalGrocerylistView);
         personalGrocerylist.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rAdapter = new RecyclerGrocerylistAdapter(getActivity(),groceryList, groceryNames, groceryAmount, groceryUnits, null, this);
+        rAdapter = new RecyclerGrocerylistAdapter(getActivity(),groceryList, groceryNames, groceryAmount, groceryUnits, null, this, this);
         personalGrocerylist.setAdapter(rAdapter);
 
 
@@ -96,6 +96,9 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
                             GroceryItem item = ds.getValue(GroceryItem.class);
                             item.setGid(ds.getKey());
                             groceryList.add(item);
+//                            Log.i(TAG, "onDataChange: "+item.getChecked());
+                            if(item.getChecked()==null || item.getChecked()=="false") item.setChecked("false");
+                            else item.setChecked("true");
                             groceryNames.add(item.getName());
                             groceryAmount.add(item.getAmount());
                             groceryUnits.add(item.getUnit());
@@ -130,7 +133,7 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
         //
         TextView editGroceryName, editGroceryUnit;
         EditText editGroceryAmount;
-        Button setSharedGroceryBtn, updateGroceryBtn, deleteGroceryBtn;
+        final Button setSharedGroceryBtn, updateGroceryBtn, deleteGroceryBtn;
         //
         editGroceryName = dialogView.findViewById(R.id.editGroceryName);
         editGroceryAmount = dialogView.findViewById(R.id.editGroceryAmount);
@@ -156,6 +159,7 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
             @Override
             public void onClick(View view) {
                 setShared(itemName, itemAmount, itemUnit, "");
+                deleteGrocery(itemID);
                 editGroceryDialog.dismiss();
             }
         });
@@ -201,4 +205,8 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
         item.setValue(null);
     }
 
+    @Override
+    public void onCheckboxClick(int position) {
+
+    }
 }

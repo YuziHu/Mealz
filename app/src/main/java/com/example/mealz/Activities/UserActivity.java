@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.mealz.Adapters.RecyclerGrocerylistAdapter;
 import com.example.mealz.Dialogs.AddGroceryDialog;
 import com.example.mealz.Dialogs.EditGroceryDialog;
 import com.example.mealz.Fragments.GrocerylistFragment;
@@ -40,7 +41,8 @@ import java.util.List;
 public class UserActivity extends AppCompatActivity implements
                                                         AddGroceryDialog.AddGroceryDialogListener,
                                                         RecipeSearchFragment.RecipeClickedListener,
-                                                        EditGroceryDialog.EditGroceryDialogListener {
+                                                        EditGroceryDialog.EditGroceryDialogListener,
+                                                        RecyclerGrocerylistAdapter.OnCheckboxClickListener {
 
     private static final String TAG = "UserActivity";
 
@@ -228,5 +230,18 @@ public class UserActivity extends AppCompatActivity implements
             DatabaseReference item = currentUserGroceryList.child(groceryID);
             item.setValue(null);
         }
+    }
+
+    @Override
+    public void onCheckboxClick(int position) {
+        //
+//        DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list");
+//        if(selectedFragment instanceof GrocerylistFragment){
+//            System.out.println("current tab is: "+((GrocerylistFragment) selectedFragment).currentTab);
+//            if(((GrocerylistFragment) selectedFragment).currentTab==1){
+//                DatabaseReference currentUserGroupGroceryList = database.getReference().child("Groups").child(UserActivity.groupID).child("grocery_list");
+//                currentUserGroceryList.child()
+//            }
+//        }
     }
 }
