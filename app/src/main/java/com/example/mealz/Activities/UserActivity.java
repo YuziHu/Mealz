@@ -37,7 +37,10 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserActivity extends AppCompatActivity implements AddGroceryDialog.AddGroceryDialogListener, RecipeSearchFragment.RecipeClickedListener, EditGroceryDialog.EditGroceryDialogListener {
+public class UserActivity extends AppCompatActivity implements
+                                                        AddGroceryDialog.AddGroceryDialogListener,
+                                                        RecipeSearchFragment.RecipeClickedListener,
+                                                        EditGroceryDialog.EditGroceryDialogListener {
 
     private static final String TAG = "UserActivity";
 
@@ -197,7 +200,15 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
 
     @Override
     public void setShared(String groceryName, int amount, String unit, String sharedWith) {
-
+        GroceryItem newGroceryEntry = new GroceryItem();
+        newGroceryEntry.setName(groceryName);
+        newGroceryEntry.setAmount(amount);
+        newGroceryEntry.setUnit(unit);
+        newGroceryEntry.setSharedWith(sharedWith);
+        if(groupID!=null){
+            DatabaseReference curUserGroupGroceryList = database.getReference().child("Group").child("grocery_list").child("shared");
+            curUserGroupGroceryList.push().setValue(newGroceryEntry);
+        }
     }
 
     @Override

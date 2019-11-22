@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.mealz.Activities.UserActivity;
 import com.example.mealz.Adapters.RecyclerGrocerylistAdapter;
 import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.R;
@@ -67,13 +68,14 @@ public class SharedGrocerylistFragment extends Fragment implements RecyclerGroce
         currentUser = mAuth.getCurrentUser();
 
         // populate grocery list view if current user has grocery items in list
-        if (currentUser != null) {
-            String currentUID = currentUser.getUid();
-            current_user_db = database.getReference().child("Users").child(currentUID);
+        if (UserActivity.groupID != null) {
+//            String currentUID = currentUser.getUid();
+//            current_user_db = database.getReference().child("Users").child(currentUID);
+
             // if current user has grocery list
-            DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("shared");
-            if (currentUserGroceryList != null) {
-                currentUserGroceryList.addValueEventListener(new ValueEventListener() {
+            DatabaseReference currentUserSharedGroceryList = database.getReference().child("Groups").child(UserActivity.groupID).child("grocery_list");
+            if (currentUserSharedGroceryList != null) {
+                currentUserSharedGroceryList.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         groceryList.clear();
@@ -187,7 +189,7 @@ public class SharedGrocerylistFragment extends Fragment implements RecyclerGroce
     public void deleteGrocery(String groceryID) {
         Log.d(TAG, "deleteGrocery: "+groceryID);
         //
-        DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("shared");
+        DatabaseReference currentUserGroceryList = database.getReference().child("Groups").child(UserActivity.groupID).child("grocery_list");
         DatabaseReference item = currentUserGroceryList.child(groceryID);
         item.setValue(null);
     }

@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mealz.Activities.UserActivity;
 import com.example.mealz.Adapters.RecyclerGrocerylistAdapter;
 import com.example.mealz.Dialogs.AddGroceryDialog;
 import com.example.mealz.Dialogs.EditGroceryDialog;
@@ -177,7 +178,15 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
     }
 
     public void setShared(String groceryName, int amount, String unit, String sharedWith) {
-
+        GroceryItem newGroceryEntry = new GroceryItem();
+        newGroceryEntry.setName(groceryName);
+        newGroceryEntry.setAmount(amount);
+        newGroceryEntry.setUnit(unit);
+        newGroceryEntry.setSharedWith(sharedWith);
+        if(UserActivity.groupID!=null){
+            DatabaseReference curUserGroupGroceryList = database.getReference().child("Groups").child(UserActivity.groupID).child("grocery_list");
+            curUserGroupGroceryList.push().setValue(newGroceryEntry);
+        }
     }
 
     public void updateGrocery(String groceryName, int amount, String unit) {
@@ -188,8 +197,8 @@ public class PersonalGrocerylistFragment extends Fragment implements RecyclerGro
         Log.d(TAG, "deleteGrocery: "+groceryID);
         //
         DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("personal");
-            DatabaseReference item = currentUserGroceryList.child(groceryID);
-            item.setValue(null);
+        DatabaseReference item = currentUserGroceryList.child(groceryID);
+        item.setValue(null);
     }
 
 }
