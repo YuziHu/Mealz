@@ -81,6 +81,12 @@ public class RecipeFragment extends Fragment implements RecyclerMealplanAdapter.
         database = FirebaseDatabase.getInstance();
         currentUser = mAuth.getCurrentUser();
 
+        recommendImages.add("https://www.edamam.com/web-img/41d/41d94cac765e8081f0d05d6725593385.jpg");
+        recommendNames.add("Dinner Tonight: The Dagwood Sandwich Recipe");
+        //
+        recommendImages.add("https://www.edamam.com/web-img/610/6109e1318e6dc7a02b0f86b398a1485f.jpg");
+        recommendNames.add("Sashimi with Soy Sauce, Sesame Seeds, and Chives Recipe");
+
         if (UserActivity.groupID != null) {
             Log.i(TAG, "onCreate: user group id " + UserActivity.groupID);
             // get list of members
@@ -139,6 +145,7 @@ public class RecipeFragment extends Fragment implements RecyclerMealplanAdapter.
         //
         recommendAdapter = new RecyclerMealplanAdapter(this, null, "", getActivity(), recommendImages, recommendNames);
         recommendRecyclerView.setAdapter(recommendAdapter);
+        recommendAdapter.notifyDataSetChanged();
 
         // firebase
         mAuth = FirebaseAuth.getInstance();
