@@ -118,7 +118,7 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for(DataSnapshot ds : dataSnapshot.getChildren()){
                         groupID = ds.getValue().toString();
-//                        Log.i(TAG, "onDataChange: "+groupID);
+                        Log.i(TAG, "onDataChange: "+groupID);
                     }
                     FirebaseInstanceId.getInstance().getInstanceId()
                             .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {

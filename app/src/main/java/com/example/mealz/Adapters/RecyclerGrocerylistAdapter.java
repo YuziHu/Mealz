@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -97,32 +98,35 @@ public class RecyclerGrocerylistAdapter extends RecyclerView.Adapter<RecyclerGro
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView gName;
         TextView gAmount;
         TextView gUnit;
         TextView gShare;
         //ImageView editGroceryAction;
+        ImageButton ingredientEdit;
         //
         OnEditIconClickListener onEditIconClickListener;
 
-        public ViewHolder(@NonNull View itemView, OnEditIconClickListener onEditIconClickListener) {
+        public ViewHolder(@NonNull View itemView, final OnEditIconClickListener onEditIconClickListener) {
             super(itemView);
 
             gName = itemView.findViewById(R.id.groceryName);
             gAmount = itemView.findViewById(R.id.gAmount);
             gUnit = itemView.findViewById(R.id.gUnit);
             gShare = itemView.findViewById(R.id.gShare);
+            ingredientEdit = itemView.findViewById(R.id.ingridientEdit);
             //editGroceryAction = itemView.findViewById(R.id.editGrocery);
             this.onEditIconClickListener = onEditIconClickListener;
-
-            itemView.setOnClickListener(this);
+            ingredientEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onEditIconClickListener.onEditIconClick(getAdapterPosition());
+                }
+            });
+//            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View view) {
-            onEditIconClickListener.onEditIconClick(getAdapterPosition());
-        }
     }
 
     public interface OnEditIconClickListener {
