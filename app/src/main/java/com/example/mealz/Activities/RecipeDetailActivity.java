@@ -116,9 +116,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
         RecipeModel recipe=(RecipeModel) getIntent().getSerializableExtra("recipe");
 
         ImageView img = findViewById(R.id.imageView);
+        TextView recipeName = findViewById(R.id.recipeName);
 
         final String img_url = recipe.getImage();
         final String label = recipe.getLabel();
+        Log.i(TAG, "onCreate: "+label);
+        recipeName.setText(label);
+
         if (!img_url.equalsIgnoreCase(""))
             Picasso.get().load(img_url).placeholder(R.drawable.ic_launcher_background)// Place holder image from drawable folder
                     .error(R.drawable.b).resize(110, 110).centerCrop()
