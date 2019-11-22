@@ -228,18 +228,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
 
-//        FirebaseInstanceId.getInstance().getInstanceId()
-//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-//                        if(task.isSuccessful()){
-//                            String token = task.getResult().getToken();
-//                        }
-//                        else{
-//                            Log.e(TAG, "onComplete: Error" + task.getException().getMessage());
-//                        }
-//                    }
-//                });
+        ImageView backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
 
     }
