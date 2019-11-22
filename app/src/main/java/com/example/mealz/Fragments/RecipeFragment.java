@@ -82,10 +82,10 @@ public class RecipeFragment extends Fragment implements RecyclerMealplanAdapter.
         currentUser = mAuth.getCurrentUser();
 
         recommendImages.add("https://www.edamam.com/web-img/41d/41d94cac765e8081f0d05d6725593385.jpg");
-        recommendNames.add("Dinner Tonight: The Dagwood Sandwich Recipe");
+        recommendNames.add("Dagwood Sandwich");
         //
         recommendImages.add("https://www.edamam.com/web-img/610/6109e1318e6dc7a02b0f86b398a1485f.jpg");
-        recommendNames.add("Sashimi with Soy Sauce, Sesame Seeds, and Chives Recipe");
+        recommendNames.add("Tuna Sashimi");
 
         if (UserActivity.groupID != null) {
             Log.i(TAG, "onCreate: user group id " + UserActivity.groupID);
