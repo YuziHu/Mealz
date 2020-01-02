@@ -40,6 +40,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -194,8 +195,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     // send notification
                     if(members != null) {
                         for(String member : members){
-                            Log.i(TAG, "onClick: members"+member);
+//                            Log.i(TAG, "onClick: members"+member);
                             if(!member.equals(currentUID)){
+//                                Log.i(TAG, "onClick: "+member);
+//                                Log.i(TAG, "onClick: "+currentUID);
                                 String to = "/topics/"+member;
                                 JSONObject notification = new JSONObject();
                                 JSONObject notificationBody = new JSONObject();

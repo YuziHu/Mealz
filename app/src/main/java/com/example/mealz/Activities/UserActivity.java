@@ -112,7 +112,7 @@ public class UserActivity extends AppCompatActivity implements
 
         if (currentUser != null) {
             String currentUID = currentUser.getUid();
-            FirebaseMessaging.getInstance().subscribeToTopic(currentUID);
+            FirebaseMessaging.getInstance().subscribeToTopic("/topics/"+currentUID);
             Log.i(TAG, "onCreate: subscribe to topic: "+currentUID);
             current_user_db = database.getReference().child("Users").child(currentUID);
             DatabaseReference userGroup = current_user_db.child("group");
@@ -123,7 +123,7 @@ public class UserActivity extends AppCompatActivity implements
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for(DataSnapshot ds : dataSnapshot.getChildren()){
                         groupID = ds.getValue().toString();
-                        Log.i(TAG, "onDataChange: "+groupID);
+//                        Log.i(TAG, "onDataChange: "+groupID);
                     }
                     FirebaseInstanceId.getInstance().getInstanceId()
                             .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -148,7 +148,7 @@ public class UserActivity extends AppCompatActivity implements
                 }
             });
 
-            Log.i(TAG, "onDataChange: "+groupID);
+//            Log.i(TAG, "onDataChange: "+groupID);
             if(groupID!=null) {
 //                Log.i(TAG, "onCreate: user group id "+groupID);
                 // get list of members
