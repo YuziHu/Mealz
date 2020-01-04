@@ -42,6 +42,7 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
     private static final String TAG = "UserActivity";
 
     // user information
+    public static String currentUID;
     public static String groupID;
     public static List<String> members = new ArrayList<>();
 
@@ -106,19 +107,16 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
         currentUser = mAuth.getCurrentUser();
 
         if (currentUser != null) {
-            String currentUID = currentUser.getUid();
+            currentUID = currentUser.getUid();
             FirebaseMessaging.getInstance().subscribeToTopic(currentUID);
             Log.i(TAG, "onCreate: subscribe to topic: "+currentUID);
             current_user_db = database.getReference().child("Users").child(currentUID);
             DatabaseReference userGroup = current_user_db.child("group");
-//            groupID = String.valueOf(current_user_db.child("group").child("groupID").getKey());
-//            Log.i(TAG, "onDataChange: "+groupID);
             userGroup.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for(DataSnapshot ds : dataSnapshot.getChildren()){
                         groupID = ds.getValue().toString();
-//                        Log.i(TAG, "onDataChange: "+groupID);
                     }
                     FirebaseInstanceId.getInstance().getInstanceId()
                             .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -126,11 +124,8 @@ public class UserActivity extends AppCompatActivity implements AddGroceryDialog.
                                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
                                         if(task.isSuccessful()){
                                             String token = task.getResult().getToken();
-//                                            Log.d(TAG, "onCreate: Firebase message instance token:"+FCMtoken);
                                             current_user_db.child("token").setValue(token);
                                         }else{
-//                                            FCMtoken = " Error: "+task.getException().getMessage();
-//                                            Log.d(TAG, "onCreate: Firebase message instance token:"+FCMtoken);
 
                                         }
                                     }
