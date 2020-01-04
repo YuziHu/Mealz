@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.mealz.Models.MealPlanModel;
 import com.example.mealz.R;
 
 import java.util.ArrayList;
@@ -25,6 +26,9 @@ public class RecyclerMealplanAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private List<String> imageUrls;
     private List<String> mealplanNames;
+    //
+    private List<MealPlanModel> mealplans;
+    //
     private Context context;
     private String tag;
     private MealPlanClickListener onMealplanClickListener;
@@ -42,7 +46,18 @@ public class RecyclerMealplanAdapter extends RecyclerView.Adapter<RecyclerView.V
         this.tag = tag;
         this.onMealplanClickListener = onMealplanClickListener;
         this.likeDislikeButtonsListener = likeDislikeButtonsListener;
+    }
 
+    public RecyclerMealplanAdapter(MealPlanClickListener onMealplanClickListener,
+                                   PendingMealplanButtonsListener likeDislikeButtonsListener,
+                                   String tag,
+                                   Context context,
+                                   List<MealPlanModel> mealplans) {
+        this.mealplans = mealplans;
+        this.context = context;
+        this.tag = tag;
+        this.onMealplanClickListener = onMealplanClickListener;
+        this.likeDislikeButtonsListener = likeDislikeButtonsListener;
     }
 
     @NonNull
@@ -60,37 +75,66 @@ public class RecyclerMealplanAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
+//    @Override
+//    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+//        if(holder instanceof ViewHolderPending) {
+//            if(imageUrls!=null && imageUrls.size()>0){
+//                Glide.with(context)
+//                        .asBitmap()
+//                        .load(imageUrls.get(position))
+//                        .into(((ViewHolderPending) holder).image);
+//                ((ViewHolderPending) holder).name.setText(mealplanNames.get(position));
+//            }
+//        }
+//        else
+//        if(imageUrls!=null && imageUrls.size()>0){
+//            Glide.with(context)
+//                    .asBitmap()
+//                    .load(imageUrls.get(position))
+//                    .into(((ViewHolderOther) holder).image);
+//            ((ViewHolderOther) holder).name.setText(mealplanNames.get(position));
+//
+//        }
+//    }
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof ViewHolderPending) {
-            if(imageUrls!=null && imageUrls.size()>0){
+            Log.i(TAG, "onBindViewHolder: "+mealplans);
+            if(mealplans!=null && mealplans.size()>0){
+                Glide.with(context)
+                        .asBitmap()
+                        .load(mealplans.get(position).getImageUrl())
+                        .into(((ViewHolderPending) holder).image);
+                ((ViewHolderPending) holder).name.setText(mealplans.get(position).getName());
+            }
+        }
+        else {
+            if (mealplanNames != null && mealplanNames.size() > 0) {
                 Glide.with(context)
                         .asBitmap()
                         .load(imageUrls.get(position))
-                        .into(((ViewHolderPending) holder).image);
-                ((ViewHolderPending) holder).name.setText(mealplanNames.get(position));
+                        .into(((ViewHolderOther) holder).image);
+                ((ViewHolderOther) holder).name.setText(mealplanNames.get(position));
             }
-        }
-        else
-        if(imageUrls!=null && imageUrls.size()>0){
-            Glide.with(context)
-                    .asBitmap()
-                    .load(imageUrls.get(position))
-                    .into(((ViewHolderOther) holder).image);
-            ((ViewHolderOther) holder).name.setText(mealplanNames.get(position));
-
         }
     }
 
     @Override
     public int getItemCount() {
-        return mealplanNames.size();
+        if(mealplans!=null) return mealplans.size();
+        else if(mealplanNames!=null) return mealplanNames.size();
+        else return 0;
     }
 
     @Override
     public int getItemViewType(int position) {
         if(tag=="PENDING") return 1;
         else return 0;
+    }
+
+    public void notifyDataSetChanged(List<MealPlanModel> mealPlanModels){
+        this.mealplans = mealPlanModels;
     }
 
     public class ViewHolderPending extends RecyclerView.ViewHolder {
@@ -149,7 +193,6 @@ public class RecyclerMealplanAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         @Override
         public void onClick(View view) {
-            Log.d(TAG, "onClick: "+tag);
             onMealplanClickListener.onMealplanClick(tag, getAdapterPosition());
         }
     }

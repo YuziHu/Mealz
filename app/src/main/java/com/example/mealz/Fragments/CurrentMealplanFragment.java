@@ -6,8 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.mealz.Activities.RecipeDetailActivity;
 import com.example.mealz.Activities.UserActivity;
@@ -15,8 +13,9 @@ import com.example.mealz.Adapters.RecyclerMealplanAdapter;
 import com.example.mealz.Models.IngredientModel;
 import com.example.mealz.Models.MealPlanModel;
 import com.example.mealz.Models.RecipeModel;
-import com.example.mealz.Models.User;
 import com.example.mealz.R;
+import com.example.mealz.ViewModels.MealplanVMs.PendingMealplanViewModel;
+import com.example.mealz.ViewModels.MealplanViewModel;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,8 +32,9 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,6 +47,9 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
     RecyclerMealplanAdapter pendingAdapter;
     RecyclerMealplanAdapter agreedAdapter;
     RecyclerMealplanAdapter personalAdapter;
+
+    // View Models
+    private MealplanViewModel mPendingMealplanViewModel;
 
     // firebase objects
     private FirebaseAuth mAuth;
@@ -82,7 +85,6 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
 
         pendingMealplanRecyclerView = view.findViewById(R.id.pendingMealplanRecyclerView);
         LinearLayoutManager pendingLayout = new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, true);
-        pendingLayout.setReverseLayout(true);
         pendingLayout.setStackFromEnd(true);
         pendingMealplanRecyclerView.setLayoutManager(pendingLayout);
         pendingMealplanRecyclerView.setNestedScrollingEnabled(true);
@@ -95,15 +97,31 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
         personalMealplanRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL, false));
         personalMealplanRecyclerView.setNestedScrollingEnabled(false);
         // adapter
-        // pending
-        pendingAdapter = new RecyclerMealplanAdapter(this, this,"PENDING", getActivity(), pendingImages, pendingNames);
-        pendingMealplanRecyclerView.setAdapter(pendingAdapter);
+//        // pending
+//        pendingAdapter = new RecyclerMealplanAdapter(this, this,"PENDING", getActivity(), pendingImages, pendingNames);
+//        pendingMealplanRecyclerView.setAdapter(pendingAdapter);
         // agreed
         agreedAdapter = new RecyclerMealplanAdapter(this, this, "AGREED", getActivity(), agreedImages, agreedNames);
         agreedMealplanRecyclerView.setAdapter(agreedAdapter);
         // personal
         personalAdapter = new RecyclerMealplanAdapter(this, this, "PERSONAL", getActivity(), personalImages, personalNames);
         personalMealplanRecyclerView.setAdapter(personalAdapter);
+
+        // View Models
+        mPendingMealplanViewModel = ViewModelProviders.of(this).get(MealplanViewModel.class);
+        // observe changes
+        mPendingMealplanViewModel.getMealplans().observe(this, new Observer<List<MealPlanModel>>() {
+            @Override
+            public void onChanged(List<MealPlanModel> mealPlanModels) {
+                Log.d(TAG, "onChanged: "+mealPlanModels);
+                pendingAdapter.notifyDataSetChanged(mealPlanModels);
+                pendingAdapter.notifyDataSetChanged();
+            }
+        });
+
+        // pending
+        pendingAdapter = new RecyclerMealplanAdapter(this, this,"PENDING", getActivity(), mPendingMealplanViewModel.getMealplans().getValue());
+        pendingMealplanRecyclerView.setAdapter(pendingAdapter);
 
         // firebase
         mAuth = FirebaseAuth.getInstance();
@@ -117,33 +135,33 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
                 curUserGroup = database.getReference().child("Groups").child(UserActivity.groupID);
             }
             // if current user has pending meal plans
-            DatabaseReference curUserCurrentPendingMealplans = curUserGroup.child("meal_plans").child("current").child("pending");
-            if(curUserCurrentPendingMealplans!=null){
-                curUserCurrentPendingMealplans.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        pendingMealPlans.clear();
-                        pendingImages.clear();
-                        pendingNames.clear();
-                        pendingIngredients.clear();
-                        for(DataSnapshot ds : dataSnapshot.getChildren()){
-                            MealPlanModel mealplan = ds.getValue(MealPlanModel.class);
-                            mealplan.setmId(ds.getKey());
-                            List<IngredientModel> ingredients = mapper.convertValue(mealplan.getIngredients(), new TypeReference<List<IngredientModel>>(){});
-                            pendingMealPlans.add(mealplan);
-                            pendingImages.add(mealplan.getImageUrl());
-                            pendingNames.add(mealplan.getName());
-                            pendingIngredients.add(ingredients);
-
-                        }
-                        pendingAdapter.notifyDataSetChanged();
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-            }
+//            DatabaseReference curUserCurrentPendingMealplans = curUserGroup.child("meal_plans").child("current").child("pending");
+//            if(curUserCurrentPendingMealplans!=null){
+//                curUserCurrentPendingMealplans.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        pendingMealPlans.clear();
+//                        pendingImages.clear();
+//                        pendingNames.clear();
+//                        pendingIngredients.clear();
+//                        for(DataSnapshot ds : dataSnapshot.getChildren()){
+//                            MealPlanModel mealplan = ds.getValue(MealPlanModel.class);
+//                            mealplan.setmId(ds.getKey());
+//                            List<IngredientModel> ingredients = mapper.convertValue(mealplan.getIngredients(), new TypeReference<List<IngredientModel>>(){});
+//                            pendingMealPlans.add(mealplan);
+//                            pendingImages.add(mealplan.getImageUrl());
+//                            pendingNames.add(mealplan.getName());
+//                            pendingIngredients.add(ingredients);
+//
+//                        }
+//                        pendingAdapter.notifyDataSetChanged();
+//                    }
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                });
+//            }
             // if current user has agreed meal plans
             if(UserActivity.groupID!=null){
                 curUserGroup = database.getReference().child("Groups").child(UserActivity.groupID);
@@ -188,7 +206,7 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
                         for(DataSnapshot ds : dataSnapshot.getChildren()){
                             MealPlanModel mealplan = ds.getValue(MealPlanModel.class);
                             List<IngredientModel> ingredients = mapper.convertValue(mealplan.getIngredients(), new TypeReference<List<IngredientModel>>(){});
-                            Log.d(TAG, "onDataChange: "+ingredients);
+//                            Log.d(TAG, "onDataChange: "+ingredients);
                             mealplan.setmId(ds.getKey());
                             personalMealPlans.add(mealplan);
                             personalImages.add(mealplan.getImageUrl());
@@ -206,6 +224,8 @@ public class CurrentMealplanFragment extends Fragment implements RecyclerMealpla
         }
         return view;
     }
+
+    private void initRecyclerView(){}
 
     @Override
     public void onMealplanClick(String tag, int position) {
