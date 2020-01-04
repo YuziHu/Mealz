@@ -36,6 +36,7 @@ public class UserProfileFragment extends Fragment {
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
     private DatabaseReference current_user_db;
+    private DatabaseReference curUserGroup;
 
     //List<GroceryItem> groceryList = new ArrayList<>();
     ArrayList<MealPlanModel> agreedMealPlans = new ArrayList<>();
@@ -76,6 +77,11 @@ public class UserProfileFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         currentUser = mAuth.getCurrentUser();
 
+        // if current user has agreed meal plans
+        if(UserActivity.groupID!=null){
+            curUserGroup = database.getReference().child("Groups").child(UserActivity.groupID);
+        }
+
         if (currentUser != null) {
             final String currentUID = currentUser.getUid();
             current_user_db = database.getReference().child("Users").child(currentUID);
@@ -94,27 +100,29 @@ public class UserProfileFragment extends Fragment {
 
                         }
                     });
-
-            DatabaseReference curUserFutureAgreedMealplans = current_user_db.child("meal_plans").child("current").child("agreed");
-            if(curUserFutureAgreedMealplans!=null){
-                curUserFutureAgreedMealplans.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        agreedMealPlans.clear();
-                        for(DataSnapshot ds : dataSnapshot.getChildren()){
-                            MealPlanModel mealplan = ds.getValue(MealPlanModel.class);
-                            mealplan.setmId(ds.getKey());
-                            agreedMealPlans.add(mealplan);
+            if(curUserGroup!=null) {
+                DatabaseReference curUserFutureAgreedMealplans = curUserGroup.child("meal_plans").child("current").child("agreed");
+                if (curUserFutureAgreedMealplans != null) {
+                    curUserFutureAgreedMealplans.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            agreedMealPlans.clear();
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                MealPlanModel mealplan = ds.getValue(MealPlanModel.class);
+                                mealplan.setmId(ds.getKey());
+                                agreedMealPlans.add(mealplan);
+                            }
+                            System.out.println(agreedMealPlans.size());
+                            String size = "" + agreedMealPlans.size();
+                            agreedMeals.setText(size);
                         }
-                        System.out.println(agreedMealPlans.size());
-                        String size = "" + agreedMealPlans.size();
-                        agreedMeals.setText(size);
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
             }
 
             DatabaseReference curUserFuturePersonalMealplans = current_user_db.child("meal_plans").child("current").child("personal");

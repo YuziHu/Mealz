@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.mealz.Activities.UserActivity;
 import com.example.mealz.Adapters.RecyclerGrocerylistAdapter;
 import com.example.mealz.Models.GroceryItem;
 import com.example.mealz.R;
@@ -32,7 +33,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class SharedGrocerylistFragment extends Fragment implements RecyclerGrocerylistAdapter.OnEditIconClickListener {
+public class SharedGrocerylistFragment extends Fragment implements RecyclerGrocerylistAdapter.OnEditIconClickListener, RecyclerGrocerylistAdapter.OnCheckboxClickListener {
 
     private static final String TAG = "SharedGroceryListFrag";
 
@@ -61,19 +62,23 @@ public class SharedGrocerylistFragment extends Fragment implements RecyclerGroce
         View view = inflater.inflate(R.layout.fragment_shared_grocerylist, container, false);
 
         sharedGrocerylistRecyclerView = view.findViewById(R.id.sharedGrocerylistView);
+        rAdapter = new RecyclerGrocerylistAdapter(getActivity(),groceryList, groceryNames, groceryAmount, groceryUnits, groceryShares, this, this);
+        sharedGrocerylistRecyclerView.setAdapter(rAdapter);
+        sharedGrocerylistRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         currentUser = mAuth.getCurrentUser();
 
         // populate grocery list view if current user has grocery items in list
-        if (currentUser != null) {
-            String currentUID = currentUser.getUid();
-            current_user_db = database.getReference().child("Users").child(currentUID);
+        if (UserActivity.groupID != null) {
+//            String currentUID = currentUser.getUid();
+//            current_user_db = database.getReference().child("Users").child(currentUID);
+
             // if current user has grocery list
-            DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("shared");
-            if (currentUserGroceryList != null) {
-                currentUserGroceryList.addValueEventListener(new ValueEventListener() {
+            DatabaseReference currentUserSharedGroceryList = database.getReference().child("Groups").child(UserActivity.groupID).child("grocery_list");
+            if (currentUserSharedGroceryList != null) {
+                currentUserSharedGroceryList.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         groceryList.clear();
@@ -84,14 +89,17 @@ public class SharedGrocerylistFragment extends Fragment implements RecyclerGroce
                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
                             GroceryItem item = ds.getValue(GroceryItem.class);
                             item.setGid(ds.getKey());
+                            if(item.getChecked()==null || item.getChecked().equals("false")) item.setChecked("false");
+                            else item.setChecked("true");
+                            Log.i(TAG, "onDataChange: "+item.getChecked());
                             groceryList.add(item);
                             groceryNames.add(item.getName());
                             groceryAmount.add(item.getAmount());
                             groceryUnits.add(item.getUnit());
                             groceryShares.add(item.getSharedWith());
                         }
-//                        adapter.notifyDataSetChanged();
-                        initRecyclerView();
+                        rAdapter.notifyDataSetChanged();
+//                        initRecyclerView();
                     }
 
                     @Override
@@ -107,7 +115,7 @@ public class SharedGrocerylistFragment extends Fragment implements RecyclerGroce
 
     private void initRecyclerView(){
         Log.d(TAG, "initRecyclerView: init recyclerview");
-        rAdapter = new RecyclerGrocerylistAdapter(getActivity(),groceryList, groceryNames, groceryAmount, groceryUnits, groceryShares, this);
+        rAdapter = new RecyclerGrocerylistAdapter(getActivity(),groceryList, groceryNames, groceryAmount, groceryUnits, groceryShares, this, this);
         sharedGrocerylistRecyclerView.setAdapter(rAdapter);
         sharedGrocerylistRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -187,8 +195,19 @@ public class SharedGrocerylistFragment extends Fragment implements RecyclerGroce
     public void deleteGrocery(String groceryID) {
         Log.d(TAG, "deleteGrocery: "+groceryID);
         //
-        DatabaseReference currentUserGroceryList = current_user_db.child("grocery_list").child("shared");
+        DatabaseReference currentUserGroceryList = database.getReference().child("Groups").child(UserActivity.groupID).child("grocery_list");
         DatabaseReference item = currentUserGroceryList.child(groceryID);
         item.setValue(null);
+    }
+
+    @Override
+    public void onCheckboxClick(int position) {
+        String gid = groceryList.get(position).getGid();
+        Log.i(TAG, "onCheckboxClick: "+gid);
+        Log.i(TAG, "onCheckboxClick: before "+groceryList.get(position).getChecked());
+        String checked = groceryList.get(position).getChecked().equals("true") ? "false" : "true";
+        Log.i(TAG, "onCheckboxClick: after "+checked);
+        DatabaseReference currentUserGroupGroceryList = database.getReference().child("Groups").child(UserActivity.groupID).child("grocery_list");
+        currentUserGroupGroceryList.child(gid).child("checked").setValue(checked);
     }
 }

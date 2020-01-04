@@ -40,6 +40,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -116,9 +117,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
         RecipeModel recipe=(RecipeModel) getIntent().getSerializableExtra("recipe");
 
         ImageView img = findViewById(R.id.imageView);
+        TextView recipeName = findViewById(R.id.recipeName);
 
         final String img_url = recipe.getImage();
         final String label = recipe.getLabel();
+        Log.i(TAG, "onCreate: "+label);
+        recipeName.setText(label);
+
         if (!img_url.equalsIgnoreCase(""))
             Picasso.get().load(img_url).placeholder(R.drawable.ic_launcher_background)// Place holder image from drawable folder
                     .error(R.drawable.b).resize(110, 110).centerCrop()
@@ -190,8 +195,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     // send notification
                     if(members != null) {
                         for(String member : members){
-                            Log.i(TAG, "onClick: members"+member);
+//                            Log.i(TAG, "onClick: members"+member);
                             if(!member.equals(currentUID)){
+//                                Log.i(TAG, "onClick: "+member);
+//                                Log.i(TAG, "onClick: "+currentUID);
                                 String to = "/topics/"+member;
                                 JSONObject notification = new JSONObject();
                                 JSONObject notificationBody = new JSONObject();
@@ -212,6 +219,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         });
 
         Button openList = findViewById(R.id.button3);
+        openList.setVisibility(View.INVISIBLE);
         openList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -227,18 +235,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
 
-//        FirebaseInstanceId.getInstance().getInstanceId()
-//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-//                        if(task.isSuccessful()){
-//                            String token = task.getResult().getToken();
-//                        }
-//                        else{
-//                            Log.e(TAG, "onComplete: Error" + task.getException().getMessage());
-//                        }
-//                    }
-//                });
+        ImageView backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
 
     }

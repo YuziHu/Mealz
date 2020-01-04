@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
 
     <item
         android:id="@+id/nav_recipe"
         android:icon="@drawable/recipe"
-        android:title="Recipe" />
+        android:title="Recipe"
+        />
 
     <item
         android:id="@+id/nav_mealplan"
         android:icon="@drawable/meal_plan"
-        android:title="Meal Plan" />
+        android:title="Meal Plan"
+       />
 
     <item
         android:id="@+id/nav_grocery"
         android:icon="@drawable/grocery"
-        android:title="Grocery" />
+        android:title="Grocery"
+
+        />
 
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/me"
-        android:title="Me" />
+        android:title="Me"
+        />
 
 </menu>

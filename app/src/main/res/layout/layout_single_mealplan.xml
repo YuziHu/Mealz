@@ -6,37 +6,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="120sp"
-        android:layout_height="120sp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_centerInParent="true"
         app:cardCornerRadius="4sp"
-        app:cardMaxElevation="2sp"
         app:cardElevation="1sp"
-        android:layout_centerInParent="true">
+        app:cardMaxElevation="2sp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="145dp">
 
             <ImageView
-                android:layout_width="90sp"
-                android:layout_height="90sp"
-                android:scaleType="centerCrop"
-                android:layout_centerHorizontal="true"
                 android:id="@+id/mealplan_image"
-                android:src="@mipmap/mealzlogo"
-                android:clickable="false"/>
+                android:layout_width="99dp"
+                android:layout_height="99dp"
+                android:layout_centerHorizontal="true"
+                android:clickable="false"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/mealzlogo" />
 
             <TextView
+                android:id="@+id/mealplan_name"
                 android:layout_width="wrap_content"
                 android:layout_height="20sp"
-                android:id="@+id/mealplan_name"
-                android:text="Meal Plan Name"
                 android:layout_below="@+id/mealplan_image"
-                android:layout_centerHorizontal="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginVertical="12dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp"
                 android:gravity="center"
-                android:layout_marginVertical="5sp"
-                android:textColor="#000"
-                />
+                android:text="Meal Plan Name"
+                android:textColor="#000" />
         </RelativeLayout>
 
 
